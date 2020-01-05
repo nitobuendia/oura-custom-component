@@ -1,0 +1,8 @@
+{
+  "domain": "oura",
+  "name": "Oura Ring",
+  "documentation": "https://github.com/nitobuendia/oura-custom-component",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": []
+}
