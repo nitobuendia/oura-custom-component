@@ -3,6 +3,22 @@
 This project is a custom component for [Home-Assistant](https://home-assistant.io).
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
 
+## Installation
+
+1. Copy the files from the `custom_component/oura/` folder into the `custom_component/oura/` of your Home-Assistant installation.
+1. Configure the sensors following the instructions in `Configuration`.
+1. Restart the Home-Assitant instance.
+
+1. If the code was installed and configured properly, you will get a permanent notification. See `Notifications` section on the Home-Assistant menu.
+1.Follow the link to Authorize Home-Assistant to access your Oura data. You may need to sign in and allow the data.
+1. You will be redirected to Home-Assistant where the code information will be captured and exchanged for the token. If the redirect fails:
+    *  Verify that your [http integration](https://www.home-assistant.io/integrations/http/) and base url are configured correctly.
+    *  Verify that you have added your Home-Assistant URL to your Oura Application in the Redirect URIs, and it contains not just the domain/base url, but the full path (i.e. including `/oura/oauth/setup`). See `Configuration` > `How to get client id and client secret`.
+
+1. Oura component will exchange the code for a token and update on the next schedule. If you want, you can force a sync from `Developer Tools` > `Services` > Service: `homeassistant.update_entity` + Entity: the Oura sensor and calling the service once (or twice after a break).
+    *  If the entity is not updating, check your logs for any potential errors.
+
+
 ## Configuration
 
 ### Schema
@@ -47,7 +63,15 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 ### How to get client id and client secret
 The parameters `client_id` and `client_secret` are provided by Oura.
 
-Read [Getting Started with the Oura Cloud API](https://cloud.ouraring.com/docs/) for more information on how to get them.
+Read [Getting Started with the Oura Cloud API](https://cloud.ouraring.com/docs/) for more information on how to get them. Once you have created your application, add your Home-Assistant to Redirect URIs as follows:
+
+`https://<url>:<port>/oura/oauth/setup`
+
+Where:
+* `https://` is the protocol. Change to `http` if you are not supporting http.s
+* `<url>` is the URL of your Home-Assistant (e.g. `something.duckdns.org` or an IP like `192.168.1.123`)
+* `<port>` is the port where your Home-Assistant is configured (`8123` by default).
+* `/oura/oauth/setup` is the path that has been created by the custom_component. Do not change it and make sure you include it on the Redirect URis.
 
 ### Monitored Days
 This data can be retrieve for multiple days at once. The days supported are:
@@ -76,7 +100,6 @@ If you set the `max_backfill` value to any positive integer, then it will backfi
 
 * `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
 
-
 ## What Data Can Be Retrieved
 
 ### State and Attributes
@@ -100,7 +123,7 @@ The attributes will contain the daily data for the selected days. In particular:
 
 ### Sample output
 
-**State**: 48 (sleep score of yesterday, which was the first day configure on the example)
+**State**: `48` (note: sleep score of yesterday, which was the first day configure on the example)
 
 **Attributes**:
 ```json
