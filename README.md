@@ -1,6 +1,7 @@
 # Oura - Custom Component for Home-Assisant
 
 This project is a custom component for [Home-Assistant](https://home-assistant.io).
+
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
 
 ## Installation
