@@ -6,12 +6,12 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ## Installation
 
-## Via HACS
+### Via HACS
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 
 
-## Manually
+### Manually
 
 1. Copy the files from the `custom_component/oura/` folder into the `custom_component/oura/` of your Home-Assistant installation.
 1. Configure the sensors following the instructions in `Configuration`.
