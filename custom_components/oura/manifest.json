@@ -2,7 +2,8 @@
   "domain": "oura",
   "name": "Oura Ring",
   "documentation": "https://github.com/nitobuendia/oura-custom-component",
-  "dependencies": [],
-  "codeowners": [],
+  "issue_tracker": "https://github.com/nitobuendia/oura-custom-component/issues",
+  "dependencies": ["core", "http"],
+  "codeowners": ["@nitobuendia"],
   "requirements": []
 }
