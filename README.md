@@ -375,3 +375,9 @@ Example for breaking up yesterday's data into multiple sensors:
         {{ states.sensor.sleep_quality.attributes.yesterday.in_bed_duration }}
       icon_template: "mdi:hotel"
 ```
+
+## Sponsoring
+If this is helpful, feel free to `Buy Me a Beer`; or check other options on the Github `❤️ Sponsor` link on the top of this page.
+
+
+<a href="https://www.buymeacoffee.com/nitobuendia" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/arial-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
