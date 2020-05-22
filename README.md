@@ -12,13 +12,14 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 
 ### Manually
-
 1. Copy the files from the `custom_component/oura/` folder into the `custom_component/oura/` of your Home-Assistant installation.
+
+### Common Steps
 1. Configure the sensors following the instructions in `Configuration`.
 1. Restart the Home-Assitant instance.
 
 1. If the code was installed and configured properly, you will get a permanent notification. See `Notifications` section on the Home-Assistant menu.
-1.Follow the link to Authorize Home-Assistant to access your Oura data. You may need to sign in and allow the data.
+1. Follow the link to Authorize Home-Assistant to access your Oura data. You may need to sign in and allow the data.
 1. You will be redirected to Home-Assistant where the code information will be captured and exchanged for the token. If the redirect fails:
     *  Verify that your [http integration](https://www.home-assistant.io/integrations/http/) and base url are configured correctly.
     *  Verify that you have added your Home-Assistant URL to your Oura Application in the Redirect URIs, and it contains not just the domain/base url, but the full path (i.e. including `/oura/oauth/setup`). See `Configuration` > `How to get client id and client secret`.
