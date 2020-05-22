@@ -3,7 +3,7 @@
   "name": "Oura Ring",
   "documentation": "https://github.com/nitobuendia/oura-custom-component",
   "issue_tracker": "https://github.com/nitobuendia/oura-custom-component/issues",
-  "dependencies": ["core", "http"],
+  "dependencies": [],
   "codeowners": ["@nitobuendia"],
   "requirements": []
 }
