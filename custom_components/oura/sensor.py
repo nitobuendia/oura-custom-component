@@ -146,7 +146,9 @@ class OuraSleepSensor(entity.Entity):
     self._hass.components.persistent_notification.create(
         'In order to authorize Home-Assistant to view your Oura Ring data, '
         'you must visit: '
-        f'<a href="{authorize_url}" target="_blank">{authorize_url}</a>',
+        f'<a href="{authorize_url}" target="_blank">{authorize_url}</a>. Make '
+        f'sure that you have added {self._api.get_auth_url()} to your '
+        'Redirect URIs on Oura Cloud Developer application.',
         title=SENSOR_NAME,
         notification_id=f'oura_setup_{self._name}')
 
