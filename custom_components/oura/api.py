@@ -162,7 +162,6 @@ class OuraApi(object):
     """Gets authentication code."""
     base_url = self._sensor._hass.config.api.base_url
     callback_url = f'{base_url}{views.AUTH_CALLBACK_PATH}'
-    state = self._sensor.name
 
     authorize_params = {
         'client_id': self._client_id,
@@ -170,7 +169,7 @@ class OuraApi(object):
         'redirect_uri': callback_url,
         'response_type': 'code',
         'scope': 'email personal daily',
-        'state': state,
+        'state': self._sensor.name,
     }
     authorize_url = '{}?{}'.format(
         self._get_api_endpoint(OuraEndpoints.AUTHORIZE),
