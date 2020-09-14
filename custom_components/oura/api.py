@@ -7,6 +7,7 @@ import os
 import requests
 import urllib
 from . import views
+from . import hass_helper
 
 # Oura API config.
 _TOKEN_FILE = 'oura-token-cache-{}'
@@ -46,6 +47,7 @@ class OuraApi(object):
       client_secret: Client secret for Oura API.
     """
     self._sensor = sensor
+    self._hass_url = hass_helper.get_url(self._sensor._hass)
 
     self._client_id = client_id
     self._client_secret = client_secret
@@ -97,6 +99,9 @@ class OuraApi(object):
         'Couldn\'t fetch data for Oura ring sensor. Verify API token.')
     return None
 
+  def get_auth_url(self):
+    """Returns the OAuth view callback URL."""
+    return f'{self._hass_url}{views.AUTH_CALLBACK_PATH}'
 
   def _get_api_endpoint(self, api_endpoint, **kwargs):
     """Gets URL for a given endpoint and day.
@@ -160,13 +165,10 @@ class OuraApi(object):
 
   def _get_authentication_code(self):
     """Gets authentication code."""
-    base_url = self._sensor._hass.config.api.base_url
-    callback_url = f'{base_url}{views.AUTH_CALLBACK_PATH}'
-
     authorize_params = {
         'client_id': self._client_id,
         'duration': 'temporary',
-        'redirect_uri': callback_url,
+        'redirect_uri': self.get_auth_url(),
         'response_type': 'code',
         'scope': 'email personal daily',
         'state': self._sensor.name,
@@ -232,12 +234,10 @@ class OuraApi(object):
     request_auth = requests.auth.HTTPBasicAuth(self._client_id,
                                                self._client_secret)
 
-    base_url = self._sensor._hass.config.api.base_url
-    callback_url = f'{base_url}{views.AUTH_CALLBACK_PATH}'
     request_data = {
         'grant_type': 'authorization_code',
         'code': code,
-        'redirect_uri': callback_url,
+        'redirect_uri': self.get_auth_url(),
     }
 
     request_headers = {
