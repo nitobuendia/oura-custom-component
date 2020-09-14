@@ -114,8 +114,8 @@ class OuraApi(object):
       Full Oura API endpoint URL.
     """
     if api_endpoint == OuraEndpoints.SLEEP:
-      sleep_api_url = '{base_url}?access_token={access_token}'.format(
-          base_url=api_endpoint.value,
+      sleep_api_url = '{oura_url}?access_token={access_token}'.format(
+          oura_url=api_endpoint.value,
           access_token=self._access_token,
       )
 
@@ -132,8 +132,8 @@ class OuraApi(object):
       return api_endpoint.value
 
     else:
-      return '{base_url}?access_token={access_token}'.format(
-          base_url=api_endpoint.value,
+      return '{oura_url}?access_token={access_token}'.format(
+          oura_url=api_endpoint.value,
           access_token=self._access_token,
       )
 
