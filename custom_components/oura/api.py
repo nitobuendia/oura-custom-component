@@ -93,10 +93,10 @@ class OuraApi(object):
 
       return response_data
 
-    return None
-
     logging.error(
         'Couldn\'t fetch data for Oura ring sensor. Verify API token.')
+    return None
+
 
   def _get_api_endpoint(self, api_endpoint, **kwargs):
     """Gets URL for a given endpoint and day.
