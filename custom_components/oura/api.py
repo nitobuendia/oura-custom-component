@@ -88,7 +88,8 @@ class OuraApi(object):
         retries += 1
         continue
 
-      if response_data.get('message') == 'Unauthorized':
+      error_message = response_data.get('error')
+      if error_message in ('invalid_token', 'unauthorized_client'):
         retries += 1
         self._refresh_access_token()
         continue
