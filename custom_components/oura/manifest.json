@@ -6,5 +6,6 @@
   "issue_tracker": "https://github.com/nitobuendia/oura-custom-component/issues",
   "dependencies": [],
   "codeowners": ["@nitobuendia"],
-  "requirements": []
+  "requirements": [],
+  "version": 1
 }
