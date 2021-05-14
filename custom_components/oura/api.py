@@ -10,7 +10,7 @@ from . import views
 from . import hass_helper
 
 # Oura API config.
-_TOKEN_FILE = 'oura-token-cache-{}'
+_TOKEN_FILE = 'data/oura-token-cache-{}.conf'
 _OURA_API = 'https://api.ouraring.com/v1'
 _OURA_CLOUD = 'https://cloud.ouraring.com'
 _MAX_API_RETRIES = 3
@@ -201,6 +201,7 @@ class OuraApi(object):
     self._access_token = access_token_data['access_token']
     self._refresh_token = access_token_data['refresh_token']
 
+    os.makedirs(os.path.dirname(self.token_file_name), exist_ok=True)
     with open(self.token_file_name, 'w+') as token_file:
       token_file.write(json.dumps(access_token_data))
 
