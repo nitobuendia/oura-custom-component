@@ -109,9 +109,8 @@ class OuraSleepSensor(entity.Entity):
     device_state_attributes: attributes of the sensor.
 
   Methods:
-    async_update: async version of update method.
+    async_update: updates sensor data.
     create_oauth_view: creates a view to manage OAuth setup.
-    update: updates sensor data.
   """
 
   def __init__(self, config, hass):
@@ -260,7 +259,7 @@ class OuraSleepSensor(entity.Entity):
 
     return sleep_dict
 
-  def update(self):
+  def _update(self):
     """Fetches new state data for the sensor."""
     sleep_dates = {
         date_name: self._get_date_by_name(date_name)
@@ -367,4 +366,4 @@ class OuraSleepSensor(entity.Entity):
 
   # Async wrappers.
   async def async_update(self):
-    await self._hass.async_add_job(self.update)
+    await self._hass.async_add_executor_job(self._update)
