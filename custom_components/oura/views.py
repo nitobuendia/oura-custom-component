@@ -29,7 +29,7 @@ class OuraAuthCallbackView(http.HomeAssistantView):
     self._sensor = sensor
 
   @core.callback
-  def get(self, request):
+  async def get(self, request):
     """Handles Oura OAuth callbacks.
 
     Stores code from Oura API into cache token file.
@@ -44,7 +44,8 @@ class OuraAuthCallbackView(http.HomeAssistantView):
     with open(token_file_name, 'w+') as token_file:
       token_file.write(json.dumps(code_data))
 
-    self._sensor.update()  # Forces exchanging code for access token.
+    # Forces exchanging code for access token.
+    await self._sensor.async_update()
 
     return self.json_message(
         f'Oura OAuth code {code} for sensor.{sensor_name} stored in '
