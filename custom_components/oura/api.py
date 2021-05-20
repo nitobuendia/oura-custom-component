@@ -161,6 +161,7 @@ class OuraApi(object):
     if token_data.get('access_token') and token_data.get('refresh_token'):
       self._access_token = token_data.get('access_token')
       self._refresh_token = token_data.get('refresh_token')
+      return
 
     logging.error('Unable to retrieve access token from file data.')
 
