@@ -74,9 +74,10 @@ async def setup(hass, config):
   return True
 
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+async def async_setup_platform(
+        hass, config, async_add_entities, discovery_info=None):
   """Adds sensor platform to the list of platforms."""
-  add_devices([OuraSleepSensor(config, hass)], True)
+  async_add_entities([OuraSleepSensor(config, hass)], True)
 
 
 def _seconds_to_hours(time_in_seconds):
@@ -108,8 +109,8 @@ class OuraSleepSensor(entity.Entity):
     device_state_attributes: attributes of the sensor.
 
   Methods:
+    async_update: updates sensor data.
     create_oauth_view: creates a view to manage OAuth setup.
-    update: updates sensor data.
   """
 
   def __init__(self, config, hass):
@@ -258,7 +259,7 @@ class OuraSleepSensor(entity.Entity):
 
     return sleep_dict
 
-  def update(self):
+  def _update(self):
     """Fetches new state data for the sensor."""
     sleep_dates = {
         date_name: self._get_date_by_name(date_name)
@@ -362,3 +363,7 @@ class OuraSleepSensor(entity.Entity):
   def device_state_attributes(self):
     """Returns the sensor attributes."""
     return self._attributes
+
+  # Async wrappers.
+  async def async_update(self):
+    await self._hass.async_add_executor_job(self._update)
