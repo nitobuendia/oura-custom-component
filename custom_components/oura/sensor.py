@@ -287,23 +287,27 @@ class OuraSleepSensor(entity.Entity):
 
       # Check past dates to see if backfill is possible when missing data.
       backfill = 0
+      original_date = date_value
       while (not sleep and
              backfill < self._backfill and
              date_value >= start_date):
-        last_date_value = date_value
         date_value = self._get_backfill_date(date_name, date_value)
         if not date_value:
           break
-
-        logging.info(
-            f'Unable to read Oura data for {date_name_title} '
-            f'({last_date_value}). Fetching {date_value} instead.')
-
         sleep = sleep_data.get(date_value)
         backfill += 1
 
+      if original_date != date_value:
+        logging.warning(
+            f'No Oura data found for {date_name_title} ({original_date}). ' +
+            (
+                f'Fetching {date_value} instead.'
+                if date_value else
+                f'Unable to find suitable backfill date. No data available.'
+            )
+        )
+
       if not sleep:
-        logging.error(f'Unable to read Oura data for {date_name_title}.')
         continue
 
       # State gets the value of the sleep score for the first monitored day.
