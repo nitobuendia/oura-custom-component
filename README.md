@@ -275,99 +275,88 @@ Example for breaking up yesterday's data into multiple sensors:
 ```yaml
 - platform: template
   sensors:
-    sleep_breath_average_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Sleep Breath Average Yesterday"
+    - name: "Sleep Breath Average Yesterday"
+      unique_id: sleep_breath_average_yesterday
       unit_of_measurement: bpm
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.breath_average }}
-      icon_template: "mdi:lungs"
+      icon: "mdi:lungs"
 
-    sleep_temperature_delta_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Sleep Temperature Delta Yesterday"
+    - name: "Sleep Temperature Delta Yesterday"
+      unique_id: sleep_temperature_delta_yesterday
       unit_of_measurement: "°C"
-      value_template: >
+      device_class: temperature
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.temperature_delta }}
-      icon_template: "mdi:thermometer-lines"
+      icon: "mdi:thermometer-lines"
 
-    sleep_resting_heart_rate_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Resting Heart Rate Yesterday"
+    - name: "Sleep Resting Heart Rate Yesterday"
+      unique_id: sleep_resting_heart_rate_yesterday
       unit_of_measurement: "bpm"
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.resting_heart_rate }}
-      icon_template: "mdi:heart-pulse"
+      icon: "mdi:heart-pulse"
 
-    resting_heart_rate_average_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Average Heart Rate Yesterday"
+    - name: "Resting Average Heart Rate Yesterday"
+      unique_id: resting_heart_rate_average_yesterday
       unit_of_measurement: "bpm"
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.heart_rate_average }}
-      icon_template: "mdi:heart-pulse"
+      icon: "mdi:heart-pulse"
 
-    bedtime_start_hour_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Bed Time Yesterday"
-      value_template: >
+    - name: "Bed Time Yesterday"
+      unique_id: bed_time_yesterday
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.bedtime_start_hour }}
-      icon_template: "mdi:sleep"
+      icon: "mdi:sleep"
 
-    bedtime_end_hour_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Wake Time Yesterday"
-      value_template: >
+    - name: "Wake Time Yesterday"
+      unique_id: wake_time_yesterday
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.bedtime_end_hour }}
-      icon_template: "mdi:sleep-off"
+      icon: "mdi:sleep-off"
 
-    deep_sleep_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Deep Sleep Yesterday"
+    - name: "Deep Sleep Yesterday"
+      unique_id: deep_sleep_yesterday
       unit_of_measurement: h
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.deep_sleep_duration }}
-      icon_template: "mdi:hotel"
+      icon: "mdi:bed"
 
-    rem_sleep_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Rem Sleep Yesterday"
+    - name: "Rem Sleep Yesterday"
+      unique_id: rem_sleep_yesterday
       unit_of_measurement: h
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.rem_sleep_duration }}
-      icon_template: "mdi:hotel"
+      icon: "mdi:bed"
 
-    light_sleep_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Light Sleep Yesterday"
+    - name: "Light Sleep Yesterday"
+      unique_id: light_sleep_yesterday
       unit_of_measurement: h
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.light_sleep_duration }}
-      icon_template: "mdi:hotel"
+      icon: "mdi:bed"
 
-    total_sleep_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Total Sleep Yesterday"
+    - name: "Total Sleep Yesterday"
+      unique_id: total_sleep_yesterday
       unit_of_measurement: h
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.total_sleep_duration }}
-      icon_template: "mdi:sleep"
+      icon: "mdi:sleep"
 
-    time_awake_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Time Awake Yesterday"
+    - name: "Time Awake Yesterday"
+      unique_id: time_awake_yesterday
       unit_of_measurement: h
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.awake_duration }}
-      icon_template: "mdi:sleep-off"
+      icon: "mdi:sleep-off"
 
-    time_in_bed_yesterday:
-      entity_id: sensor.sleep_quality
-      friendly_name: "Time In Bed Yesterday"
+    - name: "Time In Bed Yesterday"
+      unique_id: time_in_bed_yesterday
       unit_of_measurement: h
-      value_template: >
+      state: >
         {{ states.sensor.sleep_quality.attributes.yesterday.in_bed_duration }}
-      icon_template: "mdi:hotel"
+      icon: "mdi:bed"
 ```
 
 ## Sponsoring
