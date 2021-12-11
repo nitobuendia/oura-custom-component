@@ -3,6 +3,7 @@
 from homeassistant import core
 from homeassistant.components import http
 import json
+import os
 
 # Views configuration.
 AUTH_CALLBACK_NAME = 'api:oura'
@@ -41,6 +42,7 @@ class OuraAuthCallbackView(http.HomeAssistantView):
     sensor_name = request.query.get('state')
     token_file_name = self._sensor._api.token_file_name
 
+    os.makedirs(os.path.dirname(token_file_name), exist_ok=True)
     with open(token_file_name, 'w+') as token_file:
       token_file.write(json.dumps(code_data))
 
