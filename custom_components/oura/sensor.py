@@ -106,7 +106,7 @@ class OuraSleepSensor(entity.Entity):
   Attributes:
     name: name of the sensor.
     state: state of the sensor.
-    device_state_attributes: attributes of the sensor.
+    extra_state_attributes: attributes of the sensor.
 
   Methods:
     async_update: updates sensor data.
@@ -364,7 +364,7 @@ class OuraSleepSensor(entity.Entity):
     return self._state
 
   @property
-  def device_state_attributes(self):
+  def extra_state_attributes(self):
     """Returns the sensor attributes."""
     return self._attributes
 
