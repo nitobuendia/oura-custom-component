@@ -68,10 +68,10 @@ CONF_KEY_NAME = 'sleep'
 CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
     vol.Optional(
-        const.CONF_MONITORED_VARIABLES,
+        _CONFIG_MONITORED_DATES,
         default=_DEFAULT_MONITORED_DATES): cv.ensure_list,
     vol.Optional(
-        _CONFIG_MONITORED_DATES,
+        const.CONF_MONITORED_VARIABLES,
         default=_DEFAULT_MONITORED_VARIABLES): vol.In(
             _SUPPORTED_MONITORED_VARIABLES),
     vol.Optional(
