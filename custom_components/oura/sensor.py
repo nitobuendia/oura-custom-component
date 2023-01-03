@@ -11,13 +11,9 @@ _CONF_SUPPORTED_TYPES = ['sleep']
 _DEFAULT_BACKFILL = 0
 _DEFAULT_MONITORED_VARIABLES = ['yesterday']
 _DEFAULT_NAME = 'sleep_score'
-_DEFAULT_TYPE = 'sleep'  # Makes backward compatibility easier.
 
 PLATFORM_SCHEMA = config_validation.PLATFORM_SCHEMA.extend({
     voluptuous.Required(const.CONF_ACCESS_TOKEN): config_validation.string,
-    voluptuous.Optional(
-        const.CONF_TYPE,
-        default=_DEFAULT_TYPE): voluptuous.In(_CONF_SUPPORTED_TYPES),
     voluptuous.Optional(
         const.CONF_MONITORED_VARIABLES,
         default=_DEFAULT_MONITORED_VARIABLES): config_validation.ensure_list,
