@@ -169,11 +169,11 @@ class OuraSleepSensor(sensor_base.OuraSensor):
     self._monitored_variables = [
         variable_name.lower()
         for variable_name in sleep_config.get(const.CONF_MONITORED_VARIABLES)
-    ]
+    ] if sleep_config.get(const.CONF_MONITORED_VARIABLES) else []
     self._monitored_dates = [
         date_name.lower()
         for date_name in sleep_config.get(_CONFIG_MONITORED_DATES)
-    ]
+    ] if sleep_config.get(_CONFIG_MONITORED_DATES) else []
 
   # Oura update logic.
   def _get_date_type_by_name(self, date_name):
