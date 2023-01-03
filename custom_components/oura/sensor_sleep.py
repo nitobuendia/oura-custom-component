@@ -11,7 +11,6 @@ from homeassistant import const
 from homeassistant.helpers import config_validation as cv
 from . import sensor_base
 from .helpers import date_helper
-from .helpers import math_helper
 
 # Sensor configuration
 _DEFAULT_NAME = 'oura_sleep'
@@ -47,7 +46,6 @@ _SUPPORTED_MONITORED_VARIABLES = [
     'deep_sleep_duration',
     'efficiency',
     'heart_rate',
-    'heart_rate_average',
     'hrv',
     'in_bed_duration',
     'latency',
@@ -117,7 +115,6 @@ _EMPTY_SENSOR_ATTRIBUTE = {
         'items': [],
         'timestamp': None,
     },
-    'heart_rate_average': None,
     'hrv': {
         'interval': None,
         'items': [],
@@ -352,8 +349,6 @@ class OuraSleepSensor(sensor_base.OuraSensor):
           'bedtime_start_hour': bedtime_start.strftime('%H:%M'),
           # HH:MM at which you woke up.
           'bedtime_end_hour': bedtime_end.strftime('%H:%M'),
-          # Avg. beats / minute.
-          'heart_rate_average': math_helper.safe_average(heart_rates),
           # Hours in deep sleep.
           'deep_sleep_duration': date_helper.seconds_to_hours(
               sleep.get('deep_sleep_duration')),
