@@ -15,9 +15,11 @@ _SENSORS_SCHEMA = {
 
 PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend({
     vol.Required(const.CONF_ACCESS_TOKEN): cv.string,
+
     vol.Optional(
         const.CONF_SENSORS,
-        default=_DEFAULT_SENSORS_SCHEMA): _SENSORS_SCHEMA,
+        default=_DEFAULT_SENSORS_SCHEMA
+    ): _SENSORS_SCHEMA,
 })
 
 

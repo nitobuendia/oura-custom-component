@@ -67,16 +67,21 @@ _DEFAULT_BACKFILL = 0
 CONF_KEY_NAME = 'sleep'
 CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
+
     vol.Optional(
         _CONFIG_MONITORED_DATES,
-        default=_DEFAULT_MONITORED_DATES): cv.ensure_list,
+        default=_DEFAULT_MONITORED_DATES
+    ): cv.ensure_list,
+
     vol.Optional(
         const.CONF_MONITORED_VARIABLES,
-        default=_DEFAULT_MONITORED_VARIABLES): vol.In(
-            _SUPPORTED_MONITORED_VARIABLES),
+        default=_DEFAULT_MONITORED_VARIABLES
+    ): vol.In(_SUPPORTED_MONITORED_VARIABLES),
+
     vol.Optional(
         _CONF_BACKFILL,
-        default=_DEFAULT_BACKFILL): cv.positive_int,
+        default=_DEFAULT_BACKFILL
+    ): cv.positive_int,
 }
 
 # There is no need to add any configuration as all fields are optional and
