@@ -24,7 +24,9 @@ _EMPTY_SENSOR_ATTRIBUTE = {
     'day': None,
     'awake_time': None,
     'bedtime_end': None,
+    'bedtime_end_hour': None,
     'bedtime_start': None,
+    'bedtime_start_hour': None,
     'deep_sleep_duration': None,
     'efficiency': None,
     'heart_rate': {
@@ -32,6 +34,7 @@ _EMPTY_SENSOR_ATTRIBUTE = {
         'items': [],
         'timestamp': None,
     },
+    'heart_rate_average': None,
     'hrv': {
         'interval': None,
         'items': [],
