@@ -79,7 +79,7 @@ CONF_SCHEMA = {
     vol.Optional(
         const.CONF_MONITORED_VARIABLES,
         default=_DEFAULT_MONITORED_VARIABLES
-    ): vol.In(_SUPPORTED_MONITORED_VARIABLES),
+    ): vol.All(cv.ensure_list, [vol.In(_SUPPORTED_MONITORED_VARIABLES)]),
 
     vol.Optional(
         _CONF_BACKFILL,
