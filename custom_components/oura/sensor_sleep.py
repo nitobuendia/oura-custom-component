@@ -370,3 +370,7 @@ class OuraSleepSensor(sensor_base.OuraSensor):
           'in_bed_duration': date_helper.seconds_to_hours(
               sleep.get('time_in_bed')),
       })
+
+      for variable in list(self._attributes[date_name].keys()):
+        if variable not in self._monitored_variables:
+          del self._attributes[date_name][variable]
