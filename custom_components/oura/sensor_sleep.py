@@ -166,7 +166,7 @@ class OuraSleepSensor(sensor_base.OuraSensor):
         variable_name.lower()
         for variable_name in sleep_config.get(const.CONF_MONITORED_VARIABLES)
     ]
-    self._monitored_days = [
+    self._monitored_dates = [
         date_name.lower()
         for date_name in sleep_config.get(_CONFIG_MONITORED_DATES)
     ]
@@ -282,7 +282,7 @@ class OuraSleepSensor(sensor_base.OuraSensor):
     """Fetches new state data for the sensor."""
     sleep_dates = {
         date_name: self._get_date_by_name(date_name)
-        for date_name in self._monitored_days
+        for date_name in self._monitored_dates
     }
 
     # Add an extra week to retrieve past week in case current week data is
@@ -332,7 +332,7 @@ class OuraSleepSensor(sensor_base.OuraSensor):
         continue
 
       # State gets the value of the sleep score for the first monitored day.
-      if self._monitored_days.index(date_name) == 0:
+      if self._monitored_dates.index(date_name) == 0:
         self._state = sleep.get('efficiency')
 
       bedtime_start = parser.parse(sleep.get('bedtime_start'))
