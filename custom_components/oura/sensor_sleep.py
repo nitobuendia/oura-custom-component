@@ -4,12 +4,84 @@ import datetime
 import enum
 import logging
 import re
+import voluptuous as vol
 
 from dateutil import parser
 from homeassistant import const
+from homeassistant.helpers import config_validation as cv
 from . import sensor_base
 from .helpers import date_helper
 from .helpers import math_helper
+
+# Sensor configuration
+_DEFAULT_NAME = 'oura_sleep'
+
+_CONFIG_MONITORED_DATES = 'monitored_dates'
+_DEFAULT_MONITORED_DATES = ['yesterday']
+
+_DEFAULT_MONITORED_VARIABLES = [
+    'average_breath',
+    'average_heart_rate',
+    'awake_time',
+    'bedtime_start_hour',
+    'bedtime_end_hour',
+    'day',
+    'deep_sleep_duration',
+    'light_sleep_duration',
+    'rem_sleep_duration',
+    'resting_heart_rate',
+    'time_in_bed',
+    'total_sleep_duration',
+]
+_SUPPORTED_MONITORED_VARIABLES = [
+    'average_breath',
+    'average_heart_rate',
+    'average_hrv',
+    'day',
+    'awake_time',
+    'bedtime_end',
+    'bedtime_start',
+    'deep_sleep_duration',
+    'efficiency',
+    'heart_rate',
+    'hrv',
+    'latency',
+    'light_sleep_duration',
+    'low_battery_alert',
+    'lowest_heart_rate',
+    'movement_30_sec',
+    'period',
+    'readiness_score_delta',
+    'rem_sleep_duration',
+    'restless_periods',
+    'sleep_phase_5_min',
+    'sleep_score_delta',
+    'time_in_bed',
+    'total_sleep_duration',
+    'type',
+]
+
+_CONF_BACKFILL = 'max_backfill'
+_DEFAULT_BACKFILL = 0
+
+CONF_KEY_NAME = 'sleep'
+CONF_SCHEMA = {
+    vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
+    vol.Optional(
+        const.CONF_MONITORED_VARIABLES,
+        default=_DEFAULT_MONITORED_DATES): cv.ensure_list,
+    vol.Optional(
+        _CONFIG_MONITORED_DATES,
+        default=_DEFAULT_MONITORED_VARIABLES): vol.In(
+            _SUPPORTED_MONITORED_VARIABLES),
+    vol.Optional(
+        _CONF_BACKFILL,
+        default=_DEFAULT_BACKFILL): cv.positive_int,
+}
+
+# There is no need to add any configuration as all fields are optional and
+# with default values. However, this is done as it is used in the main sensor.
+DEFAULT_CONFIG = {}
 
 # Constants.
 _FULL_WEEKDAY_NAMES = [
@@ -85,7 +157,7 @@ class OuraSleepSensor(sensor_base.OuraSensor):
     # Sleep sensor config.
     self._monitored_days = [
         date_name.lower()
-        for date_name in config.get(const.CONF_MONITORED_VARIABLES)
+        for date_name in config.get(_CONFIG_MONITORED_DATES)
     ]
 
   # Oura update logic.

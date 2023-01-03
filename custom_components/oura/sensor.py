@@ -1,27 +1,23 @@
 """ensor from Oura Ring data."""
 
 from homeassistant import const
-from homeassistant.helpers import config_validation
-import voluptuous
+from homeassistant.helpers import config_validation as cv
+import voluptuous as vol
 from . import sensor_sleep
 
-_CONF_BACKFILL = 'max_backfill'
-_CONF_SUPPORTED_TYPES = ['sleep']
+_DEFAULT_SENSORS_SCHEMA = {
+    const.CONF_SENSORS: sensor_sleep.DEFAULT_CONFIG,
+}
 
-_DEFAULT_BACKFILL = 0
-_DEFAULT_MONITORED_VARIABLES = ['yesterday']
-_DEFAULT_NAME = 'sleep_score'
+_SENSORS_SCHEMA = {
+    vol.Optional(sensor_sleep.CONF_KEY_NAME): sensor_sleep.CONF_SCHEMA,
+}
 
-PLATFORM_SCHEMA = config_validation.PLATFORM_SCHEMA.extend({
-    voluptuous.Required(const.CONF_ACCESS_TOKEN): config_validation.string,
-    voluptuous.Optional(
-        const.CONF_MONITORED_VARIABLES,
-        default=_DEFAULT_MONITORED_VARIABLES): config_validation.ensure_list,
-    voluptuous.Optional(
-        const.CONF_NAME, default=_DEFAULT_NAME): config_validation.string,
-    voluptuous.Optional(
-        _CONF_BACKFILL,
-        default=_DEFAULT_BACKFILL): config_validation.positive_int,
+PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend({
+    vol.Required(const.CONF_ACCESS_TOKEN): cv.string,
+    vol.Optional(
+        const.CONF_SENSORS,
+        default=_DEFAULT_CONFIG_SCHEMA): _SENSORS_SCHEMA,
 })
 
 
