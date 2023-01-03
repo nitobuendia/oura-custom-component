@@ -301,10 +301,9 @@ class OuraSleepSensor(sensor_base.OuraSensor):
       return
 
     for date_name, date_value in sleep_dates.items():
-      if date_name not in self._attributes:
-        self._attributes[date_name] = dict()
-        self._attributes[date_name].update(_EMPTY_SENSOR_ATTRIBUTE)
-        self._attributes[date_name]['day'] = date_value
+      date_attributes = dict()
+      date_attributes.update(_EMPTY_SENSOR_ATTRIBUTE)
+      date_attributes['day'] = date_value
 
       sleep = sleep_data.get(date_value)
       date_name_title = date_name.title()
@@ -343,8 +342,8 @@ class OuraSleepSensor(sensor_base.OuraSensor):
 
       heart_rates = sleep.get('heart_rate', {}).get('items', [])
 
-      self._attributes[date_name].update(sleep)
-      self._attributes[date_name].update({
+      date_attributes.update(sleep)
+      date_attributes.update({
           # HH:MM at which you went bed.
           'bedtime_start_hour': bedtime_start.strftime('%H:%M'),
           # HH:MM at which you woke up.
@@ -371,6 +370,8 @@ class OuraSleepSensor(sensor_base.OuraSensor):
               sleep.get('time_in_bed')),
       })
 
-      for variable in list(self._attributes[date_name].keys()):
+      for variable in list(date_attributes.keys()):
         if variable not in self._monitored_variables:
-          del self._attributes[date_name][variable]
+          del date_attributes[variable]
+
+      self._attributes[date_name] = date_attributes
