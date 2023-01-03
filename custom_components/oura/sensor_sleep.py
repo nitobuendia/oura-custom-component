@@ -155,10 +155,17 @@ class OuraSleepSensor(sensor_base.OuraSensor):
     super(OuraSleepSensor, self).__init__(config, hass)
 
     # Sleep sensor config.
+    sleep_config = config.get(CONF_KEY_NAME, {})
+    self._name = sleep_config.get(const.CONF_NAME)
+    self._monitored_variables = [
+        variable_name.lower()
+        for variable_name in sleep_config.get(const.CONF_MONITORED_VARIABLES)
+    ]
     self._monitored_days = [
         date_name.lower()
-        for date_name in config.get(_CONFIG_MONITORED_DATES)
+        for date_name in sleep_config.get(_CONFIG_MONITORED_DATES)
     ]
+    self._backfill = sleep_config.get(_CONF_BACKFILL)
 
   # Oura update logic.
   def _get_date_type_by_name(self, date_name):

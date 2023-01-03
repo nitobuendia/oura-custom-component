@@ -4,11 +4,7 @@ from homeassistant import const
 from homeassistant.helpers import entity
 from . import api
 
-_CONF_BACKFILL = 'max_backfill'
-
-# Sensor config.
-SENSOR = 'oura'
-SENSOR_NAME = 'Oura Ring'
+SENSOR_NAME = 'oura'
 
 
 class OuraSensor(entity.Entity):
@@ -27,13 +23,10 @@ class OuraSensor(entity.Entity):
   def __init__(self, config, hass):
     """Initializes the sensor."""
 
+    # Basic sensor config.
     self._config = config
     self._hass = hass
-
-    # Basic sensor config.
-    self._name = config.get(const.CONF_NAME)
-    self._sensor_name = SENSOR_NAME
-    self._backfill = config.get(_CONF_BACKFILL)
+    self._name = SENSOR_NAME
 
     # API config.
     access_token = config.get(const.CONF_ACCESS_TOKEN)

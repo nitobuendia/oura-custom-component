@@ -17,7 +17,7 @@ PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend({
     vol.Required(const.CONF_ACCESS_TOKEN): cv.string,
     vol.Optional(
         const.CONF_SENSORS,
-        default=_DEFAULT_CONFIG_SCHEMA): _SENSORS_SCHEMA,
+        default=_DEFAULT_SENSORS_SCHEMA): _SENSORS_SCHEMA,
 })
 
 
@@ -29,4 +29,10 @@ async def setup(hass, config):
 async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):
   """Adds sensor platform to the list of platforms."""
-  async_add_entities([sensor_sleep.OuraSleepSensor(config, hass)], True)
+  sensors_config = config.get(const.CONF_SENSORS, {})
+  sensors = []
+
+  if sensor_sleep.CONF_KEY_NAME in sensors_config:
+    sensors.append(sensor_sleep.OuraSleepSensor(config, hass))
+
+  async_add_entities(sensors, True)
