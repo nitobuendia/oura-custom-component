@@ -163,7 +163,7 @@ class OuraSleepSensor(sensor_base.OuraSensor):
     super(OuraSleepSensor, self).__init__(config, hass)
 
     # Sleep sensor config.
-    sleep_config = config.get(CONF_KEY_NAME, {})
+    sleep_config = config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {})
     self._name = sleep_config.get(const.CONF_NAME)
     self._monitored_variables = [
         variable_name.lower()
