@@ -259,8 +259,6 @@ class OuraSleepSensor(sensor_base.OuraSensor):
           'bedtime_start_hour': bedtime_start.strftime('%H:%M'),
           # HH:MM at which you woke up.
           'bedtime_end_hour': bedtime_end.strftime('%H:%M'),
-          # Beats / minute (lowest).
-          'resting_heart_rate': sleep.get('lowest_heart_rate'),
           # Avg. beats / minute.
           'heart_rate_average': math_helper.safe_average(heart_rates),
           # Hours in deep sleep.
