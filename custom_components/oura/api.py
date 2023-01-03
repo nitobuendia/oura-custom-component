@@ -67,8 +67,6 @@ class OuraApi(object):
     response = requests.get(api_url, params=params, headers=headers)
     response_data = response.json()
 
-    logging.error(response_data)
-
     return response_data
 
   # Oura API properties.
