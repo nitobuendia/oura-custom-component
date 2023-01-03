@@ -1,4 +1,4 @@
-"""Sensors from Oura Ring data."""
+"""ensor from Oura Ring data."""
 
 from homeassistant import const
 from homeassistant.helpers import config_validation
@@ -14,8 +14,7 @@ _DEFAULT_NAME = 'sleep_score'
 _DEFAULT_TYPE = 'sleep'  # Makes backward compatibility easier.
 
 PLATFORM_SCHEMA = config_validation.PLATFORM_SCHEMA.extend({
-    voluptuous.Required(const.CONF_CLIENT_ID): config_validation.string,
-    voluptuous.Required(const.CONF_CLIENT_SECRET): config_validation.string,
+    voluptuous.Required(const.CONF_ACCESS_TOKEN): config_validation.string,
     voluptuous.Optional(
         const.CONF_TYPE,
         default=_DEFAULT_TYPE): voluptuous.In(_CONF_SUPPORTED_TYPES),

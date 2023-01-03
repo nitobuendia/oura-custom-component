@@ -9,6 +9,7 @@ from dateutil import parser
 from homeassistant import const
 from . import date_helper
 from . import sensor_base
+from .helpers import math_helper
 
 # Constants.
 _FULL_WEEKDAY_NAMES = [
@@ -17,19 +18,39 @@ _FULL_WEEKDAY_NAMES = [
 ]
 
 _EMPTY_SENSOR_ATTRIBUTE = {
-    'date': None,
-    'bedtime_start_hour': None,
-    'bedtime_end_hour': None,
-    'breath_average': None,
-    'temperature_delta': None,
-    'resting_heart_rate': None,
-    'heart_rate_average': None,
+    'average_breath': None,
+    'average_heart_rate': None,
+    'average_hrv': None,
+    'day': None,
+    'awake_time': None,
+    'bedtime_end': None,
+    'bedtime_start': None,
     'deep_sleep_duration': None,
-    'rem_sleep_duration': None,
+    'efficiency': None,
+    'heart_rate': {
+        'interval': None,
+        'items': [],
+        'timestamp': None,
+    },
+    'hrv': {
+        'interval': None,
+        'items': [],
+        'timestamp': None,
+    },
+    'latency': None,
     'light_sleep_duration': None,
+    'low_battery_alert': None,
+    'lowest_heart_rate': None,
+    'movement_30_sec': None,
+    'period': None,
+    'readiness_score_delta': None,
+    'rem_sleep_duration': None,
+    'restless_periods': None,
+    'sleep_phase_5_min': None,
+    'sleep_score_delta': None,
+    'time_in_bed': None,
     'total_sleep_duration': None,
-    'awake_duration': None,
-    'in_bed_duration': None,
+    'type': None,
 }
 
 
@@ -153,17 +174,17 @@ class OuraSleepSensor(sensor_base.OuraSensor):
       Dictionary where key is the requested summary_date and value is the
       Oura sleep data for that given day.
     """
-    if not oura_data or 'sleep' not in oura_data:
+    if not oura_data or 'data' not in oura_data:
       logging.error('Couldn\'t fetch data for Oura ring sensor.')
       return {}
 
-    sleep_data = oura_data.get('sleep')
+    sleep_data = oura_data.get('data')
     if not sleep_data:
       return {}
 
     sleep_dict = {}
     for sleep_daily_data in sleep_data:
-      sleep_date = sleep_daily_data.get('summary_date')
+      sleep_date = sleep_daily_data.get('day')
       if not sleep_date:
         continue
       sleep_dict[sleep_date] = sleep_daily_data
@@ -191,8 +212,9 @@ class OuraSleepSensor(sensor_base.OuraSensor):
 
     for date_name, date_value in sleep_dates.items():
       if date_name not in self._attributes:
-        self._attributes[date_name] = dict(_EMPTY_SENSOR_ATTRIBUTE)
-        self._attributes[date_name]['date'] = date_value
+        self._attributes[date_name] = dict()
+        self._attributes[date_name].update(_EMPTY_SENSOR_ATTRIBUTE)
+        self._attributes[date_name]['day'] = date_value
 
       sleep = sleep_data.get(date_value)
       date_name_title = date_name.title()
@@ -200,9 +222,9 @@ class OuraSleepSensor(sensor_base.OuraSensor):
       # Check past dates to see if backfill is possible when missing data.
       backfill = 0
       original_date = date_value
-      while (not sleep and
-             backfill < self._backfill and
-             date_value >= start_date):
+      while (not sleep
+             and backfill < self._backfill
+             and date_value >= start_date):
         date_value = self._get_backfill_date(date_name, date_value)
         if not date_value:
           break
@@ -224,48 +246,39 @@ class OuraSleepSensor(sensor_base.OuraSensor):
 
       # State gets the value of the sleep score for the first monitored day.
       if self._monitored_days.index(date_name) == 0:
-        self._state = sleep.get('score')
+        self._state = sleep.get('efficiency')
 
       bedtime_start = parser.parse(sleep.get('bedtime_start'))
       bedtime_end = parser.parse(sleep.get('bedtime_end'))
 
-      self._attributes[date_name] = {
-          'date': date_value,
+      heart_rates = sleep.get('heart_rate', {}).get('items', [])
 
+      self._attributes[date_name].update(sleep)
+      self._attributes[date_name].update({
           # HH:MM at which you went bed.
           'bedtime_start_hour': bedtime_start.strftime('%H:%M'),
           # HH:MM at which you woke up.
           'bedtime_end_hour': bedtime_end.strftime('%H:%M'),
-
-          # Breaths / minute.
-          'breath_average': int(round(sleep.get('breath_average'), 0)),
-          # Temperature deviation in Celsius.
-          'temperature_delta': sleep.get('temperature_delta'),
-
           # Beats / minute (lowest).
-          'resting_heart_rate': sleep.get('hr_lowest'),
+          'resting_heart_rate': sleep.get('lowest_heart_rate'),
           # Avg. beats / minute.
-          'heart_rate_average': int(round((
-              sum(sleep.get('hr_5min', 0)) /
-              (len(sleep.get('hr_5min', [])) or 1)),
-              0)),
-
+          'heart_rate_average': math_helper.safe_average(heart_rates),
           # Hours in deep sleep.
           'deep_sleep_duration': date_helper.seconds_to_hours(
-              sleep.get('deep')),
+              sleep.get('deep_sleep_duration')),
           # Hours in REM sleep.
           'rem_sleep_duration': date_helper.seconds_to_hours(
-              sleep.get('rem')),
+              sleep.get('rem_sleep_duration')),
           # Hours in light sleep.
           'light_sleep_duration': date_helper.seconds_to_hours(
-              sleep.get('light')),
+              sleep.get('light_sleep_duration')),
           # Hours sleeping: deep + rem + light.
           'total_sleep_duration': date_helper.seconds_to_hours(
-              sleep.get('total')),
+              sleep.get('total_sleep_duration')),
           # Hours awake.
           'awake_duration': date_helper.seconds_to_hours(
-              sleep.get('awake')),
+              sleep.get('awake_time')),
           # Hours in bed: sleep + awake.
           'in_bed_duration': date_helper.seconds_to_hours(
-              sleep.get('duration')),
-      }
+              sleep.get('time_in_bed')),
+      })
