@@ -4,7 +4,7 @@ import enum
 import logging
 import os
 import requests
-from . import hass_helper
+from .helpers import hass_helper
 
 # Oura API config.
 _OURA_API_V2 = 'https://api.ouraring.com/v2'
