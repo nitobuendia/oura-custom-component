@@ -19,6 +19,7 @@ _DEFAULT_MONITORED_VARIABLES = [
     'day',
     'recovery_index',
     'resting_heart_rate',
+    'score',
     'sleep_balance',
 ]
 _SUPPORTED_MONITORED_VARIABLES = [
