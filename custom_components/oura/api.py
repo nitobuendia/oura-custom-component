@@ -10,6 +10,7 @@ _OURA_API_V2 = 'https://api.ouraring.com/v2'
 
 class OuraEndpoints(enum.Enum):
   """Represents Oura endpoints."""
+  READINESS = '{}/usercollection/daily_readiness'.format(_OURA_API_V2)
   SLEEP = '{}/usercollection/sleep'.format(_OURA_API_V2)
   SLEEP_SCORE = '{}/usercollection/daily_sleep'.format(_OURA_API_V2)
 
@@ -65,6 +66,19 @@ class OuraApi(object):
     response_data = response.json()
 
     return response_data
+
+  def get_readiness_data(self, start_date, end_date=None):
+    """Fetches readiness data for a given date range.
+
+    Args:
+      start_date: Day for which to fetch data(YYYY-MM-DD).
+      end_date: Last day for which to retrieve data(YYYY-MM-DD).
+        If same as start_date, leave empty.
+
+    Returns:
+      Dictionary containing Oura sleep data.
+    """
+    return self._get_oura_data(OuraEndpoints.READINESS, start_date, end_date)
 
   def get_sleep_data(self, start_date, end_date=None):
     """Fetches sleep data for a given date range.
