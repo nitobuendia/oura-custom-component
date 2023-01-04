@@ -3,6 +3,7 @@
 from homeassistant import const
 from homeassistant.helpers import config_validation as cv
 import voluptuous as vol
+from . import sensor_readiness
 from . import sensor_sleep
 
 _DEFAULT_SENSORS_SCHEMA = {
@@ -10,6 +11,11 @@ _DEFAULT_SENSORS_SCHEMA = {
 }
 
 _SENSORS_SCHEMA = {
+    vol.Optional(
+        sensor_readiness.CONF_KEY_NAME,
+        default=sensor_readiness.DEFAULT_CONFIG
+    ): sensor_readiness.CONF_SCHEMA,
+
     vol.Optional(
         sensor_sleep.CONF_KEY_NAME,
         default=sensor_sleep.DEFAULT_CONFIG
@@ -36,6 +42,9 @@ async def async_setup_platform(
   """Adds sensor platform to the list of platforms."""
   sensors_config = config.get(const.CONF_SENSORS, {})
   sensors = []
+
+  if sensor_readiness.CONF_KEY_NAME in sensors_config:
+    sensors.append(sensor_readiness.OuraReadinessSensor(config, hass))
 
   if sensor_sleep.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_sleep.OuraSleepSensor(config, hass))
