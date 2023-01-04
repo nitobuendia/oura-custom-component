@@ -20,6 +20,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   access_token:
   scan_interval:
   sensors:
+    readiness:
+      name:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
     sleep:
       name:
       max_backfill:
