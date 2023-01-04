@@ -10,7 +10,10 @@ _DEFAULT_SENSORS_SCHEMA = {
 }
 
 _SENSORS_SCHEMA = {
-    vol.Optional(sensor_sleep.CONF_KEY_NAME): sensor_sleep.CONF_SCHEMA,
+    vol.Optional(
+        sensor_sleep.CONF_KEY_NAME,
+        default=sensor_sleep.DEFAULT_CONFIG
+    ): sensor_sleep.CONF_SCHEMA,
 }
 
 PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend({
