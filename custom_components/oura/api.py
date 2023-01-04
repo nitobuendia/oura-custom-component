@@ -68,13 +68,3 @@ class OuraApi(object):
     response_data = response.json()
 
     return response_data
-
-  # Oura API properties.
-  @property
-  def token_file_name(self):
-    """Gets the API token file name for the related sensor."""
-    # From config/custom_components/oura to config/
-    base_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    token_file = _TOKEN_FILE.format(self._sensor.name)
-    full_token_filepath = os.path.join(base_path, token_file)
-    return full_token_filepath
