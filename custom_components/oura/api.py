@@ -35,8 +35,8 @@ class OuraApi(object):
     self._access_token = access_token
     self._hass_url = hass_helper.get_url(self._sensor._hass)
 
-  def get_sleep_data(self, start_date, end_date=None):
-    """Fetches data for a sleep OuraEndpoint and date.
+  def _get_oura_data(self, endpoint, start_date, end_date=None):
+    """Fetches data for a OuraEndpoint and date.
 
     TODO: detect whether data was retrieved.
     TODO: detect whether next_token is present. If yes, fetch and combine.
@@ -48,9 +48,8 @@ class OuraApi(object):
 
     Returns:
       Dictionary containing Oura sleep data.
-      None if the access token was not found or authorized.
     """
-    api_url = OuraEndpoints.SLEEP.value
+    api_url = endpoint.value
 
     params = {}
     if start_date:
@@ -66,3 +65,16 @@ class OuraApi(object):
     response_data = response.json()
 
     return response_data
+
+  def get_sleep_data(self, start_date, end_date=None):
+    """Fetches sleep data for a given date range.
+
+    Args:
+      start_date: Day for which to fetch data(YYYY-MM-DD).
+      end_date: Last day for which to retrieve data(YYYY-MM-DD).
+        If same as start_date, leave empty.
+
+    Returns:
+      Dictionary containing Oura sleep data.
+    """
+    return self._get_oura_data(OuraEndpoints.SLEEP, start_date, end_date)
