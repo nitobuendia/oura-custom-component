@@ -156,7 +156,6 @@ class OuraSleepSensor(sensor_base.OuraSensor):
 
   Methods:
     async_update: updates sensor data.
-    create_oauth_view: creates a view to manage OAuth setup.
   """
 
   def __init__(self, config, hass):
