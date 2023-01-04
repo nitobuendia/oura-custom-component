@@ -1,8 +1,6 @@
 """Provides an OuraApi class to handle interactions with Oura API."""
 
 import enum
-import logging
-import os
 import requests
 from .helpers import hass_helper
 
