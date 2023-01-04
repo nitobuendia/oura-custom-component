@@ -32,11 +32,16 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 * `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
 * `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
 * `sensors`: (Optional) Determines which sensors to import and its configuration.
+  * `readiness`: (Optional) Configures readiness sensor. Default: readiness sensor is not configured.
+    * `name`: (Optional) Name of the sensor (e.g. sleep_readiness). Default: oura_readiness.
+    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    * `monitored_variables`: Variables that you want to monitor. See `Readiness Sensor monitored attributes` section to understand what variables are supported.
   * `sleep`: (Optional) Configures sleep sensor. Default: sleep sensor is configured.
     * `name`: (Optional) Name of the sensor (e.g. sleep_quality). Default: oura_sleep.
     * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section under `Sleep Sensor` to understand what day values are supported. Default: yesterday.
-    * `monitored_variables`: Variables that you want to monitor. See `Monitored attributes` section under `Sleep Sensor` to understand what variables are supported. Default: 'average_breath', 'average_heart_rate', 'awake_duration', 'bedtime_start_hour', 'bedtime_end_hour', 'day', 'deep_sleep_duration', 'in_bed_duration', 'light_sleep_duration', 'lowest_heart_rate', 'rem_sleep_duration', 'total_sleep_duration'.
+    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    * `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor monitored attributes` section to understand what variables are supported.
 
 ### Example
 
@@ -45,6 +50,7 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   access_token: !secret oura_api_token
   scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
   sensors:
+    readiness:
     sleep:
       name: sleep_data
       max_backfill: 3
@@ -69,11 +75,7 @@ This token is only valid for your personal data. If you need to access data from
 
 ## Sensors
 
-### Sleep Sensor
-
-#### State
-
-The state of the sensor will show the **sleep efficiency** for the first selected day (recommended: yesterday).
+### Common attributes
 
 #### Monitored days
 
@@ -107,7 +109,62 @@ If you set the `max_backfill` value to any positive integer, then it will backfi
 
 * `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
 
-#### Monitored attributes
+### Readiness Sensor
+
+#### Readiness Sensor state
+
+The state of the sensor will show the **score** for the first selected day (recommended: yesterday).
+
+#### Readiness Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+The readiness sensor supports all the following monitored attributes:
+
+* `day`: YYYY-MM-DD of the date of the data point.
+* `activity_balance`
+* `body_temperature`
+* `hrv_balance`
+* `previous_day_activity`
+* `previous_night`
+* `recovery_index`
+* `resting_heart_rate`
+* `sleep_balance`
+* `score`
+* `temperature_deviation`
+* `temperature_trend_deviation`
+* `timestamp`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_readiness_route_daily_readiness_get).
+
+#### Readiness Sensor sample output
+
+**State**: `94` (note: score of yesterday, which was the first day configured on the example)
+
+**Attributes**:
+
+```yaml
+yesterday:
+  activity_balance: 79
+  body_temperature: 96
+  day: '2023-01-03'
+  hrv_balance: 94
+  previous_day_activity: null
+  previous_night: 86
+  recovery_index: 100
+  resting_heart_rate: 100
+  sleep_balance: 98
+```
+
+For full details on the exact schema of each variable, check [Oura API documentation](https://cloud.ouraring.com/v2/docs#operation/sleep_route_sleep_get).
+
+### Sleep Sensor
+
+#### Sleep Sensor State
+
+The state of the sensor will show the **sleep efficiency** for the first selected day (recommended: yesterday).
+
+#### Sleep Sensor monitored attributes
 
 The attributes will contain the daily data for the selected days and monitored variables.
 
@@ -149,7 +206,9 @@ Formerly supported variables that are no longe part of the API (i.e. not support
 
 * `temperature_delta`: Delta temperature from sleeping to day.
 
-#### Sample output
+By default, the following attributes are being monitored: `average_breath`, `average_heart_rate`, `awake_duration`, `bedtime_start_hour`, `bedtime_end_hour`, `day`, `deep_sleep_duration`, `in_bed_duration`, `light_sleep_duration`, `lowest_heart_rate`, `rem_sleep_duration`, `total_sleep_duration`.
+
+#### Sleep Sensor sample output
 
 **State**: `48` (note: efficiency of yesterday, which was the first day configured on the example)
 
