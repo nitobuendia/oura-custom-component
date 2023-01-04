@@ -151,7 +151,8 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
       Oura sleep data for that given day.
     """
     if not oura_data or 'data' not in oura_data:
-      logging.error('Couldn\'t fetch data for Oura ring sensor.')
+      logging.error(
+          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
       return {}
 
     sleep_data = oura_data.get('data')
