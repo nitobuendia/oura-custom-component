@@ -151,7 +151,7 @@ Formerly supported variables that are no longe part of the API (i.e. not support
 
 #### Sample output
 
-**State**: `48` (note: efficiency of yesterday, which was the first day configure on the example)
+**State**: `48` (note: efficiency of yesterday, which was the first day configured on the example)
 
 **Attributes**:
 
