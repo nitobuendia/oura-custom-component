@@ -180,38 +180,42 @@ The sleep sensor supports all the following monitored attributes:
 * `average_heart_rate`: Average beats per minute of your heart (f.k.a `heart_rate_average`).
 * `average_hrv`
 * `awake_time`: Time awake in seconds.
-* `awake_duration`: Time awake in hours. Derived from `awake_time`.
+* `awake_duration_in_hours`: Time awake in hours. Derived from `awake_time`.
 * `bedtime_end`: Timestamp at which you woke up from bed.
 * `bedtime_end_hour`: Time (HH:MM) at which you woke up from bed.
 * `bedtime_start`: Timestamp at which you went to bed.
 * `bedtime_start_hour`: Time (HH:MM) at which you went to bed.
-* `deep_sleep_duration`: Number of hours in deep sleep phase.
+* `deep_sleep_duration`: Number of seconds in deep sleep phase.
+* `deep_sleep_duration_in_hours`: Number of hours in deep sleep phase. Derived from `deep_sleep_duration`.
 * `efficiency`: Sleep efficiency. Used as the state.
 * `heart_rate`
 * `hrv`
-* `in_bed_duration`: Total hours in bed.
+* `in_bed_duration_in_hours`: Total hours in bed. Derived from `time in bed`.
 * `latency`
-* `light_sleep_duration`: Number of hours in light sleep phase.
+* `light_sleep_duration`: Number of seconds in light sleep phase.
+* `light_sleep_duration_in_hours`: Number of hours in light sleep phase. Derived from `light_sleep_duration`.
 * `low_battery_alert`
 * `lowest_heart_rate`: Beats per minute of your resting heart (f.k.a `resting_heart_rate`).
 * `movement_30_sec`
 * `period`
 * `readiness_score_delta`
-* `rem_sleep_duration`: Number of hours in REM sleep phase.
+* `rem_sleep_duration`: Number of seconds in REM sleep phase.
+* `rem_sleep_duration_in_hours`: Number of hours in REM sleep phase. Derived from `rem_sleep_duration`.
 * `restless_periods`
 * `sleep_phase_5_min`
 * `sleep_score_delta`
-* `time_in_bed`
-* `total_sleep_duration`: Total hours of sleep.
+* `time_in_bed`: Total number of seconds in bed.
+* `total_sleep_duration`: Total seconds of sleep.
+* `total_sleep_duration_in_hours`: Total hours of sleep. Derived from `total_sleep_duration`.
 * `type`: Type of sleep.
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/sleep_route_sleep_get).
 
-Formerly supported variables that are no longe part of the API (i.e. not supported):
+By default, the following attributes are being monitored: `average_breath`, `average_heart_rate`, `awake_duration_in_hours`, `bedtime_start_hour`, `bedtime_end_hour`, `day`, `deep_sleep_duration_in_hours`, `in_bed_duration_in_hours`, `light_sleep_duration_in_hours`, `lowest_heart_rate`, `rem_sleep_duration_in_hours`, `total_sleep_duration_in_hours`.
+
+Formerly supported variables that are no longer part of the API (i.e. not supported):
 
 * `temperature_delta`: Delta temperature from sleeping to day.
-
-By default, the following attributes are being monitored: `average_breath`, `average_heart_rate`, `awake_duration`, `bedtime_start_hour`, `bedtime_end_hour`, `day`, `deep_sleep_duration`, `in_bed_duration`, `light_sleep_duration`, `lowest_heart_rate`, `rem_sleep_duration`, `total_sleep_duration`.
 
 #### Sleep Sensor sample output
 
