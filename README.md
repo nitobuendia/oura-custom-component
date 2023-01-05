@@ -161,8 +161,6 @@ yesterday:
   sleep_balance: 98
 ```
 
-For full details on the exact schema of each variable, check [Oura API documentation](https://cloud.ouraring.com/v2/docs#operation/sleep_route_sleep_get).
-
 ### Sleep Sensor
 
 #### Sleep Sensor State
@@ -253,8 +251,6 @@ yesterday: {
   "in_bed_duration": 8.6
 }
 ```
-
-For full details on the exact schema of each variable, check [Oura API documentation](https://cloud.ouraring.com/v2/docs#operation/sleep_route_sleep_get).
 
 ### Derived sensors
 
