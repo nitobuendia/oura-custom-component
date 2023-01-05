@@ -145,7 +145,22 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
     sleep_config = config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {})
     super(OuraSleepSensor, self).__init__(config, hass, sleep_config)
 
-  def _parse_sleep_data(self, oura_data):
+    self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
+    self._main_state_attribute = 'efficiency'
+
+  def get_sensor_data_from_api(self, start_date, end_date):
+    """Fetches sleep data from the API.
+
+    Args:
+      start_date: Start date in YYYY-MM-DD.
+      end_date: End date in YYYY-MM-DD.
+
+    Returns:
+      JSON object with API data.
+    """
+    return self._api.get_sleep_data(start_date, end_date)
+
+  def parse_sensor_data(self, oura_data):
     """Processes sleep data into a dictionary.
 
     Args:
@@ -202,25 +217,3 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
       })
 
     return sleep_dict
-
-  def _update(self):
-    """Fetches new state data for the sensor."""
-    (start_date, end_date) = self.get_monitored_date_range()
-
-    oura_data = self._api.get_sleep_data(start_date, end_date)
-    sleep_data = self._parse_sleep_data(oura_data)
-
-    if not sleep_data:
-      return
-
-    dated_attributes = self.map_data_to_monitored_days(
-        sleep_data, _EMPTY_SENSOR_ATTRIBUTE)
-
-    # Update state must happen before filtering for monitored variables.
-    first_monitored_date = self._monitored_dates[0]
-    first_date_attributes = dated_attributes.get(first_monitored_date)
-    if first_date_attributes:
-      self._state = first_date_attributes.get('efficiency')
-
-    dated_attributes = self.filter_monitored_variables(dated_attributes)
-    self._attributes = dated_attributes

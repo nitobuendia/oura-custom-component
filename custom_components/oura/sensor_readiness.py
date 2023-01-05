@@ -96,7 +96,22 @@ class OuraReadinessSensor(sensor_base.OuraDatedSensor):
         config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {}))
     super(OuraReadinessSensor, self).__init__(config, hass, readiness_config)
 
-  def _parse_readiness_data(self, oura_data):
+    self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
+    self._main_state_attribute = 'score'
+
+  def get_sensor_data_from_api(self, start_date, end_date):
+    """Fetches readiness data from the API.
+
+    Args:
+      start_date: Start date in YYYY-MM-DD.
+      end_date: End date in YYYY-MM-DD.
+
+    Returns:
+      JSON object with API data.
+    """
+    return self._api.get_readiness_data(start_date, end_date)
+
+  def parse_sensor_data(self, oura_data):
     """Processes readiness data into a dictionary.
 
     Args:
@@ -129,25 +144,3 @@ class OuraReadinessSensor(sensor_base.OuraDatedSensor):
       readiness_dict[readiness_date] = readiness_daily_data
 
     return readiness_dict
-
-  def _update(self):
-    """Fetches new state data for the sensor."""
-    (start_date, end_date) = self.get_monitored_date_range()
-
-    oura_data = self._api.get_readiness_data(start_date, end_date)
-    readiness_data = self._parse_readiness_data(oura_data)
-
-    if not readiness_data:
-      return
-
-    dated_attributes = self.map_data_to_monitored_days(
-        readiness_data, _EMPTY_SENSOR_ATTRIBUTE)
-
-    # Update state must happen before filtering for monitored variables.
-    first_monitored_date = self._monitored_dates[0]
-    first_date_attributes = dated_attributes.get(first_monitored_date)
-    if first_date_attributes:
-      self._state = first_date_attributes.get('score')
-
-    dated_attributes = self.filter_monitored_variables(dated_attributes)
-    self._attributes = dated_attributes

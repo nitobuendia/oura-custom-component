@@ -106,9 +106,8 @@ class OuraDatedSensor(OuraSensor):
       sensor_config: Sub-section of config holding the particular sensor info.
 
     Methods:
-      filter_monitored_variables: Filters data attributes to only monitored.
-      get_monitored_name_days: Get monitored days map of name to YYYY-MM-DD.
-      map_data_to_monitored_days: Maps sensor data to monitored dates.
+      get_sensor_data_from_api: Fetches data from API. Abstract method.
+      parse_sensor_data: Parses data from API. Abstract method.
     """
     super(OuraDatedSensor, self).__init__(config, hass)
 
@@ -126,6 +125,32 @@ class OuraDatedSensor(OuraSensor):
         date_name.lower()
         for date_name in sensor_config.get(CONF_MONITORED_DATES)
     ] if sensor_config.get(CONF_MONITORED_DATES) else []
+
+    # Empty daily sensor data.
+    self._empty_sensor = {}
+    # Attribute that should be used for updating state.
+    self._main_state_attribute = ''
+
+  def _filter_monitored_variables(self, sensor_data):
+    """Filters the sensor data to only contain monitored variables.
+
+    Args:
+      sensor_data: Map of dates to sensor data.
+
+    Returns:
+      Same sensor_data map but filtered to only contain monitored variables.
+    """
+    data = {}
+    data.update(sensor_data)
+
+    if not data:
+      return data
+
+    for date_attributes in list(data.values()):
+      for variable in list(date_attributes.keys()):
+        if variable not in self._monitored_variables:
+          del date_attributes[variable]
+    return data
 
   def _get_backfill_date(self, date_name, date_value):
     """Gets the backfill date for a given date and date name.
@@ -207,39 +232,7 @@ class OuraDatedSensor(OuraSensor):
     else:
       return MonitoredDayType.UNKNOWN
 
-  def _get_monitored_name_days(self):
-    """Gets the date name of all monitored days.
-
-    Returns:
-      Map of date names to dates (YYYY-MM-DD) for monitored days.
-    """
-    return {
-        date_name: self._get_date_by_name(date_name)
-        for date_name in self._monitored_dates
-    }
-
-  def filter_monitored_variables(self, sensor_data):
-    """Filters the sensor data to only contain monitored variables.
-
-    Args:
-      sensor_data: Map of dates to sensor data.
-
-    Returns:
-      Same sensor_data map but filtered to only contain monitored variables.
-    """
-    data = {}
-    data.update(sensor_data)
-
-    if not data:
-      return data
-
-    for date_attributes in list(data.values()):
-      for variable in list(date_attributes.keys()):
-        if variable not in self._monitored_variables:
-          del date_attributes[variable]
-    return data
-
-  def get_monitored_date_range(self):
+  def _get_monitored_date_range(self):
     """Returns tuple containing start and end date based on monitored dates.
 
     Returns:
@@ -255,7 +248,18 @@ class OuraDatedSensor(OuraSensor):
 
     return (start_date, end_date)
 
-  def map_data_to_monitored_days(self, sensor_data, default_attributes=None):
+  def _get_monitored_name_days(self):
+    """Gets the date name of all monitored days.
+
+    Returns:
+      Map of date names to dates (YYYY-MM-DD) for monitored days.
+    """
+    return {
+        date_name: self._get_date_by_name(date_name)
+        for date_name in self._monitored_dates
+    }
+
+  def _map_data_to_monitored_days(self, sensor_data, default_attributes=None):
     """Reads sensor data and maps it to the monitored dates, incl. backfill.
 
     Args:
@@ -266,7 +270,7 @@ class OuraDatedSensor(OuraSensor):
       sensor_data mapped to monitored_dates.
     """
     sensor_dates = self._get_monitored_name_days()
-    (start_date, _) = self.get_monitored_date_range()
+    (start_date, _) = self._get_monitored_date_range()
 
     if not sensor_data:
       return {}
@@ -312,3 +316,33 @@ class OuraDatedSensor(OuraSensor):
       dated_attributes_map[date_name] = date_attributes
 
     return dated_attributes_map
+
+  def _update(self):
+    """Fetches new state data for the sensor."""
+    (start_date, end_date) = self._get_monitored_date_range()
+
+    oura_data = self.get_sensor_data_from_api(start_date, end_date)
+    sensor_data = self.parse_sensor_data(oura_data)
+
+    if not sensor_data:
+      return
+
+    dated_attributes = self._map_data_to_monitored_days(
+        sensor_data, self._empty_sensor)
+
+    # Update state must happen before filtering for monitored variables.
+    first_monitored_date = self._monitored_dates[0]
+    first_date_attributes = dated_attributes.get(first_monitored_date)
+    if first_date_attributes and self._main_state_attribute:
+      self._state = first_date_attributes.get(self._main_state_attribute)
+
+    dated_attributes = self._filter_monitored_variables(dated_attributes)
+    self._attributes = dated_attributes
+
+  def get_sensor_data_from_api(self, start_date, end_date):
+    """Call API to fetch data. Must be implemented by child class."""
+    return {}
+
+  def parse_sensor_data(self, oura_data):
+    """Parses data from the API. Must be implemented by child class."""
+    return oura_data
