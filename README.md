@@ -20,6 +20,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   access_token:
   scan_interval:
   sensors:
+    activity:
+      name:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
     readiness:
       name:
       max_backfill:
@@ -37,6 +42,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 * `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
 * `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
 * `sensors`: (Optional) Determines which sensors to import and its configuration.
+  * `activity`: (Optional) Configures activity sensor. Default: activity sensor is not configured.
+    * `name`: (Optional) Name of the sensor (e.g. daily_activity). Default: oura_activity.
+    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    * `monitored_variables`: Variables that you want to monitor. See `Activity Sensor monitored attributes` section to understand what variables are supported.
   * `readiness`: (Optional) Configures readiness sensor. Default: readiness sensor is not configured.
     * `name`: (Optional) Name of the sensor (e.g. sleep_readiness). Default: oura_readiness.
     * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
@@ -113,6 +123,71 @@ If you set the `max_backfill` value to any positive integer, then it will backfi
 * `yesterday`: Same as `Xd_ago`. If yesterday is not available, looks for previous day. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data (the day before yesterday). If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the previous day, then the previous, then the previous; it will stop as soon as one of these values is available and will return unknown if none of them has data).
 
 * `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
+
+### Activity Sensor
+
+#### Activity Sensor state
+
+The state of the sensor will show the **score** for the first selected day (recommended: yesterday).
+
+#### Activity Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+The readiness sensor supports all the following monitored attributes:
+
+* `class_5_min`
+* `score`
+* `active_calories`
+* `average_met_minutes`
+* `day`
+* `meet_daily_targets`
+* `move_every_hour`
+* `recovery_time`
+* `stay_active`
+* `training_frequency`
+* `training_volume`
+* `equivalent_walking_distance`
+* `high_activity_met_minutes`
+* `high_activity_time`
+* `inactivity_alerts`
+* `low_activity_met_minutes`
+* `low_activity_time`
+* `medium_activity_met_minutes`
+* `medium_activity_time`
+* `met`
+* `meters_to_target`
+* `non_wear_time`
+* `resting_time`
+* `sedentary_met_minutes`
+* `sedentary_time`
+* `steps`
+* `target_calories`
+* `target_meters`
+* `timestamp`
+* `total_calories`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_activity_route_daily_activity_get).
+
+#### Readiness Sensor sample output
+
+**State**: `50` (note: score of yesterday, which was the first day configured on the example)
+
+**Attributes**:
+
+```yaml
+yesterday:
+  score: 50
+  active_calories: 2
+  high_activity_time: 0
+  low_activity_time: 180
+  medium_activity_time: 0
+  non_wear_time: 55320
+  resting_time: 27360
+  sedentary_time: 3540
+  target_calories: 550
+  total_calories: 1702
+```
 
 ### Readiness Sensor
 
