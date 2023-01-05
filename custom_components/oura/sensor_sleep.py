@@ -46,7 +46,7 @@ _SUPPORTED_MONITORED_VARIABLES = [
     'in_bed_duration_in_hours',
     'latency',
     'light_sleep_duration',
-    'light_sleep_duration_in_hours'
+    'light_sleep_duration_in_hours',
     'low_battery_alert',
     'lowest_heart_rate',
     'movement_30_sec',
