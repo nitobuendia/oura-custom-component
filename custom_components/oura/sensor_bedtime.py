@@ -45,7 +45,7 @@ DEFAULT_CONFIG = {
     const.CONF_NAME: None,
     sensor_base.CONF_MONITORED_DATES: None,
     const.CONF_MONITORED_VARIABLES: None,
-
+    sensor_base.CONF_BACKFILL: None,
 }
 
 _EMPTY_SENSOR_ATTRIBUTE = {
