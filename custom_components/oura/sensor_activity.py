@@ -134,7 +134,7 @@ class OuraActivitySensor(sensor_base.OuraDatedSensor):
     self._main_state_attribute = 'score'
 
   def get_sensor_data_from_api(self, start_date, end_date):
-    """Fetches readiness data from the API.
+    """Fetches activity data from the API.
 
     Args:
       start_date: Start date in YYYY-MM-DD.
@@ -146,14 +146,14 @@ class OuraActivitySensor(sensor_base.OuraDatedSensor):
     return self._api.get_activity_data(start_date, end_date)
 
   def parse_sensor_data(self, oura_data):
-    """Processes readiness data into a dictionary.
+    """Processes activity data into a dictionary.
 
     Args:
       oura_data: Readiness data in list format from Oura API.
 
     Returns:
       Dictionary where key is the requested summary_date and value is the
-      Oura sleep data for that given day.
+      Oura activity data for that given day.
     """
     if not oura_data or 'data' not in oura_data:
       logging.error(
@@ -167,14 +167,14 @@ class OuraActivitySensor(sensor_base.OuraDatedSensor):
     activity_dict = {}
     for activity_daily_data in activity_data:
       # Default metrics.
-      readiness_date = activity_daily_data.get('day')
-      if not readiness_date:
+      activity_date = activity_daily_data.get('day')
+      if not activity_date:
         continue
 
       contributors = activity_daily_data.get('contributors', {})
       activity_daily_data.update(contributors)
       del activity_daily_data['contributors']
 
-      activity_dict[readiness_date] = activity_daily_data
+      activity_dict[activity_date] = activity_daily_data
 
     return activity_dict

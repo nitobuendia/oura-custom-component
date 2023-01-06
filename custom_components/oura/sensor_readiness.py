@@ -119,7 +119,7 @@ class OuraReadinessSensor(sensor_base.OuraDatedSensor):
 
     Returns:
       Dictionary where key is the requested summary_date and value is the
-      Oura sleep data for that given day.
+      Oura readiness data for that given day.
     """
     if not oura_data or 'data' not in oura_data:
       logging.error(
