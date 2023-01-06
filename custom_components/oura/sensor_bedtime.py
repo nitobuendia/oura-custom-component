@@ -41,12 +41,7 @@ CONF_SCHEMA = {
     ): cv.positive_int,
 }
 
-DEFAULT_CONFIG = {
-    const.CONF_NAME: None,
-    sensor_base.CONF_MONITORED_DATES: None,
-    const.CONF_MONITORED_VARIABLES: None,
-    sensor_base.CONF_BACKFILL: None,
-}
+DEFAULT_CONFIG = {}
 
 _EMPTY_SENSOR_ATTRIBUTE = {
     variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
