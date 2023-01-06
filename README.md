@@ -194,6 +194,8 @@ The readiness sensor supports all the following monitored attributes:
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_activity_route_daily_activity_get).
 
+By default, the following attributes are being monitored: `active_calories`, `high_activity_time`, `low_activity_time`, `medium_activity_time`, `non_wear_time`, `resting_time`, `sedentary_time`, `score`, `target_calories`, `total_calories`.
+
 #### Activity Sensor sample output
 
 **State**: `50` (note: score of yesterday, which was the first day configured on the example)
@@ -231,6 +233,8 @@ The readiness sensor supports all the following monitored attributes:
 * `day`
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/docs/bedtime).
+
+By default, the following attributes are being monitored: `bedtime_window_start`, `bedtime_window_end`, `day`.
 
 #### Bedtime Sensor sample output
 
@@ -272,6 +276,8 @@ The readiness sensor supports all the following monitored attributes:
 * `timestamp`
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_readiness_route_daily_readiness_get).
+
+By default, the following attributes are being monitored: `activity_balance`, `body_temperature`, `day`, `hrv_balance`, `previous_day_activity`, `previous_night`, `recovery_index`, `resting_heart_rate`, `sleep_balance`, `score`, `temperature_deviation`, `temperature_trend_deviation`, `timestamp`.
 
 #### Readiness Sensor sample output
 
