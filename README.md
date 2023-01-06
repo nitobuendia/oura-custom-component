@@ -65,7 +65,7 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   access_token: !secret oura_api_token
   scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
   sensors:
-    readiness:
+    readiness: {}
     sleep:
       name: sleep_data
       max_backfill: 3
@@ -80,6 +80,31 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
         - sunday
         - 8d_ago # Last week, +1 to compare to yesterday.
 ```
+
+Note: While in most sensors all attributes are optional, the configuration requires a dictionary to be passed. As such, this configuration would fail:
+
+```yaml
+- platform: oura
+  access_token: !secret oura_api_token
+  scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
+  sensors:
+    readiness:
+    sleep:
+```
+
+This is because `readiness` and `sleep` both require a dictionary but the system interprets that we are passing a None value. In order to fix this, you can add at least one attribute (e.g. `name`) or you can simply set the value to `{}` which indicates an empty dictionary. The following configuration would be valid:
+
+```yaml
+- platform: oura
+  access_token: !secret oura_api_token
+  scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
+  sensors:
+    readiness: {}
+    sleep:
+      name: sleep_data
+```
+
+In this case, `readiness` sensor would use all the default values, whereas `sleep` sensor would use all the default configuration except for the name that will be using the `sleep_data` value passed.
 
 ### How to get personal Oura token
 
