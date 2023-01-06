@@ -4,6 +4,7 @@ import logging
 import voluptuous as vol
 from homeassistant import const
 from homeassistant.helpers import config_validation as cv
+from . import api
 from . import sensor_base
 from .helpers import date_helper
 
@@ -66,20 +67,9 @@ class OuraBedtimeSensor(sensor_base.OuraDatedSensor):
         config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {}))
     super(OuraBedtimeSensor, self).__init__(config, hass, bedtime_config)
 
+    self._api_endpoint = api.OuraEndpoints.BEDTIME
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'bedtime_window_start'
-
-  def get_sensor_data_from_api(self, start_date, end_date):
-    """Fetches bedtime data from the API.
-
-    Args:
-      start_date: Start date in YYYY-MM-DD.
-      end_date: End date in YYYY-MM-DD.
-
-    Returns:
-      JSON object with API data.
-    """
-    return self._api.get_bedtime_data(start_date, end_date)
 
   def parse_sensor_data(self, oura_data):
     """Processes bedtime data into a dictionary.

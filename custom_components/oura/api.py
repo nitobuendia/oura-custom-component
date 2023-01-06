@@ -25,7 +25,7 @@ class OuraApi(object):
     token_file_name: Name of the file that contains the sensor credentials.
 
   Methods:
-    get_sleep_data: fetches sleep data from Oura cloud data.
+    get_oura_data: fetches data from Oura API for given endpoint.
   """
 
   def __init__(self, sensor, access_token):
@@ -65,7 +65,7 @@ class OuraApi(object):
 
     return response_data
 
-  def _get_oura_data(self, endpoint, start_date, end_date=None):
+  def get_oura_data(self, endpoint, start_date, end_date=None):
     """Fetches data for a OuraEndpoint and date.
 
     TODO: detect whether data was retrieved.
@@ -81,6 +81,9 @@ class OuraApi(object):
     """
     api_url = endpoint.value
 
+    if _OURA_API_V1 in api_url:
+      return self._get_oura_data_legacy(endpoint, start_date, end_date)
+
     params = {}
     if start_date:
       params['start_date'] = start_date
@@ -95,56 +98,3 @@ class OuraApi(object):
     response_data = response.json()
 
     return response_data
-
-  def get_activity_data(self, start_date, end_date=None):
-    """Fetches activity data for a given date range.
-
-    Args:
-      start_date: Day for which to fetch data(YYYY-MM-DD).
-      end_date: Last day for which to retrieve data(YYYY-MM-DD).
-        If same as start_date, leave empty.
-
-    Returns:
-      Dictionary containing Oura sleep data.
-    """
-    return self._get_oura_data(OuraEndpoints.ACTIVITY, start_date, end_date)
-
-  def get_bedtime_data(self, start_date, end_date=None):
-    """Fetches bedtime data for a given date range.
-
-    Args:
-      start_date: Day for which to fetch data(YYYY-MM-DD).
-      end_date: Last day for which to retrieve data(YYYY-MM-DD).
-        If same as start_date, leave empty.
-
-    Returns:
-      Dictionary containing Oura sleep data.
-    """
-    return self._get_oura_data_legacy(
-        OuraEndpoints.BEDTIME, start_date, end_date)
-
-  def get_readiness_data(self, start_date, end_date=None):
-    """Fetches readiness data for a given date range.
-
-    Args:
-      start_date: Day for which to fetch data(YYYY-MM-DD).
-      end_date: Last day for which to retrieve data(YYYY-MM-DD).
-        If same as start_date, leave empty.
-
-    Returns:
-      Dictionary containing Oura sleep data.
-    """
-    return self._get_oura_data(OuraEndpoints.READINESS, start_date, end_date)
-
-  def get_sleep_data(self, start_date, end_date=None):
-    """Fetches sleep data for a given date range.
-
-    Args:
-      start_date: Day for which to fetch data(YYYY-MM-DD).
-      end_date: Last day for which to retrieve data(YYYY-MM-DD).
-        If same as start_date, leave empty.
-
-    Returns:
-      Dictionary containing Oura sleep data.
-    """
-    return self._get_oura_data(OuraEndpoints.SLEEP, start_date, end_date)

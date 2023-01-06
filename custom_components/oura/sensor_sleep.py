@@ -6,6 +6,7 @@ import voluptuous as vol
 from dateutil import parser
 from homeassistant import const
 from homeassistant.helpers import config_validation as cv
+from . import api
 from . import sensor_base
 from .helpers import date_helper
 
@@ -109,20 +110,9 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
     sleep_config = config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {})
     super(OuraSleepSensor, self).__init__(config, hass, sleep_config)
 
+    self._api_endpoint = api.OuraEndpoints.SLEEP
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'efficiency'
-
-  def get_sensor_data_from_api(self, start_date, end_date):
-    """Fetches sleep data from the API.
-
-    Args:
-      start_date: Start date in YYYY-MM-DD.
-      end_date: End date in YYYY-MM-DD.
-
-    Returns:
-      JSON object with API data.
-    """
-    return self._api.get_sleep_data(start_date, end_date)
 
   def parse_sensor_data(self, oura_data):
     """Processes sleep data into a dictionary.

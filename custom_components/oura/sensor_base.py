@@ -126,6 +126,8 @@ class OuraDatedSensor(OuraSensor):
         for date_name in sensor_config.get(CONF_MONITORED_DATES)
     ] if sensor_config.get(CONF_MONITORED_DATES) else []
 
+    # API endpoint for this sensor.
+    self._api_endpoint = ''
     # Empty daily sensor data.
     self._empty_sensor = {}
     # Attribute that should be used for updating state.
@@ -340,8 +342,16 @@ class OuraDatedSensor(OuraSensor):
     self._attributes = dated_attributes
 
   def get_sensor_data_from_api(self, start_date, end_date):
-    """Call API to fetch data. Must be implemented by child class."""
-    return {}
+    """Fetches data from the API for the sensor.
+
+    Args:
+      start_date: Start date in YYYY-MM-DD.
+      end_date: End date in YYYY-MM-DD.
+
+    Returns:
+      JSON object with API data.
+    """
+    return self._api.get_oura_data(self._api_endpoint, start_date, end_date)
 
   def parse_sensor_data(self, oura_data):
     """Parses data from the API. Must be implemented by child class."""
