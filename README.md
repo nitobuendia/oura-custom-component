@@ -214,6 +214,37 @@ yesterday:
   total_calories: 1702
 ```
 
+### Bedtime Sensor
+
+#### Bedtime Sensor state
+
+The state of the sensor will show the **bedtime start hour** for the first selected day.
+
+#### Bedtime Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+The readiness sensor supports all the following monitored attributes:
+
+* `bedtime_window_start`: Recommended bedtime in HH:MM format.
+* `bedtime_window_end`: Recommended bedtime in HH:MM format.
+* `day`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/docs/bedtime).
+
+#### Bedtime Sensor sample output
+
+**State**: `23:45`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  bedtime_window_start: '23:45'
+  bedtime_window_end: '00:30'
+  day: '2023-01-05'
+```
+
 ### Readiness Sensor
 
 #### Readiness Sensor state
