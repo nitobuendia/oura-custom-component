@@ -4,6 +4,7 @@ from homeassistant import const
 from homeassistant.helpers import config_validation as cv
 import voluptuous as vol
 from . import sensor_activity
+from . import sensor_bedtime
 from . import sensor_readiness
 from . import sensor_sleep
 
@@ -16,6 +17,11 @@ _SENSORS_SCHEMA = {
         sensor_activity.CONF_KEY_NAME,
         default=sensor_activity.DEFAULT_CONFIG
     ): sensor_activity.CONF_SCHEMA,
+
+    vol.Optional(
+        sensor_bedtime.CONF_KEY_NAME,
+        default=sensor_bedtime.DEFAULT_CONFIG
+    ): sensor_bedtime.CONF_SCHEMA,
 
     vol.Optional(
         sensor_readiness.CONF_KEY_NAME,
@@ -51,6 +57,9 @@ async def async_setup_platform(
 
   if sensor_activity.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_activity.OuraActivitySensor(config, hass))
+
+  if sensor_bedtime.CONF_KEY_NAME in sensors_config:
+    sensors.append(sensor_bedtime.OuraBedtimeSensor(config, hass))
 
   if sensor_readiness.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_readiness.OuraReadinessSensor(config, hass))

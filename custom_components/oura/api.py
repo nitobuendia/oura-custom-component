@@ -5,12 +5,14 @@ import requests
 from .helpers import hass_helper
 
 # Oura API config.
+_OURA_API_V1 = 'https://api.ouraring.com/v1'
 _OURA_API_V2 = 'https://api.ouraring.com/v2'
 
 
 class OuraEndpoints(enum.Enum):
   """Represents Oura endpoints."""
   ACTIVITY = '{}/usercollection/daily_activity'.format(_OURA_API_V2)
+  BEDTIME = '{}/bedtime'.format(_OURA_API_V1)
   READINESS = '{}/usercollection/daily_readiness'.format(_OURA_API_V2)
   SLEEP = '{}/usercollection/sleep'.format(_OURA_API_V2)
   SLEEP_SCORE = '{}/usercollection/daily_sleep'.format(_OURA_API_V2)
@@ -36,6 +38,32 @@ class OuraApi(object):
     self._sensor = sensor
     self._access_token = access_token
     self._hass_url = hass_helper.get_url(self._sensor._hass)
+
+  def _get_oura_data_legacy(self, endpoint, start_date, end_date=None):
+    """Fetches data for a OuraEndpoint and date for API v1.
+
+    Args:
+      start_date: Day for which to fetch data(YYYY-MM-DD).
+      end_date: Last day for which to retrieve data(YYYY-MM-DD).
+        If same as start_date, leave empty.
+
+    Returns:
+      Dictionary containing Oura sleep data.
+    """
+    api_url = endpoint.value
+
+    params = {
+        'access_token': self._access_token,
+    }
+    if start_date:
+      params['start'] = start_date
+    if end_date:
+      params['end'] = end_date
+
+    response = requests.get(api_url, params=params)
+    response_data = response.json()
+
+    return response_data
 
   def _get_oura_data(self, endpoint, start_date, end_date=None):
     """Fetches data for a OuraEndpoint and date.
@@ -80,6 +108,20 @@ class OuraApi(object):
       Dictionary containing Oura sleep data.
     """
     return self._get_oura_data(OuraEndpoints.ACTIVITY, start_date, end_date)
+
+  def get_bedtime_data(self, start_date, end_date=None):
+    """Fetches bedtime data for a given date range.
+
+    Args:
+      start_date: Day for which to fetch data(YYYY-MM-DD).
+      end_date: Last day for which to retrieve data(YYYY-MM-DD).
+        If same as start_date, leave empty.
+
+    Returns:
+      Dictionary containing Oura sleep data.
+    """
+    return self._get_oura_data_legacy(
+        OuraEndpoints.BEDTIME, start_date, end_date)
 
   def get_readiness_data(self, start_date, end_date=None):
     """Fetches readiness data for a given date range.
