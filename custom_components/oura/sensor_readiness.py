@@ -62,19 +62,7 @@ CONF_SCHEMA = {
 DEFAULT_CONFIG = {}
 
 _EMPTY_SENSOR_ATTRIBUTE = {
-    'activity_balance': None,
-    'body_temperature': None,
-    'day': None,
-    'hrv_balance': None,
-    'previous_day_activity': None,
-    'previous_night': None,
-    'recovery_index': None,
-    'resting_heart_rate': None,
-    'score': None,
-    'sleep_balance': None,
-    'temperature_deviation': None,
-    'temperature_trend_deviation': None,
-    'timestamp': None,
+    variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
 }
 
 

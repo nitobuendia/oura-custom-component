@@ -79,36 +79,7 @@ CONF_SCHEMA = {
 DEFAULT_CONFIG = {}
 
 _EMPTY_SENSOR_ATTRIBUTE = {
-    'class_5_min': None,
-    'score': None,
-    'active_calories': None,
-    'average_met_minutes': None,
-    'day': None,
-    'meet_daily_targets': None,
-    'move_every_hour': None,
-    'recovery_time': None,
-    'stay_active': None,
-    'training_frequency': None,
-    'training_volume': None,
-    'equivalent_walking_distance': None,
-    'high_activity_met_minutes': None,
-    'high_activity_time': None,
-    'inactivity_alerts': None,
-    'low_activity_met_minutes': None,
-    'low_activity_time': None,
-    'medium_activity_met_minutes': None,
-    'medium_activity_time': None,
-    'met': None,
-    'meters_to_target': None,
-    'non_wear_time': None,
-    'resting_time': None,
-    'sedentary_met_minutes': None,
-    'sedentary_time': None,
-    'steps': None,
-    'target_calories': None,
-    'target_meters': None,
-    'timestamp': None,
-    'total_calories': None,
+    variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
 }
 
 

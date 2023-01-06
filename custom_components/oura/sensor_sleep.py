@@ -88,43 +88,7 @@ CONF_SCHEMA = {
 DEFAULT_CONFIG = {}
 
 _EMPTY_SENSOR_ATTRIBUTE = {
-    'average_breath': None,
-    'average_heart_rate': None,
-    'average_hrv': None,
-    'day': None,
-    'awake_time': None,
-    'awake_duration': None,
-    'bedtime_end': None,
-    'bedtime_end_hour': None,
-    'bedtime_start': None,
-    'bedtime_start_hour': None,
-    'deep_sleep_duration': None,
-    'efficiency': None,
-    'heart_rate': {
-        'interval': None,
-        'items': [],
-        'timestamp': None,
-    },
-    'hrv': {
-        'interval': None,
-        'items': [],
-        'timestamp': None,
-    },
-    'in_bed_duration': None,
-    'latency': None,
-    'light_sleep_duration': None,
-    'low_battery_alert': None,
-    'lowest_heart_rate': None,
-    'movement_30_sec': None,
-    'period': None,
-    'readiness_score_delta': None,
-    'rem_sleep_duration': None,
-    'restless_periods': None,
-    'sleep_phase_5_min': None,
-    'sleep_score_delta': None,
-    'time_in_bed': None,
-    'total_sleep_duration': None,
-    'type': None,
+    variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
 }
 
 
