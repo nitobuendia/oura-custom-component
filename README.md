@@ -194,7 +194,7 @@ The readiness sensor supports all the following monitored attributes:
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_activity_route_daily_activity_get).
 
-#### Readiness Sensor sample output
+#### Activity Sensor sample output
 
 **State**: `50` (note: score of yesterday, which was the first day configured on the example)
 
