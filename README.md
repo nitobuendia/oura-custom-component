@@ -352,35 +352,34 @@ Formerly supported variables that are no longer part of the API (i.e. not suppor
 
 **Attributes**:
 
-```json
-yesterday: {
-  "day": "2022-07-14",
-  "bedtime_start_hour": "02:30",
-  "bedtime_end_hour": "09:32",
-  "average_breath": 14,
-  "lowest_heart_rate": 44,
-  "average_heart_rate": 47,
-  "deep_sleep_duration": 0.72,
-  "rem_sleep_duration": 0.32,
-  "light_sleep_duration": 4.54,
-  "total_sleep_duration": 5.58,
-  "awake_duration": 1.45,
-  "in_bed_duration": 7.03
-}
-8d_ago: {
-  "day": "2022-07-07",
-  "bedtime_start_hour": "23:29",
-  "bedtime_end_hour": "08:05",
-  "average_breath": 14,
-  "lowest_heart_rate": 44,
-  "average_heart_rate": 48,
-  "deep_sleep_duration": 2.05,
-  "rem_sleep_duration": 0.82,
-  "light_sleep_duration": 4.29,
-  "total_sleep_duration": 7.16,
-  "awake_duration": 1.44,
-  "in_bed_duration": 8.6
-}
+```yaml
+yesterday:
+  'day': "2022-07-14"
+  'bedtime_start_hour': "02:30"
+  'bedtime_end_hour': "09:32"
+  'average_breath': 14
+  'lowest_heart_rate': 44
+  'average_heart_rate': 47
+  'deep_sleep_duration': 0.72
+  'rem_sleep_duration': 0.32
+  'light_sleep_duration': 4.54
+  'total_sleep_duration': 5.58
+  'awake_duration': 1.45
+  'in_bed_duration': 7.0
+
+8d_ago:
+  'day': "2022-07-07"
+  'bedtime_start_hour': "23:29"
+  'bedtime_end_hour': "08:05"
+  'average_breath': 14
+  'lowest_heart_rate': 44
+  'average_heart_rate': 48
+  'deep_sleep_duration': 2.05
+  'rem_sleep_duration': 0.82
+  'light_sleep_duration': 4.29
+  'total_sleep_duration': 7.16
+  'awake_duration': 1.44
+  'in_bed_duration': 8.
 ```
 
 ### Derived sensors
