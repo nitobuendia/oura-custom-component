@@ -464,7 +464,7 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
     Methods:
       parse_sensor_data: Parses data from API.
     """
-    super(OuraDatedSeriesSensor, self).__init__(config, hass)
+    super(OuraDatedSeriesSensor, self).__init__(config, hass, sensor_config)
     self._sort_key = 'start_datetime'
 
   def _update_state(self, sensor_attributes):
