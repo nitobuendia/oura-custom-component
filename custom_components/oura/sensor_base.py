@@ -420,3 +420,64 @@ class OuraDatedSensor(OuraSensor):
       sensor_dict[sensor_date] = sensor_daily_data
 
     return sensor_dict
+
+
+class OuraDatedSeriesSensor(OuraDatedSensor):
+  """Representation of an Oura Ring sensor with series daily data.
+
+  Attributes:
+    name: name of the sensor.
+    state: state of the sensor.
+    extra_state_attributes: attributes of the sensor.
+
+  Methods:
+    async_update: updates sensor data.
+  """
+
+  def __init__(self, config, hass, sensor_config=None):
+    """Initializes the sensor.
+
+    Args:
+      config: Platform configuration.
+      hass: Home-Assistant object.
+      sensor_config: Sub-section of config holding the particular sensor info.
+
+    Methods:
+      parse_sensor_data: Parses data from API.
+    """
+    super(OuraDatedSeriesSensor, self).__init__(config, hass)
+
+  def parse_sensor_data(self, oura_data, data_param='data', day_param='day'):
+    """Parses data from the API.
+
+    Args:
+      oura_data: Data from Oura API.
+      data_param: Parameter where data is found. By default: 'data'.
+      day_param: Parameter where date is found. By default: 'date'.
+
+    Returns:
+      Dictionary where key is the requested date and value is the
+      Oura sensor data for that given day.
+    """
+    if not oura_data or data_param not in oura_data:
+      logging.error(
+          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
+      return {}
+
+    sensor_data = oura_data.get(data_param)
+    if not sensor_data:
+      return {}
+
+    sensor_dict = {}
+    for sensor_daily_data in sensor_data:
+      sensor_date = sensor_daily_data.get(day_param)
+      if not sensor_date:
+        continue
+
+      if sensor_date not in sensor_dict:
+        sensor_dict[sensor_date] = []
+
+      sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
+      sensor_dict[sensor_date].append(sensor_daily_data)
+
+    return sensor_dict

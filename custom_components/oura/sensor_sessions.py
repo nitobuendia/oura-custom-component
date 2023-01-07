@@ -58,7 +58,7 @@ _EMPTY_SENSOR_ATTRIBUTE = {
 }
 
 
-class OuraSessionsSensor(sensor_base.OuraDatedSensor):
+class OuraSessionsSensor(sensor_base.OuraDatedSeriesSensor):
   """Representation of an Oura Ring Sessions sensor.
 
   Attributes:
@@ -79,36 +79,3 @@ class OuraSessionsSensor(sensor_base.OuraDatedSensor):
     self._api_endpoint = api.OuraEndpoints.SESSIONS
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'type'
-
-  def parse_sensor_data(self, oura_data):
-    """Processes sessions data into a dictionary.
-
-    Args:
-      oura_data: Sessions data in list format from Oura API.
-
-    Returns:
-      Dictionary where key is the requested summary_date and value is the
-      Oura sessions data for that given day.
-    """
-    if not oura_data or 'data' not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
-      return {}
-
-    sessions_data = oura_data.get('data')
-    if not sessions_data:
-      return {}
-
-    sessions_dict = {}
-    for sessions_daily_data in sessions_data:
-      # Default metrics.
-      sessions_date = sessions_daily_data.get('day')
-      if not sessions_date:
-        continue
-
-      if sessions_date not in sessions_dict:
-        sessions_dict[sessions_date] = []
-
-      sessions_dict[sessions_date].append(sessions_daily_data)
-
-    return sessions_dict
