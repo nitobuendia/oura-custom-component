@@ -11,6 +11,7 @@ from . import sensor_sessions
 from . import sensor_sleep
 from . import sensor_sleep_periods
 from . import sensor_sleep_score
+from . import sensor_workouts
 
 _DEFAULT_SENSORS_SCHEMA = {
     const.CONF_SENSORS: sensor_sleep.DEFAULT_CONFIG,
@@ -56,6 +57,11 @@ _SENSORS_SCHEMA = {
         sensor_sleep_score.CONF_KEY_NAME,
         default=sensor_sleep_score.DEFAULT_CONFIG
     ): sensor_sleep_score.CONF_SCHEMA,
+
+    vol.Optional(
+        sensor_workouts.CONF_KEY_NAME,
+        default=sensor_workouts.DEFAULT_CONFIG
+    ): sensor_workouts.CONF_SCHEMA,
 }
 
 PLATFORM_SCHEMA = cv.PLATFORM_SCHEMA.extend({
@@ -99,5 +105,8 @@ async def async_setup_platform(
 
   if sensor_sleep_score.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_sleep_score.OuraSleepScoreSensor(config, hass))
+
+  if sensor_workouts.CONF_KEY_NAME in sensors_config:
+    sensors.append(sensor_workouts.OuraWorkoutsSensor(config, hass))
 
   async_add_entities(sensors, True)

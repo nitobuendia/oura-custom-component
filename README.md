@@ -53,6 +53,10 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Sleep Score Sensor State](#sleep-score-sensor-state)
       - [Sleep Score Sensor monitored attributes](#sleep-score-sensor-monitored-attributes)
       - [Sleep Score Sensor sample output](#sleep-score-sensor-sample-output)
+    - [Workouts Sensor](#workouts-sensor)
+      - [Workouts Sensor state](#workouts-sensor-state)
+      - [Workouts Sensor monitored attributes](#workouts-sensor-monitored-attributes)
+      - [Workouts Sensor sample output](#workouts-sensor-sample-output)
     - [Derived sensors](#derived-sensors)
   - [Sponsoring](#sponsoring)
 
@@ -100,6 +104,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       max_backfill:
       monitored_dates:
       monitored_variables:
+    workouts:
+      name:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
 ```
 
 ### Parameters
@@ -117,6 +126,7 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 - `readiness`: (Optional) Configures readiness sensor. By default, the readiness sensor is not configured. Default name: oura_readiness.
 - `sleep`: (Optional) Configures sleep sensor. By default the sleep sensor is added. Default name: oura_sleep.
 - `sleep_periods`: (Optional) Configures sleep periods sensor. By default, the sleep periods sensor is not configured. Default name: oura_sleep_periods.
+- `workouts`: (Optional) Configures workouts sensor. By default, the workouts sensor is not configured. Default name: oura_workouts.
 
 ### Individual sensor parameters
 
@@ -612,6 +622,51 @@ yesterday:
 8d_ago:
   'day': "2022-07-07"
   'score': 91
+```
+
+### Workouts Sensor
+
+#### Workouts Sensor state
+
+The state of the sensor will show the **activity** for the first selected day (recommended: yesterday) and latest event by timestamp.
+
+#### Workouts Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `activity`
+- `calories`
+- `day`
+- `distance`
+- `end_datetime`
+- `intensity`
+- `label`
+- `source`
+- `start_datetime`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/workouts_route_workout_get).
+
+By default, the following attributes are being monitored: `day`, `activity`, `calories`, `intensity`.
+
+#### Workouts Sensor sample output
+
+**State**: `cycling`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  - day: '2021-11-12'
+    activity: 'cycling'
+    calories: 212
+    intensity: 'moderate'
+  - day: '2021-11-12'
+    activity: 'walking'
+    calories: 35
+    intensity: 'low'
 ```
 
 ### Derived sensors

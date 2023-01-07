@@ -17,6 +17,7 @@ class OuraEndpoints(enum.Enum):
   SESSIONS = '{}/usercollection/session'.format(_OURA_API_V2)
   SLEEP_PERIODS = '{}/usercollection/sleep'.format(_OURA_API_V2)
   SLEEP_SCORE = '{}/usercollection/daily_sleep'.format(_OURA_API_V2)
+  WORKOUTS = '{}/usercollection/workout'.format(_OURA_API_V2)
 
 
 class OuraApi(object):
