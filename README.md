@@ -38,6 +38,10 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Sleep Sensor State](#sleep-sensor-state)
       - [Sleep Sensor monitored attributes](#sleep-sensor-monitored-attributes)
       - [Sleep Sensor sample output](#sleep-sensor-sample-output)
+    - [Sleep Score Sensor](#sleep-score-sensor)
+      - [Sleep Score Sensor State](#sleep-score-sensor-state)
+      - [Sleep Score Sensor monitored attributes](#sleep-score-sensor-monitored-attributes)
+      - [Sleep Score Sensor sample output](#sleep-score-sensor-sample-output)
     - [Derived sensors](#derived-sensors)
   - [Sponsoring](#sponsoring)
 
@@ -75,6 +79,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       max_backfill:
       monitored_dates:
       monitored_variables:
+    sleep_score:
+      name:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
 ```
 
 ### Parameters
@@ -100,6 +109,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
     - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
     - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
     - `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor monitored attributes` section to understand what variables are supported.
+      - `sleep_score`: (Optional) Configures sleep score sensor. Default: sleep score sensor is not configured.
+    - `name`: (Optional) Name of the sensor (e.g. sleep_score). Default: oura_sleep_score.
+    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    - `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor Score monitored attributes` section to understand what variables are supported.
 
 ### Example
 
@@ -453,6 +467,49 @@ yesterday:
   'total_sleep_duration': 7.16
   'awake_duration': 1.44
   'in_bed_duration': 8.
+```
+
+### Sleep Score Sensor
+
+#### Sleep Score Sensor State
+
+The state of the sensor will show the **score** for the first selected day (recommended: yesterday).
+
+#### Sleep Score Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+The sleep sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `deep_sleep`
+- `efficiency`
+- `latency`
+- `rem_sleep`
+- `restfulness`
+- `score`
+- `timing`
+- `timestamp`
+- `total_sleep`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#tag/Daily-Sleep).
+
+By default, the following attributes are being monitored: `day`, `score`.
+
+#### Sleep Score Sensor sample output
+
+**State**: `77` (note: score of yesterday, which was the first day configured on the example)
+
+**Attributes**:
+
+```yaml
+yesterday:
+  'day': "2022-07-14"
+  'score': 77
+
+8d_ago:
+  'day': "2022-07-07"
+  'score': 91
 ```
 
 ### Derived sensors
