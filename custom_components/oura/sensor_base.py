@@ -124,7 +124,7 @@ class OuraDatedSensor(OuraSensor):
       sensor_config: Sub-section of config holding the particular sensor info.
 
     Methods:
-      get_sensor_data_from_api: Fetches data from API. Abstract method.
+      get_sensor_data_from_api: Fetches data from API.
       parse_sensor_data: Parses data from API. Abstract method.
     """
     super(OuraDatedSensor, self).__init__(config, hass)
