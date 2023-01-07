@@ -348,6 +348,9 @@ class OuraDatedSensor(OuraSensor):
     Args:
       sensor_attributes: Sensor attributes (before filtering).
     """
+    if not self._main_state_attribute:
+      return
+
     if len(self._monitored_dates) == 0:
       return
 
@@ -356,8 +359,10 @@ class OuraDatedSensor(OuraSensor):
       return
 
     first_date_attributes = sensor_attributes.get(first_monitored_date)
-    if first_date_attributes and self._main_state_attribute:
-      self._state = first_date_attributes.get(self._main_state_attribute)
+    if not first_date_attributes:
+      return
+
+    self._state = first_date_attributes.get(self._main_state_attribute)
 
   def _update(self):
     """Fetches new state data for the sensor."""
