@@ -467,6 +467,97 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
     super(OuraDatedSeriesSensor, self).__init__(config, hass, sensor_config)
     self._sort_key = 'start_datetime'
 
+  def _filter_monitored_variables(self, sensor_data):
+    """Filters the sensor data to only contain monitored variables.
+
+    Args:
+      sensor_data: Map of dates to sensor data.
+
+    Returns:
+      Same sensor_data map but filtered to only contain monitored variables.
+    """
+    data = {}
+    data.update(sensor_data)
+
+    if not data:
+      return data
+
+    for date_series in list(data.values()):
+      for daily_data_point in date_series:
+        for variable in list(daily_data_point.keys()):
+          if variable not in self._monitored_variables:
+            del daily_data_point[variable]
+    return data
+
+  def _map_data_to_monitored_days(self, sensor_data, default_attributes=None):
+    """Reads sensor data and maps it to the monitored dates, incl. backfill.
+
+    Args:
+      sensor_data: All parsed sensor data with daily breakdowns.
+      default_attributes: Sensor information to use if no data is retrieved.
+
+    Returns:
+      sensor_data mapped to monitored_dates.
+    """
+    sensor_dates = self._get_monitored_name_days()
+    (start_date, _) = self._get_monitored_date_range()
+
+    if not sensor_data:
+      return {}
+
+    if not default_attributes:
+      default_attributes = {}
+
+    dated_attributes_map = {}
+    for date_name, date_value in sensor_dates.items():
+      date_values = []
+
+      daily_data = sensor_data.get(date_value)
+      date_name_title = date_name.title()
+
+      # Check past dates to see if backfill is possible when missing data.
+      backfill = 0
+      original_date = date_value
+      while (not daily_data
+             and backfill < self._backfill
+             and date_value >= start_date):
+        date_value = self._get_backfill_date(date_name, date_value)
+        if not date_value:
+          break
+        daily_data = sensor_data.get(date_value)
+        backfill += 1
+
+      if original_date != date_value:
+        logging.warning(
+            (
+                f'Oura ({self._name}): No Oura data found for '
+                f'{date_name_title} ({original_date}). Fetching {date_value} '
+                'instead.'
+            ) if date_value else (
+                f'Unable to find suitable backfill date. No data available.'
+            )
+        )
+
+      if not daily_data:
+        continue
+
+      if not type(daily_data) == list:
+        daily_data = [daily_data]
+
+      for series_data in daily_data:
+        series_attributes = dict()
+        series_attributes.update(default_attributes)
+        series_attributes['day'] = date_value
+        series_attributes.update(series_data)
+        date_values.append(series_attributes)
+
+        if date_name not in dated_attributes_map:
+          dated_attributes_map[date_name] = []
+
+      dated_attributes_map[date_name].extend(date_values)
+
+    return dated_attributes_map
+
   def _update_state(self, sensor_attributes):
     """Updates the state based on the sensor attributes.
 
