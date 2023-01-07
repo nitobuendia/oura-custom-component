@@ -125,7 +125,8 @@ class OuraDatedSensor(OuraSensor):
 
     Methods:
       get_sensor_data_from_api: Fetches data from API.
-      parse_sensor_data: Parses data from API. Abstract method.
+      parse_individual_data_point: Parses a data point from API.
+      parse_sensor_data: Parses data from API.
     """
     super(OuraDatedSensor, self).__init__(config, hass)
 
@@ -373,6 +374,37 @@ class OuraDatedSensor(OuraSensor):
     """
     return self._api.get_oura_data(self._api_endpoint, start_date, end_date)
 
+  def parse_individual_data_point(self, data_point):
+    """Parses the individual day or data point.
+
+    If there are changes to the data point, they must be implemented by child.
+
+    Args:
+      data_point: Object for an individual day or data point.
+
+    Returns:
+      Modified data point with right parsed data.
+    """
+    return data_point
+
   def parse_sensor_data(self, oura_data):
     """Parses data from the API. Must be implemented by child class."""
-    return oura_data
+    if not oura_data or 'data' not in oura_data:
+      logging.error(
+          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
+      return {}
+
+    sensor_data = oura_data.get('data')
+    if not sensor_data:
+      return {}
+
+    sensor_dict = {}
+    for sensor_daily_data in sensor_data:
+      sensor_date = sensor_daily_data.get('day')
+      if not sensor_date:
+        continue
+
+      sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
+      sensor_dict[sensor_date] = sensor_daily_data
+
+    return sensor_dict

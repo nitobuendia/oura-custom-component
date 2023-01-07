@@ -89,36 +89,20 @@ class OuraReadinessSensor(sensor_base.OuraDatedSensor):
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'score'
 
-  def parse_sensor_data(self, oura_data):
-    """Processes readiness data into a dictionary.
+  def parse_individual_data_point(self, data_point):
+    """Parses the individual day or data point.
 
     Args:
-      oura_data: Readiness data in list format from Oura API.
+      data_point: Object for an individual day or data point.
 
     Returns:
-      Dictionary where key is the requested summary_date and value is the
-      Oura readiness data for that given day.
+      Modified data point with right parsed data.
     """
-    if not oura_data or 'data' not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
-      return {}
+    data_point_copy = {}
+    data_point_copy.update(data_point)
 
-    readiness_data = oura_data.get('data')
-    if not readiness_data:
-      return {}
+    contributors = data_point_copy.get('contributors', {})
+    data_point_copy.update(contributors)
+    del data_point_copy['contributors']
 
-    readiness_dict = {}
-    for readiness_daily_data in readiness_data:
-      # Default metrics.
-      readiness_date = readiness_daily_data.get('day')
-      if not readiness_date:
-        continue
-
-      contributors = readiness_daily_data.get('contributors', {})
-      readiness_daily_data.update(contributors)
-      del readiness_daily_data['contributors']
-
-      readiness_dict[readiness_date] = readiness_daily_data
-
-    return readiness_dict
+    return data_point_copy

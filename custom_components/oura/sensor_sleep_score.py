@@ -79,36 +79,20 @@ class OuraSleepScoreSensor(sensor_base.OuraDatedSensor):
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'score'
 
-  def parse_sensor_data(self, oura_data):
-    """Processes sleep score data into a dictionary.
+  def parse_individual_datapoint(self, datapoint):
+    """Parses the individual day or datapoint.
 
     Args:
-      oura_data: Sleep Score (Daily Sleep) data in list format from Oura API.
+      datapoint: Object for an individual day or datapoint.
 
     Returns:
-      Dictionary where key is the requested summary_date and value is the
-      Oura sleep score data for that given day.
+      Modified datapoint with right parsed data.
     """
-    if not oura_data or 'data' not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
-      return {}
+    datapoint_copy = {}
+    datapoint_copy.update(datapoint)
 
-    sleep_score_data = oura_data.get('data')
-    if not sleep_score_data:
-      return {}
+    contributors = datapoint_copy.get('contributors', {})
+    datapoint_copy.update(contributors)
+    del datapoint_copy['contributors']
 
-    sleep_score_dict = {}
-    for sleep_score_daily_data in sleep_score_data:
-      # Default metrics.
-      sleep_score_date = sleep_score_daily_data.get('day')
-      if not sleep_score_date:
-        continue
-
-      contributors = sleep_score_daily_data.get('contributors', {})
-      sleep_score_daily_data.update(contributors)
-      del sleep_score_daily_data['contributors']
-
-      sleep_score_dict[sleep_score_date] = sleep_score_daily_data
-
-    return sleep_score_dict
+    return datapoint_copy

@@ -114,60 +114,45 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'efficiency'
 
-  def parse_sensor_data(self, oura_data):
-    """Processes sleep data into a dictionary.
+  def parse_individual_data_point(self, data_point):
+    """Parses the individual day or data point.
 
     Args:
-      oura_data: Sleep data in list format from Oura API.
+      data_point: Object for an individual day or data point.
 
     Returns:
-      Dictionary where key is the requested summary_date and value is the
-      Oura sleep data for that given day.
+      Modified data_point with right parsed data.
     """
-    if not oura_data or 'data' not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
-      return {}
+    data_point_copy = {}
+    data_point_copy.update(data_point)
 
-    sleep_data = oura_data.get('data')
-    if not sleep_data:
-      return {}
+    bedtime_start = parser.parse(data_point_copy.get('bedtime_start'))
+    bedtime_end = parser.parse(data_point_copy.get('bedtime_end'))
 
-    sleep_dict = {}
-    for sleep_daily_data in sleep_data:
-      # Default metrics.
-      sleep_date = sleep_daily_data.get('day')
-      if not sleep_date:
-        continue
-      sleep_dict[sleep_date] = sleep_daily_data
+    # Derived metrics.
+    data_point_copy.update({
+        # HH:MM at which you went bed.
+        'bedtime_start_hour': bedtime_start.strftime('%H:%M'),
+        # HH:MM at which you woke up.
+        'bedtime_end_hour': bedtime_end.strftime('%H:%M'),
+        # Hours in deep sleep.
+        'deep_sleep_duration_in_hours': date_helper.seconds_to_hours(
+            data_point_copy.get('deep_sleep_duration')),
+        # Hours in REM sleep.
+        'rem_sleep_duration_in_hours': date_helper.seconds_to_hours(
+            data_point_copy.get('rem_sleep_duration')),
+        # Hours in light sleep.
+        'light_sleep_duration_in_hours': date_helper.seconds_to_hours(
+            data_point_copy.get('light_sleep_duration')),
+        # Hours sleeping: deep + rem + light.
+        'total_sleep_duration_in_hours': date_helper.seconds_to_hours(
+            data_point_copy.get('total_sleep_duration')),
+        # Hours awake.
+        'awake_duration': date_helper.seconds_to_hours(
+            data_point_copy.get('awake_time')),
+        # Hours in bed: sleep + awake.
+        'in_bed_duration_in_hours': date_helper.seconds_to_hours(
+            data_point_copy.get('time_in_bed')),
+    })
 
-      bedtime_start = parser.parse(sleep_daily_data.get('bedtime_start'))
-      bedtime_end = parser.parse(sleep_daily_data.get('bedtime_end'))
-
-      # Derived metrics.
-      sleep_dict[sleep_date].update({
-          # HH:MM at which you went bed.
-          'bedtime_start_hour': bedtime_start.strftime('%H:%M'),
-          # HH:MM at which you woke up.
-          'bedtime_end_hour': bedtime_end.strftime('%H:%M'),
-          # Hours in deep sleep.
-          'deep_sleep_duration_in_hours': date_helper.seconds_to_hours(
-              sleep_daily_data.get('deep_sleep_duration')),
-          # Hours in REM sleep.
-          'rem_sleep_duration_in_hours': date_helper.seconds_to_hours(
-              sleep_daily_data.get('rem_sleep_duration')),
-          # Hours in light sleep.
-          'light_sleep_duration_in_hours': date_helper.seconds_to_hours(
-              sleep_daily_data.get('light_sleep_duration')),
-          # Hours sleeping: deep + rem + light.
-          'total_sleep_duration_in_hours': date_helper.seconds_to_hours(
-              sleep_daily_data.get('total_sleep_duration')),
-          # Hours awake.
-          'awake_duration': date_helper.seconds_to_hours(
-              sleep_daily_data.get('awake_time')),
-          # Hours in bed: sleep + awake.
-          'in_bed_duration_in_hours': date_helper.seconds_to_hours(
-              sleep_daily_data.get('time_in_bed')),
-      })
-
-    return sleep_dict
+    return data_point_copy
