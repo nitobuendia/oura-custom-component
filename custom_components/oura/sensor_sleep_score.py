@@ -7,13 +7,17 @@ from . import api
 from . import sensor_base
 
 # Sensor configuration
+CONF_KEY_NAME = 'sleep_score'
+
 _DEFAULT_NAME = 'oura_sleep_score'
 
-CONF_KEY_NAME = 'sleep_score'
+_DEFAULT_ATTRIBUTE_STATE = 'score'
+
 _DEFAULT_MONITORED_VARIABLES = [
     'day',
     'score',
 ]
+
 _SUPPORTED_MONITORED_VARIABLES = [
     'day',
     'deep_sleep',
@@ -31,6 +35,11 @@ CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
 
     vol.Optional(
+        sensor_base.CONF_ATTRIBUTE_STATE,
+        default=_DEFAULT_ATTRIBUTE_STATE
+    ): vol.In(_SUPPORTED_MONITORED_VARIABLES),
+
+    vol.Optional(
         sensor_base.CONF_MONITORED_DATES,
         default=sensor_base.DEFAULT_MONITORED_DATES
     ): cv.ensure_list,
@@ -46,8 +55,6 @@ CONF_SCHEMA = {
     ): cv.positive_int,
 }
 
-# There is no need to add any configuration as all fields are optional and
-# with default values. However, this is done as it is used in the main sensor.
 DEFAULT_CONFIG = {}
 
 _EMPTY_SENSOR_ATTRIBUTE = {
@@ -76,7 +83,6 @@ class OuraSleepScoreSensor(sensor_base.OuraDatedSensor):
 
     self._api_endpoint = api.OuraEndpoints.SLEEP_SCORE
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
-    self._main_state_attribute = 'score'
 
   def parse_individual_datapoint(self, datapoint):
     """Parses the individual day or datapoint.

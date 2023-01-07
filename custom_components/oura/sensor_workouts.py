@@ -7,15 +7,19 @@ from . import api
 from . import sensor_base
 
 # Sensor configuration
+CONF_KEY_NAME = 'workouts'
+
 _DEFAULT_NAME = 'oura_workouts'
 
-CONF_KEY_NAME = 'workouts'
+_DEFAULT_ATTRIBUTE_STATE = 'activity'
+
 _DEFAULT_MONITORED_VARIABLES = [
     'activity',
     'calories',
     'day',
     'intensity',
 ]
+
 _SUPPORTED_MONITORED_VARIABLES = [
     'activity',
     'calories',
@@ -30,6 +34,11 @@ _SUPPORTED_MONITORED_VARIABLES = [
 
 CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
+
+    vol.Optional(
+        sensor_base.CONF_ATTRIBUTE_STATE,
+        default=_DEFAULT_ATTRIBUTE_STATE
+    ): vol.In(_SUPPORTED_MONITORED_VARIABLES),
 
     vol.Optional(
         sensor_base.CONF_MONITORED_DATES,
@@ -47,8 +56,6 @@ CONF_SCHEMA = {
     ): cv.positive_int,
 }
 
-# There is no need to add any configuration as all fields are optional and
-# with default values. However, this is done as it is used in the main sensor.
 DEFAULT_CONFIG = {}
 
 _EMPTY_SENSOR_ATTRIBUTE = {
@@ -76,4 +83,3 @@ class OuraWorkoutsSensor(sensor_base.OuraDatedSeriesSensor):
 
     self._api_endpoint = api.OuraEndpoints.SESSIONS
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
-    self._main_state_attribute = 'activity'

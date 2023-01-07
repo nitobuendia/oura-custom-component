@@ -13,6 +13,8 @@ from .helpers import date_helper
 
 SENSOR_NAME = 'oura'
 
+CONF_ATTRIBUTE_STATE = 'attribute_state'
+
 CONF_BACKFILL = 'max_backfill'
 DEFAULT_BACKFILL = 0
 
@@ -134,11 +136,14 @@ class OuraDatedSensor(OuraSensor):
 
     self._name = self._sensor_config.get(const.CONF_NAME)
     self._backfill = self._sensor_config.get(CONF_BACKFILL)
+    self._main_state_attribute = self._sensor_config.get(CONF_ATTRIBUTE_STATE)
+
     self._monitored_variables = [
         variable_name.lower()
         for variable_name
         in self._sensor_config.get(const.CONF_MONITORED_VARIABLES)
     ] if self._sensor_config.get(const.CONF_MONITORED_VARIABLES) else []
+
     self._monitored_dates = [
         date_name.lower()
         for date_name in self._sensor_config.get(CONF_MONITORED_DATES)
@@ -148,8 +153,6 @@ class OuraDatedSensor(OuraSensor):
     self._api_endpoint = ''
     # Empty daily sensor data.
     self._empty_sensor = {}
-    # Attribute that should be used for updating state.
-    self._main_state_attribute = ''
 
   def _filter_monitored_variables(self, sensor_data):
     """Filters the sensor data to only contain monitored variables.

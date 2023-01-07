@@ -8,14 +8,18 @@ from . import sensor_base
 from .helpers import date_helper
 
 # Sensor configuration
+CONF_KEY_NAME = 'bedtime'
+
 _DEFAULT_NAME = 'oura_bedtime'
 
-CONF_KEY_NAME = 'bedtime'
+_DEFAULT_ATTRIBUTE_STATE = 'bedtime_window_start'
+
 _DEFAULT_MONITORED_VARIABLES = [
     'bedtime_window_start',
     'bedtime_window_end',
     'day',
 ]
+
 _SUPPORTED_MONITORED_VARIABLES = [
     'bedtime_window_start',
     'bedtime_window_end',
@@ -24,6 +28,11 @@ _SUPPORTED_MONITORED_VARIABLES = [
 
 CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
+
+    vol.Optional(
+        sensor_base.CONF_ATTRIBUTE_STATE,
+        default=_DEFAULT_ATTRIBUTE_STATE
+    ): vol.In(_SUPPORTED_MONITORED_VARIABLES),
 
     vol.Optional(
         sensor_base.CONF_MONITORED_DATES,
@@ -68,7 +77,6 @@ class OuraBedtimeSensor(sensor_base.OuraDatedSensor):
 
     self._api_endpoint = api.OuraEndpoints.BEDTIME
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
-    self._main_state_attribute = 'bedtime_window_start'
 
   def parse_individual_data_point(self, data_point):
     """Parses the individual day or data point.

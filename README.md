@@ -85,36 +85,43 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       monitored_dates:
     activity:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
     heart_rate:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
     readiness:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
     sleep:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
     sleep_periods:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
     sleep_score:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
     workouts:
       name:
+      attribute_state:
       max_backfill:
       monitored_dates:
       monitored_variables:
@@ -141,9 +148,10 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 ### Individual sensor parameters
 
 - `name`: (Optional) Name of the sensor (e.g. sleep_score).
-- `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-- `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-- `monitored_variables`: Variables that you want to monitor. See `monitored attributes` section within each sensor description below to understand what variables are supported.
+- `attribute_state`: (Optional) What monitored variable (i.e. attribute) will be used to define the main state of the sensor. To see the default values, check the `state` section within each sensor description below.
+- `max_backfill`: (Optional) How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+- `monitored_dates`: (Optional) Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+- `monitored_variables`: (Optional) Variables that you want to monitor. See `monitored attributes` section within each sensor description below to understand what variables are supported.
 
 ### Example
 
