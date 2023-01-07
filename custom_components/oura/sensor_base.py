@@ -351,7 +351,7 @@ class OuraDatedSensor(OuraSensor):
     if not self._main_state_attribute:
       return
 
-    if len(self._monitored_dates) == 0:
+    if not self._monitored_dates:
       return
 
     first_monitored_date = self._monitored_dates[0]
