@@ -7,6 +7,7 @@ from . import sensor_activity
 from . import sensor_base
 from . import sensor_bedtime
 from . import sensor_readiness
+from . import sensor_sessions
 from . import sensor_sleep
 from . import sensor_sleep_score
 
@@ -34,6 +35,11 @@ _SENSORS_SCHEMA = {
         sensor_readiness.CONF_KEY_NAME,
         default=sensor_readiness.DEFAULT_CONFIG
     ): sensor_readiness.CONF_SCHEMA,
+
+    vol.Optional(
+        sensor_sessions.CONF_KEY_NAME,
+        default=sensor_sessions.DEFAULT_CONFIG
+    ): sensor_sessions.CONF_SCHEMA,
 
     vol.Optional(
         sensor_sleep.CONF_KEY_NAME,
@@ -75,6 +81,9 @@ async def async_setup_platform(
 
   if sensor_readiness.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_readiness.OuraReadinessSensor(config, hass))
+
+  if sensor_sessions.CONF_KEY_NAME in sensors_config:
+    sensors.append(sensor_sessions.OuraSessionsSensor(config, hass))
 
   if sensor_sleep.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_sleep.OuraSleepSensor(config, hass))

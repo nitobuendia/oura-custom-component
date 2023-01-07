@@ -1,0 +1,114 @@
+"""Proivdes a sessions sensor."""
+
+import logging
+import voluptuous as vol
+from homeassistant import const
+from homeassistant.helpers import config_validation as cv
+from . import api
+from . import sensor_base
+
+# Sensor configuration
+_DEFAULT_NAME = 'oura_sessions'
+
+CONF_KEY_NAME = 'sessions'
+_DEFAULT_MONITORED_VARIABLES = [
+    'day',
+    'start_datetime',
+    'end_datetime',
+    'type',
+    'heart_rate',
+    'motion_count',
+]
+_SUPPORTED_MONITORED_VARIABLES = [
+    'day',
+    'start_datetime',
+    'end_datetime',
+    'type',
+    'heart_rate',
+    'heart_rate_variability',
+    'mood',
+    'motion_count',
+]
+
+CONF_SCHEMA = {
+    vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
+
+    vol.Optional(
+        sensor_base.CONF_MONITORED_DATES,
+        default=sensor_base.DEFAULT_MONITORED_DATES
+    ): cv.ensure_list,
+
+    vol.Optional(
+        const.CONF_MONITORED_VARIABLES,
+        default=_DEFAULT_MONITORED_VARIABLES
+    ): vol.All(cv.ensure_list, [vol.In(_SUPPORTED_MONITORED_VARIABLES)]),
+
+    vol.Optional(
+        sensor_base.CONF_BACKFILL,
+        default=sensor_base.DEFAULT_BACKFILL
+    ): cv.positive_int,
+}
+
+# There is no need to add any configuration as all fields are optional and
+# with default values. However, this is done as it is used in the main sensor.
+DEFAULT_CONFIG = {}
+
+_EMPTY_SENSOR_ATTRIBUTE = {
+    variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
+}
+
+
+class OuraSessionsSensor(sensor_base.OuraDatedSensor):
+  """Representation of an Oura Ring Sessions sensor.
+
+  Attributes:
+    name: name of the sensor.
+    state: state of the sensor.
+    extra_state_attributes: attributes of the sensor.
+
+  Methods:
+    async_update: updates sensor data.
+  """
+
+  def __init__(self, config, hass):
+    """Initializes the sensor."""
+    sessions_config = (
+        config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {}))
+    super(OuraSessionsSensor, self).__init__(config, hass, sessions_config)
+
+    self._api_endpoint = api.OuraEndpoints.SESSIONS
+    self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
+    self._main_state_attribute = 'type'
+
+  def parse_sensor_data(self, oura_data):
+    """Processes sessions data into a dictionary.
+
+    Args:
+      oura_data: Sessions data in list format from Oura API.
+
+    Returns:
+      Dictionary where key is the requested summary_date and value is the
+      Oura sessions data for that given day.
+    """
+    if not oura_data or 'data' not in oura_data:
+      logging.error(
+          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
+      return {}
+
+    sessions_data = oura_data.get('data')
+    if not sessions_data:
+      return {}
+
+    sessions_dict = {}
+    for sessions_daily_data in sessions_data:
+      # Default metrics.
+      sessions_date = sessions_daily_data.get('day')
+      if not sessions_date:
+        continue
+
+      if sessions_date not in sessions_dict:
+        sessions_dict[sessions_date] = []
+
+      sessions_dict[sessions_date].append(sessions_daily_data)
+
+    return sessions_dict

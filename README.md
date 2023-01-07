@@ -34,6 +34,10 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Readiness Sensor state](#readiness-sensor-state)
       - [Readiness Sensor monitored attributes](#readiness-sensor-monitored-attributes)
       - [Readiness Sensor sample output](#readiness-sensor-sample-output)
+    - [Sessions Sensor](#sessions-sensor)
+      - [Sessions Sensor state](#sessions-sensor-state)
+      - [Sessions Sensor monitored attributes](#sessions-sensor-monitored-attributes)
+      - [Sessions Sensor sample output](#sessions-sensor-sample-output)
     - [Sleep Sensor](#sleep-sensor)
       - [Sleep Sensor State](#sleep-sensor-state)
       - [Sleep Sensor monitored attributes](#sleep-sensor-monitored-attributes)
@@ -378,6 +382,32 @@ yesterday:
   resting_heart_rate: 100
   sleep_balance: 98
 ```
+
+
+### Sessions Sensor
+
+#### Sessions Sensor state
+
+The state of the sensor will show the **type** for the first selected day (recommended: yesterday) and latest event by timestamp.
+
+#### Sessions Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `start_datetime`
+- `end_datetime`
+- `type`
+- `heart_rate`
+- `heart_rate_variability`
+- `mood`
+- `motion_count`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#tag/Sessions).
+
+By default, the following attributes are being monitored: `day`, `start_datetime`, `end_datetime`, `type`, `heart_rate`, `motion_count`.
 
 ### Sleep Sensor
 
