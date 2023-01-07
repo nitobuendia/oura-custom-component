@@ -106,36 +106,20 @@ class OuraActivitySensor(sensor_base.OuraDatedSensor):
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'score'
 
-  def parse_sensor_data(self, oura_data):
-    """Processes activity data into a dictionary.
+  def parse_individual_data_point(self, data_point):
+    """Parses the individual day or data point.
 
     Args:
-      oura_data: Readiness data in list format from Oura API.
+      data_point: Object for an individual day or data point.
 
     Returns:
-      Dictionary where key is the requested summary_date and value is the
-      Oura activity data for that given day.
+      Modified data point with right parsed data.
     """
-    if not oura_data or 'data' not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
-      return {}
+    data_point_copy = {}
+    data_point_copy.update(data_point)
 
-    activity_data = oura_data.get('data')
-    if not activity_data:
-      return {}
+    contributors = data_point_copy.get('contributors', {})
+    data_point_copy.update(contributors)
+    del data_point_copy['contributors']
 
-    activity_dict = {}
-    for activity_daily_data in activity_data:
-      # Default metrics.
-      activity_date = activity_daily_data.get('day')
-      if not activity_date:
-        continue
-
-      contributors = activity_daily_data.get('contributors', {})
-      activity_daily_data.update(contributors)
-      del activity_daily_data['contributors']
-
-      activity_dict[activity_date] = activity_daily_data
-
-    return activity_dict
+    return data_point_copy
