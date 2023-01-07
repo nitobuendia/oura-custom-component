@@ -240,7 +240,7 @@ The state of the sensor will show the **score** for the first selected day (reco
 
 The attributes will contain the daily data for the selected days and monitored variables.
 
-The readiness sensor supports all the following monitored attributes:
+This sensor supports all the following monitored attributes:
 
 - `class_5_min`
 - `score`
@@ -307,7 +307,7 @@ The state of the sensor will show the **bedtime start hour** for the first selec
 
 The attributes will contain the daily data for the selected days and monitored variables.
 
-The readiness sensor supports all the following monitored attributes:
+This sensor supports all the following monitored attributes:
 
 - `bedtime_window_start`: Recommended bedtime in HH:MM format.
 - `bedtime_window_end`: Recommended bedtime in HH:MM format.
@@ -389,7 +389,7 @@ The state of the sensor will show the **sleep efficiency** for the first selecte
 
 The attributes will contain the daily data for the selected days and monitored variables.
 
-The sleep sensor supports all the following monitored attributes:
+This sensor supports all the following monitored attributes:
 
 - `day`: YYYY-MM-DD of the date of the data point.
 - `average_breath`: Average breaths per minute (f.k.a `breath_average`).
@@ -479,7 +479,7 @@ The state of the sensor will show the **score** for the first selected day (reco
 
 The attributes will contain the daily data for the selected days and monitored variables.
 
-The sleep sensor supports all the following monitored attributes:
+This sensor supports all the following monitored attributes:
 
 - `day`: YYYY-MM-DD of the date of the data point.
 - `deep_sleep`
