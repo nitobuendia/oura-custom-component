@@ -29,6 +29,10 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Activity Sensor state](#activity-sensor-state)
       - [Activity Sensor monitored attributes](#activity-sensor-monitored-attributes)
       - [Activity Sensor sample output](#activity-sensor-sample-output)
+    - [Heart Rate Sensor](#heart-rate-sensor)
+      - [Heart Rate Sensor state](#heart-rate-sensor-state)
+      - [Heart Rate Sensor monitored attributes](#heart-rate-sensor-monitored-attributes)
+      - [Heart Rate Sensor sample output](#heart-rate-sensor-sample-output)
     - [Bedtime Sensor](#bedtime-sensor)
       - [Bedtime Sensor state](#bedtime-sensor-state)
       - [Bedtime Sensor monitored attributes](#bedtime-sensor-monitored-attributes)
@@ -84,6 +88,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       max_backfill:
       monitored_dates:
       monitored_variables:
+    heart_rate:
+      name:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
     readiness:
       name:
       max_backfill:
@@ -123,6 +132,7 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 - `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. By default, there is no default sensor configuration; instead, each sensor config or default values are used.
 - `activity`: (Optional) Configures activity sensor. By default, the activity sensor is not configured. Default name: oura_activity.
+- `heart_rate`: (Optional) Configures heart rate sensor. By default, the heart rate sensor is not configured. Default name: oura_heart_rate.
 - `readiness`: (Optional) Configures readiness sensor. By default, the readiness sensor is not configured. Default name: oura_readiness.
 - `sleep`: (Optional) Configures sleep sensor. By default the sleep sensor is added. Default name: oura_sleep.
 - `sleep_periods`: (Optional) Configures sleep periods sensor. By default, the sleep periods sensor is not configured. Default name: oura_sleep_periods.
@@ -317,6 +327,66 @@ yesterday:
   sedentary_time: 3540
   target_calories: 550
   total_calories: 1702
+```
+
+### Heart Rate Sensor
+
+#### Heart Rate Sensor state
+
+The state of the sensor will show the **bpm** for the first selected day (recommended: yesterday).
+
+#### Heart Rate Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`
+- `bpm`
+- `source`
+- `timestamp`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/heartrate_route_heartrate_get).
+
+By default, the following attributes are being monitored: `day`, `bpm`, `source`, `timestamp`.
+
+#### Heart Rate Sensor sample output
+
+**State**: `58`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  - day: '2023-01-06'
+    bpm: 58
+    source: awake
+    timestamp: '2023-01-06T16:40:38+00:00'
+  - day: '2023-01-06'
+    bpm: 53
+    source: awake
+    timestamp: '2023-01-06T16:40:52+00:00'
+  - day: '2023-01-06'
+    bpm: 55
+    source: awake
+    timestamp: '2023-01-06T16:40:53+00:00'
+  - day: '2023-01-06'
+    bpm: 60
+    source: awake
+    timestamp: '2023-01-06T16:50:59+00:00'
+  - day: '2023-01-06'
+    bpm: 64
+    source: awake
+    timestamp: '2023-01-06T16:51:25+00:00'
+  - day: '2023-01-06'
+    bpm: 62
+    source: awake
+    timestamp: '2023-01-06T16:51:31+00:00'
+  - day: '2023-01-06'
+    bpm: 64
+    source: awake
+    timestamp: '2023-01-06T16:56:02+00:00'
+  # (...)
 ```
 
 ### Bedtime Sensor

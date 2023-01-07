@@ -13,6 +13,7 @@ class OuraEndpoints(enum.Enum):
   """Represents Oura endpoints."""
   ACTIVITY = '{}/usercollection/daily_activity'.format(_OURA_API_V2)
   BEDTIME = '{}/bedtime'.format(_OURA_API_V1)
+  HEART_RATE = '{}/usercollection/heartrate'.format(_OURA_API_V2)
   READINESS = '{}/usercollection/daily_readiness'.format(_OURA_API_V2)
   SESSIONS = '{}/usercollection/session'.format(_OURA_API_V2)
   SLEEP_PERIODS = '{}/usercollection/sleep'.format(_OURA_API_V2)

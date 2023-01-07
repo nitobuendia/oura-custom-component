@@ -6,6 +6,7 @@ import voluptuous as vol
 from . import sensor_activity
 from . import sensor_base
 from . import sensor_bedtime
+from . import sensor_heart_rate
 from . import sensor_readiness
 from . import sensor_sessions
 from . import sensor_sleep
@@ -32,6 +33,11 @@ _SENSORS_SCHEMA = {
         sensor_bedtime.CONF_KEY_NAME,
         default=sensor_bedtime.DEFAULT_CONFIG
     ): sensor_bedtime.CONF_SCHEMA,
+
+    vol.Optional(
+        sensor_heart_rate.CONF_KEY_NAME,
+        default=sensor_heart_rate.DEFAULT_CONFIG
+    ): sensor_heart_rate.CONF_SCHEMA,
 
     vol.Optional(
         sensor_readiness.CONF_KEY_NAME,
@@ -90,6 +96,9 @@ async def async_setup_platform(
 
   if sensor_bedtime.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_bedtime.OuraBedtimeSensor(config, hass))
+
+  if sensor_heart_rate.CONF_KEY_NAME in sensors_config:
+    sensors.append(sensor_heart_rate.OuraHeartRateSensor(config, hass))
 
   if sensor_readiness.CONF_KEY_NAME in sensors_config:
     sensors.append(sensor_readiness.OuraReadinessSensor(config, hass))
