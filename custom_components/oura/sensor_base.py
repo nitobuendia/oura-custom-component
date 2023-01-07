@@ -342,6 +342,23 @@ class OuraDatedSensor(OuraSensor):
 
     return dated_attributes_map
 
+  def _update_state(self, sensor_attributes):
+    """Updates the state based on the sensor attributes.
+
+    Args:
+      sensor_attributes: Sensor attributes (before filtering).
+    """
+    if len(self._monitored_dates) == 0:
+      return
+
+    first_monitored_date = self._monitored_dates[0]
+    if not first_monitored_date:
+      return
+
+    first_date_attributes = sensor_attributes.get(first_monitored_date)
+    if first_date_attributes and self._main_state_attribute:
+      self._state = first_date_attributes.get(self._main_state_attribute)
+
   def _update(self):
     """Fetches new state data for the sensor."""
     (start_date, end_date) = self._get_monitored_date_range()
@@ -356,10 +373,7 @@ class OuraDatedSensor(OuraSensor):
         sensor_data, self._empty_sensor)
 
     # Update state must happen before filtering for monitored variables.
-    first_monitored_date = self._monitored_dates[0]
-    first_date_attributes = dated_attributes.get(first_monitored_date)
-    if first_date_attributes and self._main_state_attribute:
-      self._state = first_date_attributes.get(self._main_state_attribute)
+    self._update_state(dated_attributes)
 
     dated_attributes = self._filter_monitored_variables(dated_attributes)
     self._attributes = dated_attributes
