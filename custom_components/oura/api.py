@@ -15,7 +15,7 @@ class OuraEndpoints(enum.Enum):
   BEDTIME = '{}/bedtime'.format(_OURA_API_V1)
   READINESS = '{}/usercollection/daily_readiness'.format(_OURA_API_V2)
   SESSIONS = '{}/usercollection/session'.format(_OURA_API_V2)
-  SLEEP = '{}/usercollection/sleep'.format(_OURA_API_V2)
+  SLEEP_PERIODS = '{}/usercollection/sleep'.format(_OURA_API_V2)
   SLEEP_SCORE = '{}/usercollection/daily_sleep'.format(_OURA_API_V2)
 
 

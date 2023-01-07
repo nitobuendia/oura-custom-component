@@ -109,7 +109,7 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
     sleep_config = config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {})
     super(OuraSleepSensor, self).__init__(config, hass, sleep_config)
 
-    self._api_endpoint = api.OuraEndpoints.SLEEP
+    self._api_endpoint = api.OuraEndpoints.SLEEP_PERIODS
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'efficiency'
 
