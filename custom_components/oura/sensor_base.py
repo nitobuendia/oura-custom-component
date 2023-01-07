@@ -384,20 +384,30 @@ class OuraDatedSensor(OuraSensor):
     """
     return data_point
 
-  def parse_sensor_data(self, oura_data):
-    """Parses data from the API. Must be implemented by child class."""
-    if not oura_data or 'data' not in oura_data:
+  def parse_sensor_data(self, oura_data, data_param='data', day_param='day'):
+    """Parses data from the API.
+
+    Args:
+      oura_data: Data from Oura API.
+      data_param: Parameter where data is found. By default: 'data'.
+      day_param: Parameter where date is found. By default: 'date'.
+
+    Returns:
+      Dictionary where key is the requested date and value is the
+      Oura sensor data for that given day.
+    """
+    if not oura_data or data_param not in oura_data:
       logging.error(
           f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
       return {}
 
-    sensor_data = oura_data.get('data')
+    sensor_data = oura_data.get(data_param)
     if not sensor_data:
       return {}
 
     sensor_dict = {}
     for sensor_daily_data in sensor_data:
-      sensor_date = sensor_daily_data.get('day')
+      sensor_date = sensor_daily_data.get(day_param)
       if not sensor_date:
         continue
 
