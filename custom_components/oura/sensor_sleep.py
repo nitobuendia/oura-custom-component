@@ -38,7 +38,6 @@ _SUPPORTED_MONITORED_VARIABLES = [
     'day',
     'awake_time',
     'awake_duration_in_hours',
-    'awake_duration',
     'bedtime_end',
     'bedtime_end_hour',
     'bedtime_start',
@@ -166,7 +165,7 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
         'total_sleep_duration_in_hours': date_helper.seconds_to_hours(
             data_point_copy.get('total_sleep_duration')),
         # Hours awake.
-        'awake_duration': date_helper.seconds_to_hours(
+        'awake_duration_in_hours': date_helper.seconds_to_hours(
             data_point_copy.get('awake_time')),
         # Hours in bed: sleep + awake.
         'in_bed_duration_in_hours': date_helper.seconds_to_hours(

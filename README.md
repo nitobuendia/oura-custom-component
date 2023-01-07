@@ -590,12 +590,12 @@ yesterday:
   'average_breath': 14
   'lowest_heart_rate': 44
   'average_heart_rate': 47
-  'deep_sleep_duration': 0.72
-  'rem_sleep_duration': 0.32
-  'light_sleep_duration': 4.54
-  'total_sleep_duration': 5.58
-  'awake_duration': 1.45
-  'in_bed_duration': 7.0
+  'deep_sleep_duration_in_hours': 0.72
+  'rem_sleep_duration_in_hours': 0.32
+  'light_sleep_duration_in_hours': 4.54
+  'total_sleep_duration_in_hours': 5.58
+  'awake_duration_in_hours': 1.45
+  'in_bed_duration_in_hours': 7.0
 
 8d_ago:
   'day': "2022-07-07"
@@ -604,12 +604,12 @@ yesterday:
   'average_breath': 14
   'lowest_heart_rate': 44
   'average_heart_rate': 48
-  'deep_sleep_duration': 2.05
-  'rem_sleep_duration': 0.82
-  'light_sleep_duration': 4.29
-  'total_sleep_duration': 7.16
-  'awake_duration': 1.44
-  'in_bed_duration': 8.
+  'deep_sleep_duration_in_hours': 2.05
+  'rem_sleep_duration_in_hours': 0.82
+  'light_sleep_duration_in_hours': 4.29
+  'total_sleep_duration_in_hours': 7.16
+  'awake_duration_in_hours': 1.44
+  'in_bed_duration_in_hours': 8.23
 ```
 
 ### Sleep Periods Sensor
@@ -793,42 +793,42 @@ Example for breaking up yesterday's data into multiple sensors:
       unique_id: deep_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.deep_sleep_duration }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.deep_sleep_duration_in_hours }}
       icon: "mdi:bed"
 
     - name: "Rem Sleep Yesterday"
       unique_id: rem_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.rem_sleep_duration }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.rem_sleep_duration_in_hours }}
       icon: "mdi:bed"
 
     - name: "Light Sleep Yesterday"
       unique_id: light_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.light_sleep_duration }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.light_sleep_duration_in_hours }}
       icon: "mdi:bed"
 
     - name: "Total Sleep Yesterday"
       unique_id: total_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.total_sleep_duration }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.total_sleep_duration_in_hours }}
       icon: "mdi:sleep"
 
     - name: "Time Awake Yesterday"
       unique_id: time_awake_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.awake_duration }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.awake_duration_in_hours }}
       icon: "mdi:sleep-off"
 
     - name: "Time In Bed Yesterday"
       unique_id: time_in_bed_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.in_bed_duration }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.in_bed_duration_in_hours }}
       icon: "mdi:bed"
 ```
 
