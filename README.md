@@ -409,6 +409,24 @@ For a definition of all these variables, check [Oura's API](https://cloud.ourari
 
 By default, the following attributes are being monitored: `day`, `start_datetime`, `end_datetime`, `type`, `heart_rate`, `motion_count`.
 
+#### Sessions Sensor sample output
+
+**State**: `94`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  - day: '2021-11-12'
+    start_datetime: '2021-11-12T12:32:09-08:00'
+    end_datetime: '2021-11-12T12:40:49-08:00'
+    type: 'rest'
+  - day: '2021-11-12'
+    start_datetime: '2021-11-12T19:45:07-08:00'
+    end_datetime: '2021-11-12T20:39:27-08:00'
+    type: 'meditation'
+```
+
 ### Sleep Sensor
 
 #### Sleep Sensor State
