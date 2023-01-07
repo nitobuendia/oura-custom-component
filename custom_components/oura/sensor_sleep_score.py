@@ -1,4 +1,4 @@
-"""Proivdes a sleep score sensor."""
+"""Provides a sleep score sensor."""
 
 import voluptuous as vol
 from homeassistant import const
