@@ -524,7 +524,6 @@ yesterday:
   'in_bed_duration': 8.
 ```
 
-
 ### Sleep Periods Sensor
 
 #### Sleep Periods Sensor State
@@ -571,7 +570,6 @@ yesterday:
   total_sleep_duration_in_hours: 6.67
   type: long_sleep
 ```
-
 
 ### Sleep Score Sensor
 
