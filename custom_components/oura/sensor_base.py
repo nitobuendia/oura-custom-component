@@ -112,7 +112,9 @@ class OuraDatedSensor(OuraSensor):
     extra_state_attributes: attributes of the sensor.
 
   Methods:
-    async_update: updates sensor data.
+    get_sensor_data_from_api: Fetches data from API.
+    parse_individual_data_point: Parses a data point from API.
+    parse_sensor_data: Parses data from API.
   """
 
   def __init__(self, config, hass, sensor_config=None):
@@ -122,11 +124,6 @@ class OuraDatedSensor(OuraSensor):
       config: Platform configuration.
       hass: Home-Assistant object.
       sensor_config: Sub-section of config holding the particular sensor info.
-
-    Methods:
-      get_sensor_data_from_api: Fetches data from API.
-      parse_individual_data_point: Parses a data point from API.
-      parse_sensor_data: Parses data from API.
     """
     super(OuraDatedSensor, self).__init__(config, hass)
 
