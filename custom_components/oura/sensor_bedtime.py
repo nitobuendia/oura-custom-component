@@ -82,6 +82,8 @@ class OuraBedtimeSensor(sensor_base.OuraDatedSensor):
     data_point_copy = {}
     data_point_copy.update(data_point)
 
+    data_point_copy['day'] = data_point_copy['date']
+
     bedtime_window = data_point_copy.get('bedtime_window', {})
 
     start_diff = bedtime_window['start']
@@ -107,4 +109,4 @@ class OuraBedtimeSensor(sensor_base.OuraDatedSensor):
       Oura bedtime data for that given day.
     """
     return super(OuraBedtimeSensor, self).parse_sensor_data(
-        oura_data, 'ideal_bedtimes', 'date')
+        oura_data, 'ideal_bedtimes')
