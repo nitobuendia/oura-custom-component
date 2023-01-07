@@ -1,5 +1,9 @@
 # Oura - Custom Component for Home-Assisant
 
+
+**THIS COMPONENT IS LEGACY AND HAS BEEN DEPRECATED. THIS CODE REMAINS HERE AS PART OF THE TRANSITION TO V2. REFER TO THE [MAIN BRANCH](https://github.com/nitobuendia/oura-custom-component) FOR THE LATEST VERSION. THE NEW COMPONENT WORKS ON THE NEW API VERSION(S) AND INCLUDE A LARGE NUMBER OF DATA POINTS AND AVAILABLE SENSORS.**
+
+
 This project is a custom component for [Home-Assistant](https://home-assistant.io).
 
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
