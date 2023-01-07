@@ -260,11 +260,16 @@ class OuraDatedSensor(OuraSensor):
     """
     sensor_dates = self._get_monitored_name_days()
 
+    today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+    sensor_dates = sensor_dates.values()
+    start_date = (
+        min(sensor_dates) if len(sensor_dates) > 0 else today_date)
+    end_date = (
+        max(sensor_dates) if len(sensor_dates) > 0 else today_date)
+
     # Add an extra week to retrieve past week in case current week data is
     # missing.
-    start_date = date_helper.add_days_to_string_date(
-        min(sensor_dates.values()), -7)
-    end_date = max(sensor_dates.values())
+    start_date = date_helper.add_days_to_string_date(start_date, -7)
 
     return (start_date, end_date)
 
