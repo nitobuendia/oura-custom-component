@@ -5,6 +5,7 @@ This project is a custom component for [Home-Assistant](https://home-assistant.i
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
 
 ## Table of Contents
+
 - [Oura - Custom Component for Home-Assisant](#oura---custom-component-for-home-assisant)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
@@ -39,7 +40,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Sleep Sensor sample output](#sleep-sensor-sample-output)
     - [Derived sensors](#derived-sensors)
   - [Sponsoring](#sponsoring)
-
 
 ## Installation
 
@@ -79,27 +79,27 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ### Parameters
 
-* `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
-* `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
-* `sensors`: (Optional) Determines which sensors to import and its configuration.
-  * `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. Default: no default configuration.
-    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-  * `activity`: (Optional) Configures activity sensor. Default: activity sensor is not configured.
-    * `name`: (Optional) Name of the sensor (e.g. daily_activity). Default: oura_activity.
-    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    * `monitored_variables`: Variables that you want to monitor. See `Activity Sensor monitored attributes` section to understand what variables are supported.
-  * `readiness`: (Optional) Configures readiness sensor. Default: readiness sensor is not configured.
-    * `name`: (Optional) Name of the sensor (e.g. sleep_readiness). Default: oura_readiness.
-    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    * `monitored_variables`: Variables that you want to monitor. See `Readiness Sensor monitored attributes` section to understand what variables are supported.
-  * `sleep`: (Optional) Configures sleep sensor. Default: sleep sensor is configured.
-    * `name`: (Optional) Name of the sensor (e.g. sleep_quality). Default: oura_sleep.
-    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    * `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor monitored attributes` section to understand what variables are supported.
+- `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
+- `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
+- `sensors`: (Optional) Determines which sensors to import and its configuration.
+  - `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. Default: no default configuration.
+    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+  - `activity`: (Optional) Configures activity sensor. Default: activity sensor is not configured.
+    - `name`: (Optional) Name of the sensor (e.g. daily_activity). Default: oura_activity.
+    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    - `monitored_variables`: Variables that you want to monitor. See `Activity Sensor monitored attributes` section to understand what variables are supported.
+  - `readiness`: (Optional) Configures readiness sensor. Default: readiness sensor is not configured.
+    - `name`: (Optional) Name of the sensor (e.g. sleep_readiness). Default: oura_readiness.
+    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    - `monitored_variables`: Variables that you want to monitor. See `Readiness Sensor monitored attributes` section to understand what variables are supported.
+  - `sleep`: (Optional) Configures sleep sensor. Default: sleep sensor is configured.
+    - `name`: (Optional) Name of the sensor (e.g. sleep_quality). Default: oura_sleep.
+    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    - `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor monitored attributes` section to understand what variables are supported.
 
 ### Example
 
@@ -188,9 +188,9 @@ For example, in the following configuration:
 
 This data can be retrieve for multiple days at once. The days supported are:
 
-* `yesterday`: Previous day. This is the most recent data.
-* `Xd_ago`: Number of days ago (e.g. 8d_ago ago to get the data of yesterday last week).
-* `monday`, `tuesday`, ..., `sunday`: Previous days of the week.
+- `yesterday`: Previous day. This is the most recent data.
+- `Xd_ago`: Number of days ago (e.g. 8d_ago ago to get the data of yesterday last week).
+- `monday`, `tuesday`, ..., `sunday`: Previous days of the week.
 
 #### Backfilling
 
@@ -210,11 +210,11 @@ If you set the `max_backfill` value to `0`, there will never be backfill of data
 
 If you set the `max_backfill` value to any positive integer, then it will backfill like this:
 
-* `Xd_ago`: If the data for X days ago is not available, looks for the day before. For example, if the setting is `8d_ago` and is not available, it will look for the data `9d_ago`. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data. If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the 9d ago, then 10d ago, then 11d ago; it will stop as soon as one of these values is available (e.g. if 10d ago is available, it will not check 11d ago) and will return unknown if none of them has data).
+- `Xd_ago`: If the data for X days ago is not available, looks for the day before. For example, if the setting is `8d_ago` and is not available, it will look for the data `9d_ago`. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data. If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the 9d ago, then 10d ago, then 11d ago; it will stop as soon as one of these values is available (e.g. if 10d ago is available, it will not check 11d ago) and will return unknown if none of them has data).
 
-* `yesterday`: Same as `Xd_ago`. If yesterday is not available, looks for previous day. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data (the day before yesterday). If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the previous day, then the previous, then the previous; it will stop as soon as one of these values is available and will return unknown if none of them has data).
+- `yesterday`: Same as `Xd_ago`. If yesterday is not available, looks for previous day. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data (the day before yesterday). If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the previous day, then the previous, then the previous; it will stop as soon as one of these values is available and will return unknown if none of them has data).
 
-* `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
+- `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
 
 ### Activity Sensor
 
@@ -228,36 +228,36 @@ The attributes will contain the daily data for the selected days and monitored v
 
 The readiness sensor supports all the following monitored attributes:
 
-* `class_5_min`
-* `score`
-* `active_calories`
-* `average_met_minutes`
-* `day`
-* `meet_daily_targets`
-* `move_every_hour`
-* `recovery_time`
-* `stay_active`
-* `training_frequency`
-* `training_volume`
-* `equivalent_walking_distance`
-* `high_activity_met_minutes`
-* `high_activity_time`
-* `inactivity_alerts`
-* `low_activity_met_minutes`
-* `low_activity_time`
-* `medium_activity_met_minutes`
-* `medium_activity_time`
-* `met`
-* `meters_to_target`
-* `non_wear_time`
-* `resting_time`
-* `sedentary_met_minutes`
-* `sedentary_time`
-* `steps`
-* `target_calories`
-* `target_meters`
-* `timestamp`
-* `total_calories`
+- `class_5_min`
+- `score`
+- `active_calories`
+- `average_met_minutes`
+- `day`
+- `meet_daily_targets`
+- `move_every_hour`
+- `recovery_time`
+- `stay_active`
+- `training_frequency`
+- `training_volume`
+- `equivalent_walking_distance`
+- `high_activity_met_minutes`
+- `high_activity_time`
+- `inactivity_alerts`
+- `low_activity_met_minutes`
+- `low_activity_time`
+- `medium_activity_met_minutes`
+- `medium_activity_time`
+- `met`
+- `meters_to_target`
+- `non_wear_time`
+- `resting_time`
+- `sedentary_met_minutes`
+- `sedentary_time`
+- `steps`
+- `target_calories`
+- `target_meters`
+- `timestamp`
+- `total_calories`
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_activity_route_daily_activity_get).
 
@@ -295,9 +295,9 @@ The attributes will contain the daily data for the selected days and monitored v
 
 The readiness sensor supports all the following monitored attributes:
 
-* `bedtime_window_start`: Recommended bedtime in HH:MM format.
-* `bedtime_window_end`: Recommended bedtime in HH:MM format.
-* `day`
+- `bedtime_window_start`: Recommended bedtime in HH:MM format.
+- `bedtime_window_end`: Recommended bedtime in HH:MM format.
+- `day`
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/docs/bedtime).
 
@@ -328,19 +328,19 @@ The attributes will contain the daily data for the selected days and monitored v
 
 The readiness sensor supports all the following monitored attributes:
 
-* `day`: YYYY-MM-DD of the date of the data point.
-* `activity_balance`
-* `body_temperature`
-* `hrv_balance`
-* `previous_day_activity`
-* `previous_night`
-* `recovery_index`
-* `resting_heart_rate`
-* `sleep_balance`
-* `score`
-* `temperature_deviation`
-* `temperature_trend_deviation`
-* `timestamp`
+- `day`: YYYY-MM-DD of the date of the data point.
+- `activity_balance`
+- `body_temperature`
+- `hrv_balance`
+- `previous_day_activity`
+- `previous_night`
+- `recovery_index`
+- `resting_heart_rate`
+- `sleep_balance`
+- `score`
+- `temperature_deviation`
+- `temperature_trend_deviation`
+- `timestamp`
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_readiness_route_daily_readiness_get).
 
@@ -377,39 +377,39 @@ The attributes will contain the daily data for the selected days and monitored v
 
 The sleep sensor supports all the following monitored attributes:
 
-* `day`: YYYY-MM-DD of the date of the data point.
-* `average_breath`: Average breaths per minute (f.k.a `breath_average`).
-* `average_heart_rate`: Average beats per minute of your heart (f.k.a `heart_rate_average`).
-* `average_hrv`
-* `awake_time`: Time awake in seconds.
-* `awake_duration_in_hours`: Time awake in hours. Derived from `awake_time`.
-* `bedtime_end`: Timestamp at which you woke up from bed.
-* `bedtime_end_hour`: Time (HH:MM) at which you woke up from bed.
-* `bedtime_start`: Timestamp at which you went to bed.
-* `bedtime_start_hour`: Time (HH:MM) at which you went to bed.
-* `deep_sleep_duration`: Number of seconds in deep sleep phase.
-* `deep_sleep_duration_in_hours`: Number of hours in deep sleep phase. Derived from `deep_sleep_duration`.
-* `efficiency`: Sleep efficiency. Used as the state.
-* `heart_rate`
-* `hrv`
-* `in_bed_duration_in_hours`: Total hours in bed. Derived from `time in bed`.
-* `latency`
-* `light_sleep_duration`: Number of seconds in light sleep phase.
-* `light_sleep_duration_in_hours`: Number of hours in light sleep phase. Derived from `light_sleep_duration`.
-* `low_battery_alert`
-* `lowest_heart_rate`: Beats per minute of your resting heart (f.k.a `resting_heart_rate`).
-* `movement_30_sec`
-* `period`
-* `readiness_score_delta`
-* `rem_sleep_duration`: Number of seconds in REM sleep phase.
-* `rem_sleep_duration_in_hours`: Number of hours in REM sleep phase. Derived from `rem_sleep_duration`.
-* `restless_periods`
-* `sleep_phase_5_min`
-* `sleep_score_delta`
-* `time_in_bed`: Total number of seconds in bed.
-* `total_sleep_duration`: Total seconds of sleep.
-* `total_sleep_duration_in_hours`: Total hours of sleep. Derived from `total_sleep_duration`.
-* `type`: Type of sleep.
+- `day`: YYYY-MM-DD of the date of the data point.
+- `average_breath`: Average breaths per minute (f.k.a `breath_average`).
+- `average_heart_rate`: Average beats per minute of your heart (f.k.a `heart_rate_average`).
+- `average_hrv`
+- `awake_time`: Time awake in seconds.
+- `awake_duration_in_hours`: Time awake in hours. Derived from `awake_time`.
+- `bedtime_end`: Timestamp at which you woke up from bed.
+- `bedtime_end_hour`: Time (HH:MM) at which you woke up from bed.
+- `bedtime_start`: Timestamp at which you went to bed.
+- `bedtime_start_hour`: Time (HH:MM) at which you went to bed.
+- `deep_sleep_duration`: Number of seconds in deep sleep phase.
+- `deep_sleep_duration_in_hours`: Number of hours in deep sleep phase. Derived from `deep_sleep_duration`.
+- `efficiency`: Sleep efficiency. Used as the state.
+- `heart_rate`
+- `hrv`
+- `in_bed_duration_in_hours`: Total hours in bed. Derived from `time in bed`.
+- `latency`
+- `light_sleep_duration`: Number of seconds in light sleep phase.
+- `light_sleep_duration_in_hours`: Number of hours in light sleep phase. Derived from `light_sleep_duration`.
+- `low_battery_alert`
+- `lowest_heart_rate`: Beats per minute of your resting heart (f.k.a `resting_heart_rate`).
+- `movement_30_sec`
+- `period`
+- `readiness_score_delta`
+- `rem_sleep_duration`: Number of seconds in REM sleep phase.
+- `rem_sleep_duration_in_hours`: Number of hours in REM sleep phase. Derived from `rem_sleep_duration`.
+- `restless_periods`
+- `sleep_phase_5_min`
+- `sleep_score_delta`
+- `time_in_bed`: Total number of seconds in bed.
+- `total_sleep_duration`: Total seconds of sleep.
+- `total_sleep_duration_in_hours`: Total hours of sleep. Derived from `total_sleep_duration`.
+- `type`: Type of sleep.
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/sleep_route_sleep_get).
 
@@ -417,7 +417,7 @@ By default, the following attributes are being monitored: `average_breath`, `ave
 
 Formerly supported variables that are no longer part of the API (i.e. not supported):
 
-* `temperature_delta`: Delta temperature from sleeping to day.
+- `temperature_delta`: Delta temperature from sleeping to day.
 
 #### Sleep Sensor sample output
 
