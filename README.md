@@ -283,7 +283,7 @@ By default, the following attributes are being monitored: `active_calories`, `hi
 
 #### Activity Sensor sample output
 
-**State**: `50` (note: score of yesterday, which was the first day configured on the example)
+**State**: `50`
 
 **Attributes**:
 
@@ -366,7 +366,7 @@ By default, the following attributes are being monitored: `activity_balance`, `b
 
 #### Readiness Sensor sample output
 
-**State**: `94` (note: score of yesterday, which was the first day configured on the example)
+**State**: `94`
 
 **Attributes**:
 
@@ -465,7 +465,7 @@ Formerly supported variables that are no longer part of the API (i.e. not suppor
 
 #### Sleep Sensor sample output
 
-**State**: `48` (note: efficiency of yesterday, which was the first day configured on the example)
+**State**: `48`
 
 **Attributes**:
 
@@ -528,7 +528,7 @@ By default, the following attributes are being monitored: `day`, `score`.
 
 #### Sleep Score Sensor sample output
 
-**State**: `77` (note: score of yesterday, which was the first day configured on the example)
+**State**: `77`
 
 **Attributes**:
 
