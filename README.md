@@ -42,6 +42,10 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Sleep Sensor State](#sleep-sensor-state)
       - [Sleep Sensor monitored attributes](#sleep-sensor-monitored-attributes)
       - [Sleep Sensor sample output](#sleep-sensor-sample-output)
+    - [Sleep Periods Sensor](#sleep-periods-sensor)
+      - [Sleep Periods Sensor State](#sleep-periods-sensor-state)
+      - [Sleep Periods Sensor monitored attributes](#sleep-periods-sensor-monitored-attributes)
+      - [Sleep Periods Sensor sample output](#sleep-periods-sensor-sample-output)
     - [Sleep Score Sensor](#sleep-score-sensor)
       - [Sleep Score Sensor State](#sleep-score-sensor-state)
       - [Sleep Score Sensor monitored attributes](#sleep-score-sensor-monitored-attributes)
@@ -83,6 +87,11 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       max_backfill:
       monitored_dates:
       monitored_variables:
+    sleep_periods:
+      name:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
     sleep_score:
       name:
       max_backfill:
@@ -113,7 +122,12 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
     - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
     - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
     - `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor monitored attributes` section to understand what variables are supported.
-      - `sleep_score`: (Optional) Configures sleep score sensor. Default: sleep score sensor is not configured.
+  - `sleep_periods`: (Optional) Configures sleep periods sensor. Default: sleep periods sensor is not configured.
+    - `name`: (Optional) Name of the sensor (e.g. sleep_periods). Default: oura_sleep_periods.
+    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+    - `monitored_variables`: Variables that you want to monitor. See `Sleep Periods Sensor monitored attributes` section to understand what variables are supported.
+  - `sleep_score`: (Optional) Configures sleep score sensor. Default: sleep score sensor is not configured.
     - `name`: (Optional) Name of the sensor (e.g. sleep_score). Default: oura_sleep_score.
     - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
     - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
@@ -516,6 +530,55 @@ yesterday:
   'awake_duration': 1.44
   'in_bed_duration': 8.
 ```
+
+
+### Sleep Periods Sensor
+
+#### Sleep Periods Sensor State
+
+Same as [Sleep Sensor](#sleep-sensor-state) but prioritizing the first sleep period for the given day.
+
+#### Sleep Periods Sensor monitored attributes
+
+Same as [Sleep Sensor](#sleep-sensor-monitored-attributes).
+
+By default, the following attributes are being monitored: `average_breath`, `average_heart_rate`, `bedtime_start_hour`, `bedtime_end_hour`, `day`, `total_sleep_duration_in_hours`, `type`.
+
+#### Sleep Periods Sensor sample output
+
+**State**: `95`
+
+**Attributes**:
+
+```yaml
+yesterday:
+- average_breath: 13
+  average_heart_rate: 56.375
+  day: '2022-12-30'
+  bedtime_end_hour: '01:43'
+  bedtime_start_hour: '01:20'
+  efficiency: 95
+  total_sleep_duration_in_hours: 0.09
+  type: sleep
+- average_breath: 14.125
+  average_heart_rate: 52
+  day: '2022-12-30'
+  efficiency: 71
+  bedtime_end_hour: '08:09'
+  bedtime_start_hour: '02:33'
+  total_sleep_duration_in_hours: 5.02
+  type: long_sleep
+
+8d_ago:
+- average_breath: 13.25
+  average_heart_rate: 57.625
+  day: '2023-12-23'
+  bedtime_end_hour: '07:45'
+  bedtime_start_hour: '00:28'
+  total_sleep_duration_in_hours: 6.67
+  type: long_sleep
+```
+
 
 ### Sleep Score Sensor
 
