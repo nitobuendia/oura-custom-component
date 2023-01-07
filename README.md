@@ -4,6 +4,43 @@ This project is a custom component for [Home-Assistant](https://home-assistant.i
 
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
 
+## Table of Contents
+- [Oura - Custom Component for Home-Assisant](#oura---custom-component-for-home-assisant)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+    - [Schema](#schema)
+    - [Parameters](#parameters)
+    - [Example](#example)
+    - [How to get personal Oura token](#how-to-get-personal-oura-token)
+  - [Sensors](#sensors)
+    - [Default Sensor](#default-sensor)
+    - [Common attributes](#common-attributes)
+      - [Monitored days](#monitored-days)
+      - [Backfilling](#backfilling)
+        - [What is Backfilling and why it is needed](#what-is-backfilling-and-why-it-is-needed)
+        - [Rule of thumb](#rule-of-thumb)
+        - [Full backfilling logic](#full-backfilling-logic)
+    - [Activity Sensor](#activity-sensor)
+      - [Activity Sensor state](#activity-sensor-state)
+      - [Activity Sensor monitored attributes](#activity-sensor-monitored-attributes)
+      - [Activity Sensor sample output](#activity-sensor-sample-output)
+    - [Bedtime Sensor](#bedtime-sensor)
+      - [Bedtime Sensor state](#bedtime-sensor-state)
+      - [Bedtime Sensor monitored attributes](#bedtime-sensor-monitored-attributes)
+      - [Bedtime Sensor sample output](#bedtime-sensor-sample-output)
+    - [Readiness Sensor](#readiness-sensor)
+      - [Readiness Sensor state](#readiness-sensor-state)
+      - [Readiness Sensor monitored attributes](#readiness-sensor-monitored-attributes)
+      - [Readiness Sensor sample output](#readiness-sensor-sample-output)
+    - [Sleep Sensor](#sleep-sensor)
+      - [Sleep Sensor State](#sleep-sensor-state)
+      - [Sleep Sensor monitored attributes](#sleep-sensor-monitored-attributes)
+      - [Sleep Sensor sample output](#sleep-sensor-sample-output)
+    - [Derived sensors](#derived-sensors)
+  - [Sponsoring](#sponsoring)
+
+
 ## Installation
 
 1. Copy the files from the `custom_component/oura/` folder into the `custom_component/oura/` of your Home-Assistant installation.
