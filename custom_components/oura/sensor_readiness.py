@@ -1,4 +1,4 @@
-"""Proivdes a readiness sensor."""
+"""Provides a readiness sensor."""
 
 import voluptuous as vol
 from homeassistant import const

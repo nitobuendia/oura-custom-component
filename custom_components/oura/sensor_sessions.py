@@ -1,4 +1,4 @@
-"""Proivdes a sessions sensor."""
+"""Provides a sessions sensor."""
 
 import voluptuous as vol
 from homeassistant import const

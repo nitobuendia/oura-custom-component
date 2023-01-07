@@ -1,4 +1,4 @@
-"""Proivdes an activity sensor."""
+"""Provides an activity sensor."""
 
 import voluptuous as vol
 from homeassistant import const
