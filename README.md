@@ -4,274 +4,755 @@ This project is a custom component for [Home-Assistant](https://home-assistant.i
 
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
 
+## Table of Contents
+
+- [Oura - Custom Component for Home-Assisant](#oura---custom-component-for-home-assisant)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+    - [Schema](#schema)
+    - [Parameters](#parameters)
+    - [Top level parameters](#top-level-parameters)
+    - [Sensors parameters](#sensors-parameters)
+    - [Individual sensor parameters](#individual-sensor-parameters)
+    - [Example](#example)
+    - [How to get personal Oura token](#how-to-get-personal-oura-token)
+  - [Sensors](#sensors)
+    - [Default Sensor](#default-sensor)
+    - [Common attributes](#common-attributes)
+      - [Monitored days](#monitored-days)
+      - [Backfilling](#backfilling)
+        - [What is Backfilling and why it is needed](#what-is-backfilling-and-why-it-is-needed)
+        - [Rule of thumb](#rule-of-thumb)
+        - [Full backfilling logic](#full-backfilling-logic)
+    - [Activity Sensor](#activity-sensor)
+      - [Activity Sensor state](#activity-sensor-state)
+      - [Activity Sensor monitored attributes](#activity-sensor-monitored-attributes)
+      - [Activity Sensor sample output](#activity-sensor-sample-output)
+    - [Heart Rate Sensor](#heart-rate-sensor)
+      - [Heart Rate Sensor state](#heart-rate-sensor-state)
+      - [Heart Rate Sensor monitored attributes](#heart-rate-sensor-monitored-attributes)
+      - [Heart Rate Sensor sample output](#heart-rate-sensor-sample-output)
+    - [Bedtime Sensor](#bedtime-sensor)
+      - [Bedtime Sensor state](#bedtime-sensor-state)
+      - [Bedtime Sensor monitored attributes](#bedtime-sensor-monitored-attributes)
+      - [Bedtime Sensor sample output](#bedtime-sensor-sample-output)
+    - [Readiness Sensor](#readiness-sensor)
+      - [Readiness Sensor state](#readiness-sensor-state)
+      - [Readiness Sensor monitored attributes](#readiness-sensor-monitored-attributes)
+      - [Readiness Sensor sample output](#readiness-sensor-sample-output)
+    - [Sessions Sensor](#sessions-sensor)
+      - [Sessions Sensor state](#sessions-sensor-state)
+      - [Sessions Sensor monitored attributes](#sessions-sensor-monitored-attributes)
+      - [Sessions Sensor sample output](#sessions-sensor-sample-output)
+    - [Sleep Sensor](#sleep-sensor)
+      - [Sleep Sensor State](#sleep-sensor-state)
+      - [Sleep Sensor monitored attributes](#sleep-sensor-monitored-attributes)
+      - [Sleep Sensor sample output](#sleep-sensor-sample-output)
+    - [Sleep Periods Sensor](#sleep-periods-sensor)
+      - [Sleep Periods Sensor State](#sleep-periods-sensor-state)
+      - [Sleep Periods Sensor monitored attributes](#sleep-periods-sensor-monitored-attributes)
+      - [Sleep Periods Sensor sample output](#sleep-periods-sensor-sample-output)
+    - [Sleep Score Sensor](#sleep-score-sensor)
+      - [Sleep Score Sensor State](#sleep-score-sensor-state)
+      - [Sleep Score Sensor monitored attributes](#sleep-score-sensor-monitored-attributes)
+      - [Sleep Score Sensor sample output](#sleep-score-sensor-sample-output)
+    - [Workouts Sensor](#workouts-sensor)
+      - [Workouts Sensor state](#workouts-sensor-state)
+      - [Workouts Sensor monitored attributes](#workouts-sensor-monitored-attributes)
+      - [Workouts Sensor sample output](#workouts-sensor-sample-output)
+    - [Derived sensors](#derived-sensors)
+  - [Sponsoring](#sponsoring)
+
 ## Installation
 
 1. Copy the files from the `custom_component/oura/` folder into the `custom_component/oura/` of your Home-Assistant installation.
 
 1. Configure the sensors following the instructions in `Configuration`.
-1. Restart the Home-Assitant instance.
-
-1. If the code was installed and configured properly, you will get a permanent notification. See `Notifications` section on the Home-Assistant menu.
-1. Follow the link to Authorize Home-Assistant to access your Oura data. You may need to sign in and allow the data.
-1. You will be redirected to Home-Assistant where the code information will be captured and exchanged for the token. If the redirect fails:
-    *  Verify that your [http integration](https://www.home-assistant.io/integrations/http/) and base url are configured correctly.
-    *  Verify that you have added your Home-Assistant URL to your Oura Application in the Redirect URIs, and it contains not just the domain/base url, but the full path (i.e. including `/oura/oauth/setup`). See `Configuration` > `How to get client id and client secret`.
-
-1. Oura component will exchange the code for a token and update on the next schedule. If you want, you can force a sync from `Developer Tools` > `Services` > Service: `homeassistant.update_entity` + Entity: the Oura sensor and calling the service once (or twice after a break).
-    *  If the entity is not updating, check your logs for any potential errors.
-
+1. Restart the Home-Assistant instance.
 
 ## Configuration
 
 ### Schema
+
 ```yaml
 - platform: oura
-  name:
-  client_id:
-  client_secret:
+  access_token:
   scan_interval:
-  max_backfill:
-  monitored_variables:
+  sensors:
+    default:
+      max_backfill:
+      monitored_dates:
+    activity:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
+    heart_rate:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
+    readiness:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
+    sleep:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
+    sleep_periods:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
+    sleep_score:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
+    workouts:
+      name:
+      attribute_state:
+      max_backfill:
+      monitored_dates:
+      monitored_variables:
 ```
 
 ### Parameters
-* `name`: Name of the sensor (e.g. sleep_quality).
-* `client_id`: Oura client id. See `How to get client id and client secret` section for how to obtain this data.
-* `client_secret`: Oura client secret. See `How to get client id and client secret` section for how to obtain this data.
-* `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
-* `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works.
-* `monitored_variables`: Days that you want to monitor. See `Monitored Days` section to understand what day values are supported.
+
+### Top level parameters
+
+- `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
+- `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
+- `sensors`: (Optional) Determines which sensors to import and its configuration.
+
+### Sensors parameters
+
+- `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. By default, there is no default sensor configuration; instead, each sensor config or default values are used.
+- `activity`: (Optional) Configures activity sensor. By default, the activity sensor is not configured. Default name: oura_activity.
+- `heart_rate`: (Optional) Configures heart rate sensor. By default, the heart rate sensor is not configured. Default name: oura_heart_rate.
+- `readiness`: (Optional) Configures readiness sensor. By default, the readiness sensor is not configured. Default name: oura_readiness.
+- `sleep`: (Optional) Configures sleep sensor. By default the sleep sensor is added. Default name: oura_sleep.
+- `sleep_periods`: (Optional) Configures sleep periods sensor. By default, the sleep periods sensor is not configured. Default name: oura_sleep_periods.
+- `workouts`: (Optional) Configures workouts sensor. By default, the workouts sensor is not configured. Default name: oura_workouts.
+
+### Individual sensor parameters
+
+- `name`: (Optional) Name of the sensor (e.g. sleep_score).
+- `attribute_state`: (Optional) What monitored variable (i.e. attribute) will be used to define the main state of the sensor. To see the default values, check the `state` section within each sensor description below.
+- `max_backfill`: (Optional) How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+- `monitored_dates`: (Optional) Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+- `monitored_variables`: (Optional) Variables that you want to monitor. See `monitored attributes` section within each sensor description below to understand what variables are supported.
 
 ### Example
+
 ```yaml
 - platform: oura
-  name: sleep_quality
-  client_id: !secret oura_client_id
-  client_secret: !secret oura_client_secret
+  access_token: !secret oura_api_token
   scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
-  max_backfill: 3
-  monitored_variables:
-    - yesterday
-    - monday
-    - tuesday
-    - wednesday
-    - thursday
-    - friday
-    - saturday
-    - sunday
-    - 8d_ago # Last week, +1 to compare to yesterday.
+  sensors:
+    readiness: {}
+    sleep:
+      name: sleep_data
+      max_backfill: 3
+      monitored_dates:
+        - yesterday
+        - monday
+        - tuesday
+        - wednesday
+        - thursday
+        - friday
+        - saturday
+        - sunday
+        - 8d_ago # Last week, +1 to compare to yesterday.
 ```
 
-### How to get client id and client secret
-The parameters `client_id` and `client_secret` are provided by Oura.
+This configuration will load two sensors: `readiness` and `sleep`.
 
-Read [Getting Started with the Oura Cloud API](https://cloud.ouraring.com/docs/) for more information on how to get them. Once you have created your application, add your Home-Assistant to Redirect URIs as follows:
+Note: While in most sensors all attributes are optional, the configuration requires a dictionary to be passed. As such, this configuration would fail:
 
-`https://<url>:<port>/oura/oauth/setup`
+```yaml
+- platform: oura
+  access_token: !secret oura_api_token
+  scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
+  sensors:
+    readiness:
+    sleep:
+```
 
-Where:
-* `https://` is the protocol. Change to `http` if you are not supporting http.s
-* `<url>` is the URL of your Home-Assistant (e.g. `something.duckdns.org` or an IP like `192.168.1.123`)
-* `<port>` is the port where your Home-Assistant is configured (`8123` by default).
-* `/oura/oauth/setup` is the path that has been created by the custom_component. Do not change it and make sure you include it on the Redirect URis.
+This is because `readiness` and `sleep` both require a dictionary but the system interprets that we are passing a None value. In order to fix this, you can add at least one attribute (e.g. `name`) or you can simply set the value to `{}` which indicates an empty dictionary. The following configuration would be valid:
 
-### Monitored Days
+```yaml
+- platform: oura
+  access_token: !secret oura_api_token
+  scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
+  sensors:
+    readiness: {}
+    sleep:
+      name: sleep_data
+```
+
+In this case, `readiness` sensor would use all the default values, whereas `sleep` sensor would use all the default configuration except for the name that will be using the `sleep_data` value passed.
+
+### How to get personal Oura token
+
+The parameter `access_token` is provided by Oura. Read [this Oura documentation](https://cloud.ouraring.com/docs/authentication#personal-access-tokens) for more information on how to get
+them.
+
+This token is only valid for your personal data. If you need to access data from multiple users, you will need to configure multiple sensors.
+
+## Sensors
+
+### Default Sensor
+
+This is not an actual sensor, but it helps in configuring all the other sensors. If you want some variables to be configured the same for all the other sensors, you can use the `default` sensor for this matter. Other sensors will use this configuration unless you specify a different configuration for that sensor.
+
+For example, in the following configuration:
+
+```yaml
+- platform: oura
+  access_token:
+  scan_interval:
+  sensors:
+    default:
+      max_backfill: 1
+    activity:
+      name: activity_sensor
+    readiness:
+      name: readiness_sensor
+    sleep:
+      name: sleep_sensor
+      max_backfill: 7
+```
+
+`activity` and `readiness` sensor will use `max_backfill` of 1 from the `default` sensor instead of their respective default values. `sleep` sensor will use `max_backfill` of 7 because it was specified at its own sensor overriding both the default value and the `default` sensor.
+
+### Common attributes
+
+#### Monitored days
+
 This data can be retrieve for multiple days at once. The days supported are:
-* `yesterday`: Previous day. This is the most recent data.
-* `Xd_ago`: Number of days ago (e.g. 8d_ago ago to get the data of yesterday last week).
-* `monday`, `tuesday`, ..., `sunday`: Previous days of the week.
 
-### Backfilling strategy
-#### What is Backfilling and why it is needed
+- `yesterday`: Previous day. This is the most recent data.
+- `Xd_ago`: Number of days ago (e.g. 8d_ago ago to get the data of yesterday last week).
+- `monday`, `tuesday`, ..., `sunday`: Previous days of the week.
+
+#### Backfilling
+
+##### What is Backfilling and why it is needed
+
 Imagine you want to retrieve the previous day of data, but for some reason the data for that day does not exist. This would mean that the data would not be possible to be retrieved and will simply show unknown on the sensor.
 
-This is frequent for `yesterday` as the data is not yet synced to the systems at midnight (you are still sleeping), but could happen for any day if you forgot to wear the ring. You may want this to stay like this or would prefer to backfill with the most relevant previous data. That process is called backfilling. This componenent allows to set a backfilling strategy:
+This is frequent for `yesterday` as the data is not yet synced to the systems at midnight (you are still sleeping), but could happen for any day if you forgot to wear the ring. You may want this to stay like this or would prefer to backfill with the most relevant previous data. That process is called backfilling. This component allows to set a backfilling strategy:
 
-#### Rule of thumb
+##### Rule of thumb
 
 The rule of thumb is that if backfilling is enabled, it will look for the previous day for `yesterday` and `Xd_ago` and for the previous week when using weekdays (e.g. `monday` or `thursday`).
 
-#### Full backfilling logic
+##### Full backfilling logic
+
 If you set the `max_backfill` value to `0`, there will never be backfill of data. If a day of data is not available, it will show unknown.
 
 If you set the `max_backfill` value to any positive integer, then it will backfill like this:
 
-* `Xd_ago`: If the data for X days ago is not available, looks for the day before. For example, if the setting is `8d_ago` and is not available, it will look for the data `9d_ago`. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data. If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the 9d ago, then 10d ago, then 11d ago; it will stop as soon as one of these values is available (e.g. if 10d ago is available, it will not check 11d ago) and will return unknown if none of them has data).
+- `Xd_ago`: If the data for X days ago is not available, looks for the day before. For example, if the setting is `8d_ago` and is not available, it will look for the data `9d_ago`. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data. If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the 9d ago, then 10d ago, then 11d ago; it will stop as soon as one of these values is available (e.g. if 10d ago is available, it will not check 11d ago) and will return unknown if none of them has data).
 
-* `yesterday`: Same as `Xd_ago`. If yesterday is not available, looks for previous day. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data (the day before yesterday). If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the previous day, then the previous, then the previous; it will stop as soon as one of these values is available and will return unknown if none of them has data).
+- `yesterday`: Same as `Xd_ago`. If yesterday is not available, looks for previous day. The number of previous days will depend on your backfill value. If the backfill is set to any value >1, it will check the value of previous day of data (the day before yesterday). If the data is found, then it will use this one. If not, it will continue as many times as the value of `max_backfill` (e.g. if the value is 3, it will check the previous day, then the previous, then the previous; it will stop as soon as one of these values is available and will return unknown if none of them has data).
 
-* `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
+- `monday`, `tuesday`, ..., `sunday`: It works similar to `Xd_ago` except in that it looks for the previous week instead of previous day. For example, if last `monday` is not available, it will look for the `monday` of the previous week. If it's available, it will use it. If not, it will continue checking as many weeks back as the backfilling value.
 
-## What Data Can Be Retrieved
+### Activity Sensor
 
-### State and Attributes
-The state of the sensor will show the **sleep quality score** for the first selected day (recommended: yesterday).
+#### Activity Sensor state
 
-### Attributes per Day
-The attributes will contain the daily data for the selected days. In particular:
-* `date`: YYYY-MM-DD of the date of the data point.
-* `bedtime_start_hour`: Time at which you went to bed.
-* `bedtime_end_hour`: Time at which you woke up from bed.
-* `breath_average`: Average breaths per minute.
-* `temperature_delta`: Delta temperature from sleeping to day.
-* `resting_heart_rate`: Beats per minute of your resting heart.
-* `heart_rate_average`: Average beats per minute of your heart.
-* `deep_sleep_duration`: Number of hours in deep sleep phase.
-* `rem_sleep_duration`: Number of hours in REM sleep phase.
-* `light_sleep_duration`: Number of hours in light sleep phase.
-* `total_sleep_duration`: Total hours of sleep.
-* `awake_duration`: Total hours awake during the night.
-* `in_bed_duration`: Total hours in bed.
+The state of the sensor will show the **score** for the first selected day (recommended: yesterday).
 
-### Sample output
+#### Activity Sensor monitored attributes
 
-**State**: `48` (note: sleep score of yesterday, which was the first day configure on the example)
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `class_5_min`
+- `score`
+- `active_calories`
+- `average_met_minutes`
+- `day`
+- `meet_daily_targets`
+- `move_every_hour`
+- `recovery_time`
+- `stay_active`
+- `training_frequency`
+- `training_volume`
+- `equivalent_walking_distance`
+- `high_activity_met_minutes`
+- `high_activity_time`
+- `inactivity_alerts`
+- `low_activity_met_minutes`
+- `low_activity_time`
+- `medium_activity_met_minutes`
+- `medium_activity_time`
+- `met`
+- `meters_to_target`
+- `non_wear_time`
+- `resting_time`
+- `sedentary_met_minutes`
+- `sedentary_time`
+- `steps`
+- `target_calories`
+- `target_meters`
+- `timestamp`
+- `total_calories`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_activity_route_daily_activity_get).
+
+By default, the following attributes are being monitored: `active_calories`, `high_activity_time`, `low_activity_time`, `medium_activity_time`, `non_wear_time`, `resting_time`, `sedentary_time`, `score`, `target_calories`, `total_calories`.
+
+#### Activity Sensor sample output
+
+**State**: `50`
 
 **Attributes**:
-```json
-yesterday: {
-  "date": "2020-01-04",
-  "bedtime_start_hour": "02:30",
-  "bedtime_end_hour": "09:32",
-  "breath_average": 14,
-  "temperature_delta": 0.43,
-  "resting_heart_rate": 44,
-  "heart_rate_average": 47,
-  "deep_sleep_duration": 0.72,
-  "rem_sleep_duration": 0.32,
-  "light_sleep_duration": 4.54,
-  "total_sleep_duration": 5.58,
-  "awake_duration": 1.45,
-  "in_bed_duration": 7.03
-}
-monday: {
-  "date": "2019-12-30",
-  "bedtime_start_hour": "01:24",
-  "bedtime_end_hour": "08:30",
-  "breath_average": 14,
-  "temperature_delta": -0.1,
-  "resting_heart_rate": 44,
-  "heart_rate_average": 46,
-  "deep_sleep_duration": 1.33,
-  "rem_sleep_duration": 0.62,
-  "light_sleep_duration": 3.84,
-  "total_sleep_duration": 5.8,
-  "awake_duration": 1.3,
-  "in_bed_duration": 7.1
-}
-tuesday: {
-  "date": "2019-12-31",
-  "bedtime_start_hour": "04:22",
-  "bedtime_end_hour": "11:24",
-  "breath_average": 14,
-  "temperature_delta": -0.18,
-  "resting_heart_rate": 44,
-  "heart_rate_average": 48,
-  "deep_sleep_duration": 1.79,
-  "rem_sleep_duration": 0.93,
-  "light_sleep_duration": 3.12,
-  "total_sleep_duration": 5.83,
-  "awake_duration": 1.2,
-  "in_bed_duration": 7.03
-}
-wednesday: {
-  "date": "2020-01-01",
-  "bedtime_start_hour": "01:37",
-  "bedtime_end_hour": "07:45",
-  "breath_average": 14,
-  "temperature_delta": -0.79,
-  "resting_heart_rate": 40,
-  "heart_rate_average": 44,
-  "deep_sleep_duration": 2.09,
-  "rem_sleep_duration": 0.32,
-  "light_sleep_duration": 2.92,
-  "total_sleep_duration": 5.33,
-  "awake_duration": 0.8,
-  "in_bed_duration": 6.13
-}
-thursday: {
-  "date": "2020-01-02",
-  "bedtime_start_hour": "02:00",
-  "bedtime_end_hour": "08:15",
-  "breath_average": 14,
-  "temperature_delta": 0.01,
-  "resting_heart_rate": 45,
-  "heart_rate_average": 48,
-  "deep_sleep_duration": 1.14,
-  "rem_sleep_duration": 0.78,
-  "light_sleep_duration": 3.38,
-  "total_sleep_duration": 5.29,
-  "awake_duration": 0.96,
-  "in_bed_duration": 6.25
-}
-friday: {
-  "date": "2020-01-03",
-  "bedtime_start_hour": "00:43",
-  "bedtime_end_hour": "11:32",
-  "breath_average": 14,
-  "temperature_delta": 0.49,
-  "resting_heart_rate": 47,
-  "heart_rate_average": 49,
-  "deep_sleep_duration": 1.75,
-  "rem_sleep_duration": 1.82,
-  "light_sleep_duration": 4.96,
-  "total_sleep_duration": 8.53,
-  "awake_duration": 2.28,
-  "in_bed_duration": 10.82
-}
-saturday: {
-  "date": "2020-01-04",
-  "bedtime_start_hour": "02:30",
-  "bedtime_end_hour": "09:32",
-  "breath_average": 14,
-  "temperature_delta": 0.43,
-  "resting_heart_rate": 44,
-  "heart_rate_average": 47,
-  "deep_sleep_duration": 0.72,
-  "rem_sleep_duration": 0.32,
-  "light_sleep_duration": 4.54,
-  "total_sleep_duration": 5.58,
-  "awake_duration": 1.45,
-  "in_bed_duration": 7.03
-}
-sunday: {
-  "date": "2019-12-29",
-  "bedtime_start_hour": "01:18",
-  "bedtime_end_hour": "08:35",
-  "breath_average": 14,
-  "temperature_delta": -0.34,
-  "resting_heart_rate": 44,
-  "heart_rate_average": 45,
-  "deep_sleep_duration": 1.77,
-  "rem_sleep_duration": 0.42,
-  "light_sleep_duration": 3.63,
-  "total_sleep_duration": 5.83,
-  "awake_duration": 1.46,
-  "in_bed_duration": 7.28
-}
-8d_ago: {
-  "date": "2019-12-25",
-  "bedtime_start_hour": "23:29",
-  "bedtime_end_hour": "08:05",
-  "breath_average": 14,
-  "temperature_delta": -0.31,
-  "resting_heart_rate": 44,
-  "heart_rate_average": 48,
-  "deep_sleep_duration": 2.05,
-  "rem_sleep_duration": 0.82,
-  "light_sleep_duration": 4.29,
-  "total_sleep_duration": 7.16,
-  "awake_duration": 1.44,
-  "in_bed_duration": 8.6
-}
+
+```yaml
+yesterday:
+  score: 50
+  active_calories: 2
+  high_activity_time: 0
+  low_activity_time: 180
+  medium_activity_time: 0
+  non_wear_time: 55320
+  resting_time: 27360
+  sedentary_time: 3540
+  target_calories: 550
+  total_calories: 1702
+```
+
+### Heart Rate Sensor
+
+#### Heart Rate Sensor state
+
+The state of the sensor will show the **bpm** for the first selected day (recommended: yesterday).
+
+#### Heart Rate Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`
+- `bpm`
+- `source`
+- `timestamp`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/heartrate_route_heartrate_get).
+
+By default, the following attributes are being monitored: `day`, `bpm`, `source`, `timestamp`.
+
+#### Heart Rate Sensor sample output
+
+**State**: `58`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  - day: '2023-01-06'
+    bpm: 58
+    source: awake
+    timestamp: '2023-01-06T16:40:38+00:00'
+  - day: '2023-01-06'
+    bpm: 53
+    source: awake
+    timestamp: '2023-01-06T16:40:52+00:00'
+  - day: '2023-01-06'
+    bpm: 55
+    source: awake
+    timestamp: '2023-01-06T16:40:53+00:00'
+  - day: '2023-01-06'
+    bpm: 60
+    source: awake
+    timestamp: '2023-01-06T16:50:59+00:00'
+  - day: '2023-01-06'
+    bpm: 64
+    source: awake
+    timestamp: '2023-01-06T16:51:25+00:00'
+  - day: '2023-01-06'
+    bpm: 62
+    source: awake
+    timestamp: '2023-01-06T16:51:31+00:00'
+  - day: '2023-01-06'
+    bpm: 64
+    source: awake
+    timestamp: '2023-01-06T16:56:02+00:00'
+  # (...)
+```
+
+### Bedtime Sensor
+
+#### Bedtime Sensor state
+
+The state of the sensor will show the **bedtime start hour** for the first selected day.
+
+#### Bedtime Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `bedtime_window_start`: Recommended bedtime in HH:MM format.
+- `bedtime_window_end`: Recommended bedtime in HH:MM format.
+- `day`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/docs/bedtime).
+
+By default, the following attributes are being monitored: `bedtime_window_start`, `bedtime_window_end`, `day`.
+
+#### Bedtime Sensor sample output
+
+**State**: `23:45`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  bedtime_window_start: '23:45'
+  bedtime_window_end: '00:30'
+  day: '2023-01-05'
+```
+
+### Readiness Sensor
+
+#### Readiness Sensor state
+
+The state of the sensor will show the **score** for the first selected day (recommended: yesterday).
+
+#### Readiness Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `activity_balance`
+- `body_temperature`
+- `hrv_balance`
+- `previous_day_activity`
+- `previous_night`
+- `recovery_index`
+- `resting_heart_rate`
+- `sleep_balance`
+- `score`
+- `temperature_deviation`
+- `temperature_trend_deviation`
+- `timestamp`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_readiness_route_daily_readiness_get).
+
+By default, the following attributes are being monitored: `activity_balance`, `body_temperature`, `day`, `hrv_balance`, `previous_day_activity`, `previous_night`, `recovery_index`, `resting_heart_rate`, `sleep_balance`, `score`, `temperature_deviation`, `temperature_trend_deviation`, `timestamp`.
+
+#### Readiness Sensor sample output
+
+**State**: `94`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  activity_balance: 79
+  body_temperature: 96
+  day: '2023-01-03'
+  hrv_balance: 94
+  previous_day_activity: null
+  previous_night: 86
+  recovery_index: 100
+  resting_heart_rate: 100
+  sleep_balance: 98
+```
+
+### Sessions Sensor
+
+#### Sessions Sensor state
+
+The state of the sensor will show the **type** for the first selected day (recommended: yesterday) and latest event by timestamp.
+
+#### Sessions Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `start_datetime`
+- `end_datetime`
+- `type`
+- `heart_rate`
+- `heart_rate_variability`
+- `mood`
+- `motion_count`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#tag/Sessions).
+
+By default, the following attributes are being monitored: `day`, `start_datetime`, `end_datetime`, `type`, `heart_rate`, `motion_count`.
+
+#### Sessions Sensor sample output
+
+**State**: `94`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  - day: '2021-11-12'
+    start_datetime: '2021-11-12T12:32:09-08:00'
+    end_datetime: '2021-11-12T12:40:49-08:00'
+    type: 'rest'
+  - day: '2021-11-12'
+    start_datetime: '2021-11-12T19:45:07-08:00'
+    end_datetime: '2021-11-12T20:39:27-08:00'
+    type: 'meditation'
+```
+
+### Sleep Sensor
+
+#### Sleep Sensor State
+
+The state of the sensor will show the **sleep efficiency** for the first selected day (recommended: yesterday).
+
+#### Sleep Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `average_breath`: Average breaths per minute (f.k.a `breath_average`).
+- `average_heart_rate`: Average beats per minute of your heart (f.k.a `heart_rate_average`).
+- `average_hrv`
+- `awake_time`: Time awake in seconds.
+- `awake_duration_in_hours`: Time awake in hours. Derived from `awake_time`.
+- `bedtime_end`: Timestamp at which you woke up from bed.
+- `bedtime_end_hour`: Time (HH:MM) at which you woke up from bed.
+- `bedtime_start`: Timestamp at which you went to bed.
+- `bedtime_start_hour`: Time (HH:MM) at which you went to bed.
+- `deep_sleep_duration`: Number of seconds in deep sleep phase.
+- `deep_sleep_duration_in_hours`: Number of hours in deep sleep phase. Derived from `deep_sleep_duration`.
+- `efficiency`: Sleep efficiency. Used as the state.
+- `heart_rate`
+- `hrv`
+- `in_bed_duration_in_hours`: Total hours in bed. Derived from `time in bed`.
+- `latency`
+- `light_sleep_duration`: Number of seconds in light sleep phase.
+- `light_sleep_duration_in_hours`: Number of hours in light sleep phase. Derived from `light_sleep_duration`.
+- `low_battery_alert`
+- `lowest_heart_rate`: Beats per minute of your resting heart (f.k.a `resting_heart_rate`).
+- `movement_30_sec`
+- `period`
+- `readiness_score_delta`
+- `rem_sleep_duration`: Number of seconds in REM sleep phase.
+- `rem_sleep_duration_in_hours`: Number of hours in REM sleep phase. Derived from `rem_sleep_duration`.
+- `restless_periods`
+- `sleep_phase_5_min`
+- `sleep_score_delta`
+- `time_in_bed`: Total number of seconds in bed.
+- `total_sleep_duration`: Total seconds of sleep.
+- `total_sleep_duration_in_hours`: Total hours of sleep. Derived from `total_sleep_duration`.
+- `type`: Type of sleep.
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/sleep_route_sleep_get).
+
+By default, the following attributes are being monitored: `average_breath`, `average_heart_rate`, `awake_duration_in_hours`, `bedtime_start_hour`, `bedtime_end_hour`, `day`, `deep_sleep_duration_in_hours`, `in_bed_duration_in_hours`, `light_sleep_duration_in_hours`, `lowest_heart_rate`, `rem_sleep_duration_in_hours`, `total_sleep_duration_in_hours`.
+
+Formerly supported variables that are no longer part of the API (i.e. not supported):
+
+- `temperature_delta`: Delta temperature from sleeping to day.
+
+#### Sleep Sensor sample output
+
+**State**: `48`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  'day': "2022-07-14"
+  'bedtime_start_hour': "02:30"
+  'bedtime_end_hour': "09:32"
+  'average_breath': 14
+  'lowest_heart_rate': 44
+  'average_heart_rate': 47
+  'deep_sleep_duration': 0.72
+  'rem_sleep_duration': 0.32
+  'light_sleep_duration': 4.54
+  'total_sleep_duration': 5.58
+  'awake_duration': 1.45
+  'in_bed_duration': 7.0
+
+8d_ago:
+  'day': "2022-07-07"
+  'bedtime_start_hour': "23:29"
+  'bedtime_end_hour': "08:05"
+  'average_breath': 14
+  'lowest_heart_rate': 44
+  'average_heart_rate': 48
+  'deep_sleep_duration': 2.05
+  'rem_sleep_duration': 0.82
+  'light_sleep_duration': 4.29
+  'total_sleep_duration': 7.16
+  'awake_duration': 1.44
+  'in_bed_duration': 8.
+```
+
+### Sleep Periods Sensor
+
+#### Sleep Periods Sensor State
+
+Same as [Sleep Sensor](#sleep-sensor-state) but prioritizing the first sleep period for the given day.
+
+#### Sleep Periods Sensor monitored attributes
+
+Same as [Sleep Sensor](#sleep-sensor-monitored-attributes).
+
+By default, the following attributes are being monitored: `average_breath`, `average_heart_rate`, `bedtime_start_hour`, `bedtime_end_hour`, `day`, `total_sleep_duration_in_hours`, `type`.
+
+#### Sleep Periods Sensor sample output
+
+**State**: `95`
+
+**Attributes**:
+
+```yaml
+yesterday:
+- average_breath: 13
+  average_heart_rate: 56.375
+  day: '2022-12-30'
+  bedtime_end_hour: '01:43'
+  bedtime_start_hour: '01:20'
+  efficiency: 95
+  total_sleep_duration_in_hours: 0.09
+  type: sleep
+- average_breath: 14.125
+  average_heart_rate: 52
+  day: '2022-12-30'
+  efficiency: 71
+  bedtime_end_hour: '08:09'
+  bedtime_start_hour: '02:33'
+  total_sleep_duration_in_hours: 5.02
+  type: long_sleep
+
+8d_ago:
+- average_breath: 13.25
+  average_heart_rate: 57.625
+  day: '2023-12-23'
+  bedtime_end_hour: '07:45'
+  bedtime_start_hour: '00:28'
+  total_sleep_duration_in_hours: 6.67
+  type: long_sleep
+```
+
+### Sleep Score Sensor
+
+#### Sleep Score Sensor State
+
+The state of the sensor will show the **score** for the first selected day (recommended: yesterday).
+
+#### Sleep Score Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `deep_sleep`
+- `efficiency`
+- `latency`
+- `rem_sleep`
+- `restfulness`
+- `score`
+- `timing`
+- `timestamp`
+- `total_sleep`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#tag/Daily-Sleep).
+
+By default, the following attributes are being monitored: `day`, `score`.
+
+#### Sleep Score Sensor sample output
+
+**State**: `77`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  'day': "2022-07-14"
+  'score': 77
+
+8d_ago:
+  'day': "2022-07-07"
+  'score': 91
+```
+
+### Workouts Sensor
+
+#### Workouts Sensor state
+
+The state of the sensor will show the **activity** for the first selected day (recommended: yesterday) and latest event by timestamp.
+
+#### Workouts Sensor monitored attributes
+
+The attributes will contain the daily data for the selected days and monitored variables.
+
+This sensor supports all the following monitored attributes:
+
+- `day`: YYYY-MM-DD of the date of the data point.
+- `activity`
+- `calories`
+- `day`
+- `distance`
+- `end_datetime`
+- `intensity`
+- `label`
+- `source`
+- `start_datetime`
+
+For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/workouts_route_workout_get).
+
+By default, the following attributes are being monitored: `day`, `activity`, `calories`, `intensity`.
+
+#### Workouts Sensor sample output
+
+**State**: `cycling`
+
+**Attributes**:
+
+```yaml
+yesterday:
+  - day: '2021-11-12'
+    activity: 'cycling'
+    calories: 212
+    intensity: 'moderate'
+  - day: '2021-11-12'
+    activity: 'walking'
+    calories: 35
+    intensity: 'low'
 ```
 
 ### Derived sensors
 
 While the component retrieves all the data for all the days in one same attribute data, you can re-use this data into template sensors. This is more efficient than creating multiple sensors with multiple API calls.
 
-
 Example for breaking up yesterday's data into multiple sensors:
+
 ```yaml
 - platform: template
   sensors:
@@ -279,29 +760,21 @@ Example for breaking up yesterday's data into multiple sensors:
       unique_id: sleep_breath_average_yesterday
       unit_of_measurement: bpm
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.breath_average }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.average_breath }}
       icon: "mdi:lungs"
-
-    - name: "Sleep Temperature Delta Yesterday"
-      unique_id: sleep_temperature_delta_yesterday
-      unit_of_measurement: "°C"
-      device_class: temperature
-      state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.temperature_delta }}
-      icon: "mdi:thermometer-lines"
 
     - name: "Sleep Resting Heart Rate Yesterday"
       unique_id: sleep_resting_heart_rate_yesterday
       unit_of_measurement: "bpm"
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.resting_heart_rate }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.lowest_heart_rate }}
       icon: "mdi:heart-pulse"
 
     - name: "Resting Average Heart Rate Yesterday"
       unique_id: resting_heart_rate_average_yesterday
       unit_of_measurement: "bpm"
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.heart_rate_average }}
+        {{ states.sensor.sleep_quality.attributes.yesterday.average_heart_rate }}
       icon: "mdi:heart-pulse"
 
     - name: "Bed Time Yesterday"
@@ -360,7 +833,7 @@ Example for breaking up yesterday's data into multiple sensors:
 ```
 
 ## Sponsoring
-If this is helpful, feel free to `Buy Me a Beer`; or check other options on the Github `❤️ Sponsor` link on the top of this page.
 
+If this is helpful, feel free to `Buy Me a Beer`; or check other options on the Github `❤️ Sponsor` link on the top of this page.
 
 <a href="https://www.buymeacoffee.com/nitobuendia" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/arial-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
