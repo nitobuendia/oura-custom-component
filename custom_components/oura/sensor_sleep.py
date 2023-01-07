@@ -1,6 +1,5 @@
 """Provides a sleep sensor."""
 
-import logging
 import voluptuous as vol
 
 from dateutil import parser

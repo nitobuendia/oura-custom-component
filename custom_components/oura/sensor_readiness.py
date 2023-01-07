@@ -1,6 +1,5 @@
 """Proivdes a readiness sensor."""
 
-import logging
 import voluptuous as vol
 from homeassistant import const
 from homeassistant.helpers import config_validation as cv
