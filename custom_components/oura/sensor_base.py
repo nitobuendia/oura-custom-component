@@ -465,6 +465,39 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
       parse_sensor_data: Parses data from API.
     """
     super(OuraDatedSeriesSensor, self).__init__(config, hass)
+    self._sort_key = 'start_datetime'
+
+  def _update_state(self, sensor_attributes):
+    """Updates the state based on the sensor attributes.
+
+    Args:
+      sensor_attributes: Sensor attributes (before filtering).
+    """
+    if not self._main_state_attribute:
+      return
+
+    if not self._monitored_dates:
+      return
+
+    first_monitored_date = self._monitored_dates[0]
+    if not first_monitored_date:
+      return
+
+    first_date_attributes = sensor_attributes.get(first_monitored_date)
+    if not first_date_attributes:
+      return
+
+    first_date_attributes_copy = []
+    first_date_attributes_copy.extend(first_date_attributes)
+    sorted(
+        first_date_attributes_copy,
+        key=lambda data_point: data_point[self._sort_key])
+
+    first_series_attribute = first_date_attributes_copy[0]
+    if not first_series_attribute:
+      return
+
+    self._state = first_date_attributes.get(self._main_state_attribute)
 
   def parse_sensor_data(self, oura_data, data_param='data', day_param='day'):
     """Parses data from the API.
