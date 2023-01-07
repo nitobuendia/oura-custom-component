@@ -397,7 +397,6 @@ yesterday:
   sleep_balance: 98
 ```
 
-
 ### Sessions Sensor
 
 #### Sessions Sensor state
