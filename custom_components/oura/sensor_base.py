@@ -431,11 +431,14 @@ class OuraDatedSensor(OuraSensor):
 
     sensor_dict = {}
     for sensor_daily_data in sensor_data:
+      sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
+      if not sensor_daily_data:
+        continue
+
       sensor_date = sensor_daily_data.get(day_param)
       if not sensor_date:
         continue
 
-      sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
       sensor_dict[sensor_date] = sensor_daily_data
 
     return sensor_dict
@@ -613,6 +616,10 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
 
     sensor_dict = {}
     for sensor_daily_data in sensor_data:
+      sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
+      if not sensor_daily_data:
+        continue
+
       sensor_date = sensor_daily_data.get(day_param)
       if not sensor_date:
         continue
@@ -620,7 +627,6 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
       if sensor_date not in sensor_dict:
         sensor_dict[sensor_date] = []
 
-      sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
       sensor_dict[sensor_date].append(sensor_daily_data)
 
     return sensor_dict
