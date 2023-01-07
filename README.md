@@ -12,6 +12,9 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   - [Configuration](#configuration)
     - [Schema](#schema)
     - [Parameters](#parameters)
+    - [Top level parameters](#top-level-parameters)
+    - [Sensors parameters](#sensors-parameters)
+    - [Individual sensor parameters](#individual-sensor-parameters)
     - [Example](#example)
     - [How to get personal Oura token](#how-to-get-personal-oura-token)
   - [Sensors](#sensors)
@@ -101,37 +104,26 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ### Parameters
 
+### Top level parameters
+
 - `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
 - `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
 - `sensors`: (Optional) Determines which sensors to import and its configuration.
-  - `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. Default: no default configuration.
-    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-  - `activity`: (Optional) Configures activity sensor. Default: activity sensor is not configured.
-    - `name`: (Optional) Name of the sensor (e.g. daily_activity). Default: oura_activity.
-    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    - `monitored_variables`: Variables that you want to monitor. See `Activity Sensor monitored attributes` section to understand what variables are supported.
-  - `readiness`: (Optional) Configures readiness sensor. Default: readiness sensor is not configured.
-    - `name`: (Optional) Name of the sensor (e.g. sleep_readiness). Default: oura_readiness.
-    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    - `monitored_variables`: Variables that you want to monitor. See `Readiness Sensor monitored attributes` section to understand what variables are supported.
-  - `sleep`: (Optional) Configures sleep sensor. Default: sleep sensor is configured.
-    - `name`: (Optional) Name of the sensor (e.g. sleep_quality). Default: oura_sleep.
-    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    - `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor monitored attributes` section to understand what variables are supported.
-  - `sleep_periods`: (Optional) Configures sleep periods sensor. Default: sleep periods sensor is not configured.
-    - `name`: (Optional) Name of the sensor (e.g. sleep_periods). Default: oura_sleep_periods.
-    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    - `monitored_variables`: Variables that you want to monitor. See `Sleep Periods Sensor monitored attributes` section to understand what variables are supported.
-  - `sleep_score`: (Optional) Configures sleep score sensor. Default: sleep score sensor is not configured.
-    - `name`: (Optional) Name of the sensor (e.g. sleep_score). Default: oura_sleep_score.
-    - `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
-    - `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
-    - `monitored_variables`: Variables that you want to monitor. See `Sleep Sensor Score monitored attributes` section to understand what variables are supported.
+
+### Sensors parameters
+
+- `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. By default, there is no default sensor configuration; instead, each sensor config or default values are used.
+- `activity`: (Optional) Configures activity sensor. By default, the activity sensor is not configured. Default name: oura_activity.
+- `readiness`: (Optional) Configures readiness sensor. By default, the readiness sensor is not configured. Default name: oura_readiness.
+- `sleep`: (Optional) Configures sleep sensor. By default the sleep sensor is added. Default name: oura_sleep.
+- `sleep_periods`: (Optional) Configures sleep periods sensor. By default, the sleep periods sensor is not configured. Default name: oura_sleep_periods.
+
+### Individual sensor parameters
+
+- `name`: (Optional) Name of the sensor (e.g. sleep_score).
+- `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+- `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
+- `monitored_variables`: Variables that you want to monitor. See `monitored attributes` section within each sensor description below to understand what variables are supported.
 
 ### Example
 
@@ -155,6 +147,8 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
         - sunday
         - 8d_ago # Last week, +1 to compare to yesterday.
 ```
+
+This configuration will load two sensors: `readiness` and `sleep`.
 
 Note: While in most sensors all attributes are optional, the configuration requires a dictionary to be passed. As such, this configuration would fail:
 
