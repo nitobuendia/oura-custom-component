@@ -344,7 +344,7 @@ The state of the sensor will show the **score** for the first selected day (reco
 
 The attributes will contain the daily data for the selected days and monitored variables.
 
-The readiness sensor supports all the following monitored attributes:
+This sensor supports all the following monitored attributes:
 
 - `day`: YYYY-MM-DD of the date of the data point.
 - `activity_balance`
