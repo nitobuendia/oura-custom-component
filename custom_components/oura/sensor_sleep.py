@@ -119,6 +119,19 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
     self._api_endpoint = api.OuraEndpoints.SLEEP_PERIODS
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
 
+  def filter_individual_data_point(self, data_point):
+    """Filters an individual data point.
+
+    If data must be filtered, this must be implemented by the child class.
+
+    Args:
+      data_point: Object for an individual day or data point.
+
+    Returns:
+      True, if data needs to be included. False, otherwise.
+    """
+    return data_point.get('type') == 'long_sleep'
+
   def parse_individual_data_point(self, data_point):
     """Parses the individual day or data point.
 
