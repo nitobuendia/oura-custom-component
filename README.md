@@ -20,6 +20,9 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   access_token:
   scan_interval:
   sensors:
+    default:
+      max_backfill:
+      monitored_dates:
     activity:
       name:
       max_backfill:
@@ -42,6 +45,9 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 * `access_token`: Personal Oura token. See `How to get personal Oura token` section for how to obtain this data.
 * `scan_interval`: (Optional) Set how many seconds should pass in between refreshes. As the sleep data should only refresh once per day, we recommend to update every few hours (e.g. 7200 for 2h or 21600 for 6h).
 * `sensors`: (Optional) Determines which sensors to import and its configuration.
+  * `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. Default: no default configuration.
+    * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
+    * `monitored_dates`: Days that you want to monitor. See `Monitored days` section to understand what day values are supported. Default: yesterday.
   * `activity`: (Optional) Configures activity sensor. Default: activity sensor is not configured.
     * `name`: (Optional) Name of the sensor (e.g. daily_activity). Default: oura_activity.
     * `max_backfill`: How many days before to backfill if a day of data is not available. See `Backfilling strategy` section to understand how this parameter works. Default: 0.
@@ -114,6 +120,30 @@ them.
 This token is only valid for your personal data. If you need to access data from multiple users, you will need to configure multiple sensors.
 
 ## Sensors
+
+### Default Sensor
+
+This is not an actual sensor, but it helps in configuring all the other sensors. If you want some variables to be configured the same for all the other sensors, you can use the `default` sensor for this matter. Other sensors will use this configuration unless you specify a different configuration for that sensor.
+
+For example, in the following configuration:
+
+```yaml
+- platform: oura
+  access_token:
+  scan_interval:
+  sensors:
+    default:
+      max_backfill: 1
+    activity:
+      name: activity_sensor
+    readiness:
+      name: readiness_sensor
+    sleep:
+      name: sleep_sensor
+      max_backfill: 7
+```
+
+`activity` and `readiness` sensor will use `max_backfill` of 1 from the `default` sensor instead of their respective default values. `sleep` sensor will use `max_backfill` of 7 because it was specified at its own sensor overriding both the default value and the `default` sensor.
 
 ### Common attributes
 

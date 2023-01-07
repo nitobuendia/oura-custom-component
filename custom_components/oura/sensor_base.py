@@ -4,7 +4,9 @@ import datetime
 import enum
 import logging
 import re
+import voluptuous as vol
 from homeassistant import const
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import entity
 from . import api
 from .helpers import date_helper
@@ -16,6 +18,21 @@ DEFAULT_BACKFILL = 0
 
 CONF_MONITORED_DATES = 'monitored_dates'
 DEFAULT_MONITORED_DATES = ['yesterday']
+
+# Default sensor definitions.
+CONF_KEY_NAME = 'default'
+DEFAULT_CONFIG = {}
+CONF_SCHEMA = {
+    vol.Optional(
+        CONF_MONITORED_DATES,
+        default=DEFAULT_MONITORED_DATES
+    ): cv.ensure_list,
+
+    vol.Optional(
+        CONF_BACKFILL,
+        default=DEFAULT_BACKFILL
+    ): cv.positive_int,
+}
 
 
 class MonitoredDayType(enum.Enum):
@@ -49,6 +66,7 @@ class OuraSensor(entity.Entity):
 
     # Basic sensor config.
     self._config = config
+    self._sensor_config = config.get(CONF_KEY_NAME, {})
     self._hass = hass
     self._name = SENSOR_NAME
 
@@ -114,17 +132,19 @@ class OuraDatedSensor(OuraSensor):
     # Dated sensor config.
     if not sensor_config:
       sensor_config = config
+    self._sensor_config.update(sensor_config)
 
-    self._name = sensor_config.get(const.CONF_NAME)
-    self._backfill = sensor_config.get(CONF_BACKFILL)
+    self._name = self._sensor_config.get(const.CONF_NAME)
+    self._backfill = self._sensor_config.get(CONF_BACKFILL)
     self._monitored_variables = [
         variable_name.lower()
-        for variable_name in sensor_config.get(const.CONF_MONITORED_VARIABLES)
-    ] if sensor_config.get(const.CONF_MONITORED_VARIABLES) else []
+        for variable_name
+        in self._sensor_config.get(const.CONF_MONITORED_VARIABLES)
+    ] if self._sensor_config.get(const.CONF_MONITORED_VARIABLES) else []
     self._monitored_dates = [
         date_name.lower()
-        for date_name in sensor_config.get(CONF_MONITORED_DATES)
-    ] if sensor_config.get(CONF_MONITORED_DATES) else []
+        for date_name in self._sensor_config.get(CONF_MONITORED_DATES)
+    ] if self._sensor_config.get(CONF_MONITORED_DATES) else []
 
     # API endpoint for this sensor.
     self._api_endpoint = ''
