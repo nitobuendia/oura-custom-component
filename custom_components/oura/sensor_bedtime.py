@@ -71,6 +71,32 @@ class OuraBedtimeSensor(sensor_base.OuraDatedSensor):
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
     self._main_state_attribute = 'bedtime_window_start'
 
+  def parse_individual_data_point(self, data_point):
+    """Parses the individual day or data point.
+
+    Args:
+      data_point: Object for an individual day or data point.
+
+    Returns:
+      Modified data point with right parsed data.
+    """
+    data_point_copy = {}
+    data_point_copy.update(data_point)
+
+    bedtime_window = data_point_copy.get('bedtime_window', {})
+
+    start_diff = bedtime_window['start']
+    start_hour = date_helper.add_time_to_string_time('00:00', start_diff)
+    data_point_copy['bedtime_window_start'] = start_hour
+
+    end_diff = bedtime_window['end']
+    end_hour = date_helper.add_time_to_string_time('00:00', end_diff)
+    data_point_copy['bedtime_window_end'] = end_hour
+
+    del data_point_copy['bedtime_window']
+
+    return data_point_copy
+
   def parse_sensor_data(self, oura_data):
     """Processes bedtime data into a dictionary.
 
@@ -81,37 +107,5 @@ class OuraBedtimeSensor(sensor_base.OuraDatedSensor):
       Dictionary where key is the requested summary_date and value is the
       Oura bedtime data for that given day.
     """
-    if not oura_data or 'ideal_bedtimes' not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
-      return {}
-
-    bedtime_data = oura_data.get('ideal_bedtimes')
-    if not bedtime_data:
-      return {}
-
-    bedtime_dict = {}
-    for bedtime_daily_data in bedtime_data:
-      # Default metrics.
-      bedtime_date = bedtime_daily_data.get('date')
-      if not bedtime_date:
-        continue
-
-      # Use day instead of date to bring consistency with V2 API.
-      bedtime_daily_data['day'] = bedtime_date
-
-      bedtime_window = bedtime_daily_data.get('bedtime_window', {})
-
-      start_diff = bedtime_window['start']
-      start_hour = date_helper.add_time_to_string_time('00:00', start_diff)
-      bedtime_daily_data['bedtime_window_start'] = start_hour
-
-      end_diff = bedtime_window['end']
-      end_hour = date_helper.add_time_to_string_time('00:00', end_diff)
-      bedtime_daily_data['bedtime_window_end'] = end_hour
-
-      del bedtime_daily_data['bedtime_window']
-
-      bedtime_dict[bedtime_date] = bedtime_daily_data
-
-    return bedtime_dict
+    return super(OuraBedtimeSensor, self).parse_sensor_data(
+        oura_data, 'ideal_bedtimes', 'date')
