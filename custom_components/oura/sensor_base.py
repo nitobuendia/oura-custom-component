@@ -497,7 +497,7 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
     if not first_series_attribute:
       return
 
-    self._state = first_date_attributes.get(self._main_state_attribute)
+    self._state = first_series_attribute.get(self._main_state_attribute)
 
   def parse_sensor_data(self, oura_data, data_param='data', day_param='day'):
     """Parses data from the API.
