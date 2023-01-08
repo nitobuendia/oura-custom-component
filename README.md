@@ -18,7 +18,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
     - [Example](#example)
     - [How to get personal Oura token](#how-to-get-personal-oura-token)
   - [Sensors](#sensors)
-    - [Default Sensor](#default-sensor)
     - [Common attributes](#common-attributes)
       - [Monitored days](#monitored-days)
       - [Backfilling](#backfilling)
@@ -80,9 +79,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
   access_token:
   scan_interval:
   sensors:
-    default:
-      max_backfill:
-      monitored_dates:
     activity:
       name:
       attribute_state:
@@ -137,7 +133,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ### Sensors parameters
 
-- `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. By default, there is no default sensor configuration; instead, each sensor config or default values are used.
 - `activity`: (Optional) Configures activity sensor. By default, the activity sensor is not configured. Default name: oura_activity.
 - `heart_rate`: (Optional) Configures heart rate sensor. By default, the heart rate sensor is not configured. Default name: oura_heart_rate.
 - `readiness`: (Optional) Configures readiness sensor. By default, the readiness sensor is not configured. Default name: oura_readiness.
@@ -211,30 +206,6 @@ them.
 This token is only valid for your personal data. If you need to access data from multiple users, you will need to configure multiple sensors.
 
 ## Sensors
-
-### Default Sensor
-
-This is not an actual sensor, but it helps in configuring all the other sensors. If you want some variables to be configured the same for all the other sensors, you can use the `default` sensor for this matter. Other sensors will use this configuration unless you specify a different configuration for that sensor.
-
-For example, in the following configuration:
-
-```yaml
-- platform: oura
-  access_token:
-  scan_interval:
-  sensors:
-    default:
-      max_backfill: 1
-    activity:
-      name: activity_sensor
-    readiness:
-      name: readiness_sensor
-    sleep:
-      name: sleep_sensor
-      max_backfill: 7
-```
-
-`activity` and `readiness` sensor will use `max_backfill` of 1 from the `default` sensor instead of their respective default values. `sleep` sensor will use `max_backfill` of 7 because it was specified at its own sensor overriding both the default value and the `default` sensor.
 
 ### Common attributes
 

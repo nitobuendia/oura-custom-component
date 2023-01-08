@@ -21,21 +21,6 @@ DEFAULT_BACKFILL = 0
 CONF_MONITORED_DATES = 'monitored_dates'
 DEFAULT_MONITORED_DATES = ['yesterday']
 
-# Default sensor definitions.
-CONF_KEY_NAME = 'default'
-
-CONF_SCHEMA = {
-    vol.Optional(
-        CONF_MONITORED_DATES,
-        default=DEFAULT_MONITORED_DATES
-    ): cv.ensure_list,
-
-    vol.Optional(
-        CONF_BACKFILL,
-        default=DEFAULT_BACKFILL
-    ): cv.positive_int,
-}
-
 
 class MonitoredDayType(enum.Enum):
   """Types of days which can be monitored."""
@@ -68,7 +53,7 @@ class OuraSensor(entity.Entity):
 
     # Basic sensor config.
     self._config = config
-    self._sensor_config = config.get(CONF_KEY_NAME, {})
+    self._sensor_config = {}
     self._hass = hass
     self._name = SENSOR_NAME
 

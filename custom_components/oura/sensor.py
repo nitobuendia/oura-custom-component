@@ -16,7 +16,6 @@ from . import sensor_workouts
 
 
 _SENSORS_SCHEMA = {
-    vol.Optional(sensor_base.CONF_KEY_NAME): sensor_base.CONF_SCHEMA,
     vol.Optional(sensor_activity.CONF_KEY_NAME): sensor_activity.CONF_SCHEMA,
     vol.Optional(sensor_bedtime.CONF_KEY_NAME): sensor_bedtime.CONF_SCHEMA,
     vol.Optional(
