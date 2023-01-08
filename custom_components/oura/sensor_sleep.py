@@ -91,8 +91,6 @@ CONF_SCHEMA = {
     ): cv.positive_int,
 }
 
-DEFAULT_CONFIG = {}
-
 _EMPTY_SENSOR_ATTRIBUTE = {
     variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
 }

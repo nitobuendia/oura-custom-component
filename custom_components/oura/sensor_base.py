@@ -23,7 +23,7 @@ DEFAULT_MONITORED_DATES = ['yesterday']
 
 # Default sensor definitions.
 CONF_KEY_NAME = 'default'
-DEFAULT_CONFIG = {}
+
 CONF_SCHEMA = {
     vol.Optional(
         CONF_MONITORED_DATES,

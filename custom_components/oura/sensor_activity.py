@@ -74,10 +74,6 @@ CONF_SCHEMA = {
     ): cv.positive_int,
 }
 
-# There is no need to add any configuration as all fields are optional and
-# with default values. However, this is done as it is used in the main sensor.
-DEFAULT_CONFIG = {}
-
 _EMPTY_SENSOR_ATTRIBUTE = {
     variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
 }
