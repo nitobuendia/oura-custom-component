@@ -548,7 +548,7 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
         )
 
       if not daily_data:
-        continue
+        daily_data = [self._empty_sensor]
 
       if not type(daily_data) == list:
         daily_data = [daily_data]
