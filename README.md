@@ -74,54 +74,64 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ### Schema
 
+Under your `configuration.yaml`, you should include the `sensor` platform under which you should add the following configuration:
+
+`configuration.yaml`
+
 ```yaml
-- platform: oura
-  access_token:
-  scan_interval:
-  sensors:
-    activity:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    heart_rate:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    readiness:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    sleep:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    sleep_periods:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    sleep_score:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    workouts:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
+sensor:
+  - platform: oura
+    access_token:
+    scan_interval:
+    sensors:
+      activity:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      heart_rate:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      readiness:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      sleep:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      sleep_periods:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      sleep_score:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      workouts:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+  # (...) Potentially other sensors that you may have configured.
+
+# (...) Other code on your configuration.yaml file.
 ```
+
+Note: Make sure there are no two sensor platforms. If you already have one `sensor:` configuration, make sure to merge this code with yours.
 
 ### Parameters
 
@@ -151,24 +161,28 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 ### Example
 
 ```yaml
-- platform: oura
-  access_token: !secret oura_api_token
-  scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
-  sensors:
-    readiness: {}
-    sleep:
-      name: sleep_data
-      max_backfill: 3
-      monitored_dates:
-        - yesterday
-        - monday
-        - tuesday
-        - wednesday
-        - thursday
-        - friday
-        - saturday
-        - sunday
-        - 8d_ago # Last week, +1 to compare to yesterday.
+sensor:
+  - platform: oura
+    access_token: !secret oura_api_token
+    scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
+    sensors:
+      readiness: {}
+      sleep:
+        name: sleep_data
+        max_backfill: 3
+        monitored_dates:
+          - yesterday
+          - monday
+          - tuesday
+          - wednesday
+          - thursday
+          - friday
+          - saturday
+          - sunday
+          - 8d_ago # Last week, +1 to compare to yesterday.
+  # (...) Potentially other sensors that you may have configured.
+
+# (...) Other code on your configuration.yaml file.
 ```
 
 This configuration will load two sensors: `readiness` and `sleep`.
