@@ -745,75 +745,75 @@ template:
       unique_id: sleep_breath_average_yesterday
       unit_of_measurement: bpm
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.average_breath }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('average_breath') }}
       icon: "mdi:lungs"
 
     - name: "Sleep Resting Heart Rate Yesterday"
       unique_id: sleep_resting_heart_rate_yesterday
       unit_of_measurement: "bpm"
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.lowest_heart_rate }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('lowest_heart_rate') }}
       icon: "mdi:heart-pulse"
 
     - name: "Resting Average Heart Rate Yesterday"
       unique_id: resting_heart_rate_average_yesterday
       unit_of_measurement: "bpm"
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.average_heart_rate }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('average_heart_rate') }}
       icon: "mdi:heart-pulse"
 
     - name: "Bed Time Yesterday"
       unique_id: bed_time_yesterday
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.bedtime_start_hour }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('bedtime_start_hour') }}
       icon: "mdi:sleep"
 
     - name: "Wake Time Yesterday"
       unique_id: wake_time_yesterday
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.bedtime_end_hour }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('bedtime_end_hour') }}
       icon: "mdi:sleep-off"
 
     - name: "Deep Sleep Yesterday"
       unique_id: deep_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.deep_sleep_duration_in_hours }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('deep_sleep_duration_in_hours') }}
       icon: "mdi:bed"
 
     - name: "Rem Sleep Yesterday"
       unique_id: rem_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.rem_sleep_duration_in_hours }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('rem_sleep_duration_in_hours') }}
       icon: "mdi:bed"
 
     - name: "Light Sleep Yesterday"
       unique_id: light_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.light_sleep_duration_in_hours }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('light_sleep_duration_in_hours') }}
       icon: "mdi:bed"
 
     - name: "Total Sleep Yesterday"
       unique_id: total_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.total_sleep_duration_in_hours }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('total_sleep_duration_in_hours') }}
       icon: "mdi:sleep"
 
     - name: "Time Awake Yesterday"
       unique_id: time_awake_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.awake_duration_in_hours }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('awake_duration_in_hours') }}
       icon: "mdi:sleep-off"
 
     - name: "Time In Bed Yesterday"
       unique_id: time_in_bed_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_data.attributes.yesterday.in_bed_duration_in_hours }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('in_bed_duration_in_hours') }}
       icon: "mdi:bed"
 ```
 
