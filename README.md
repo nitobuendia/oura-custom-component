@@ -823,7 +823,7 @@ Do note that you may need to edit this for your needs and configuration. For exa
 
 ## Card Examples
 
-  ### apexcharts-card
+  ### [apexcharts-card](https://github.com/RomRider/apexcharts-card)
 
   #### Display Scores Last 7 Days
 
