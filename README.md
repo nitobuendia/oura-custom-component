@@ -18,7 +18,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
     - [Example](#example)
     - [How to get personal Oura token](#how-to-get-personal-oura-token)
   - [Sensors](#sensors)
-    - [Default Sensor](#default-sensor)
     - [Common attributes](#common-attributes)
       - [Monitored days](#monitored-days)
       - [Backfilling](#backfilling)
@@ -75,57 +74,64 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ### Schema
 
+Under your `configuration.yaml`, you should include the `sensor` platform under which you should add the following configuration:
+
+`configuration.yaml`
+
 ```yaml
-- platform: oura
-  access_token:
-  scan_interval:
-  sensors:
-    default:
-      max_backfill:
-      monitored_dates:
-    activity:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    heart_rate:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    readiness:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    sleep:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    sleep_periods:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    sleep_score:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
-    workouts:
-      name:
-      attribute_state:
-      max_backfill:
-      monitored_dates:
-      monitored_variables:
+sensor:
+  - platform: oura
+    access_token:
+    scan_interval:
+    sensors:
+      activity:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      heart_rate:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      readiness:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      sleep:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      sleep_periods:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      sleep_score:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+      workouts:
+        name:
+        attribute_state:
+        max_backfill:
+        monitored_dates:
+        monitored_variables:
+  # (...) Potentially other sensors that you may have configured.
+
+# (...) Other code on your configuration.yaml file.
 ```
+
+Note: Make sure there are no two sensor platforms. If you already have one `sensor:` configuration, make sure to merge this code with yours.
 
 ### Parameters
 
@@ -137,7 +143,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 
 ### Sensors parameters
 
-- `default`: (Optional) Configures all other sensors. Read the `Default Sensor` section to understand more about this behaviour and set up. By default, there is no default sensor configuration; instead, each sensor config or default values are used.
 - `activity`: (Optional) Configures activity sensor. By default, the activity sensor is not configured. Default name: oura_activity.
 - `heart_rate`: (Optional) Configures heart rate sensor. By default, the heart rate sensor is not configured. Default name: oura_heart_rate.
 - `readiness`: (Optional) Configures readiness sensor. By default, the readiness sensor is not configured. Default name: oura_readiness.
@@ -156,24 +161,28 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
 ### Example
 
 ```yaml
-- platform: oura
-  access_token: !secret oura_api_token
-  scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
-  sensors:
-    readiness: {}
-    sleep:
-      name: sleep_data
-      max_backfill: 3
-      monitored_dates:
-        - yesterday
-        - monday
-        - tuesday
-        - wednesday
-        - thursday
-        - friday
-        - saturday
-        - sunday
-        - 8d_ago # Last week, +1 to compare to yesterday.
+sensor:
+  - platform: oura
+    access_token: !secret oura_api_token
+    scan_interval: 7200 # 2h = 2h * 60min * 60 seconds
+    sensors:
+      readiness: {}
+      sleep:
+        name: sleep_data
+        max_backfill: 3
+        monitored_dates:
+          - yesterday
+          - monday
+          - tuesday
+          - wednesday
+          - thursday
+          - friday
+          - saturday
+          - sunday
+          - 8d_ago # Last week, +1 to compare to yesterday.
+  # (...) Potentially other sensors that you may have configured.
+
+# (...) Other code on your configuration.yaml file.
 ```
 
 This configuration will load two sensors: `readiness` and `sleep`.
@@ -211,30 +220,6 @@ them.
 This token is only valid for your personal data. If you need to access data from multiple users, you will need to configure multiple sensors.
 
 ## Sensors
-
-### Default Sensor
-
-This is not an actual sensor, but it helps in configuring all the other sensors. If you want some variables to be configured the same for all the other sensors, you can use the `default` sensor for this matter. Other sensors will use this configuration unless you specify a different configuration for that sensor.
-
-For example, in the following configuration:
-
-```yaml
-- platform: oura
-  access_token:
-  scan_interval:
-  sensors:
-    default:
-      max_backfill: 1
-    activity:
-      name: activity_sensor
-    readiness:
-      name: readiness_sensor
-    sleep:
-      name: sleep_sensor
-      max_backfill: 7
-```
-
-`activity` and `readiness` sensor will use `max_backfill` of 1 from the `default` sensor instead of their respective default values. `sleep` sensor will use `max_backfill` of 7 because it was specified at its own sensor overriding both the default value and the `default` sensor.
 
 ### Common attributes
 
@@ -590,12 +575,12 @@ yesterday:
   'average_breath': 14
   'lowest_heart_rate': 44
   'average_heart_rate': 47
-  'deep_sleep_duration': 0.72
-  'rem_sleep_duration': 0.32
-  'light_sleep_duration': 4.54
-  'total_sleep_duration': 5.58
-  'awake_duration': 1.45
-  'in_bed_duration': 7.0
+  'deep_sleep_duration_in_hours': 0.72
+  'rem_sleep_duration_in_hours': 0.32
+  'light_sleep_duration_in_hours': 4.54
+  'total_sleep_duration_in_hours': 5.58
+  'awake_duration_in_hours': 1.45
+  'in_bed_duration_in_hours': 7.0
 
 8d_ago:
   'day': "2022-07-07"
@@ -604,12 +589,12 @@ yesterday:
   'average_breath': 14
   'lowest_heart_rate': 44
   'average_heart_rate': 48
-  'deep_sleep_duration': 2.05
-  'rem_sleep_duration': 0.82
-  'light_sleep_duration': 4.29
-  'total_sleep_duration': 7.16
-  'awake_duration': 1.44
-  'in_bed_duration': 8.
+  'deep_sleep_duration_in_hours': 2.05
+  'rem_sleep_duration_in_hours': 0.82
+  'light_sleep_duration_in_hours': 4.29
+  'total_sleep_duration_in_hours': 7.16
+  'awake_duration_in_hours': 1.44
+  'in_bed_duration_in_hours': 8.23
 ```
 
 ### Sleep Periods Sensor
@@ -751,86 +736,88 @@ yesterday:
 
 While the component retrieves all the data for all the days in one same attribute data, you can re-use this data into template sensors. This is more efficient than creating multiple sensors with multiple API calls.
 
-Example for breaking up yesterday's data into multiple sensors:
+Example for breaking up yesterday's data into multiple sensors using the [template integration](https://www.home-assistant.io/integrations/template):
 
 ```yaml
-- platform: template
-  sensors:
+template:
+  - sensor:
     - name: "Sleep Breath Average Yesterday"
       unique_id: sleep_breath_average_yesterday
       unit_of_measurement: bpm
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.average_breath }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('average_breath') }}
       icon: "mdi:lungs"
 
     - name: "Sleep Resting Heart Rate Yesterday"
       unique_id: sleep_resting_heart_rate_yesterday
       unit_of_measurement: "bpm"
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.lowest_heart_rate }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('lowest_heart_rate') }}
       icon: "mdi:heart-pulse"
 
     - name: "Resting Average Heart Rate Yesterday"
       unique_id: resting_heart_rate_average_yesterday
       unit_of_measurement: "bpm"
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.average_heart_rate }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('average_heart_rate') }}
       icon: "mdi:heart-pulse"
 
     - name: "Bed Time Yesterday"
       unique_id: bed_time_yesterday
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.bedtime_start_hour }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('bedtime_start_hour') }}
       icon: "mdi:sleep"
 
     - name: "Wake Time Yesterday"
       unique_id: wake_time_yesterday
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.bedtime_end_hour }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('bedtime_end_hour') }}
       icon: "mdi:sleep-off"
 
     - name: "Deep Sleep Yesterday"
       unique_id: deep_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.deep_sleep_duration }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('deep_sleep_duration_in_hours') }}
       icon: "mdi:bed"
 
     - name: "Rem Sleep Yesterday"
       unique_id: rem_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.rem_sleep_duration }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('rem_sleep_duration_in_hours') }}
       icon: "mdi:bed"
 
     - name: "Light Sleep Yesterday"
       unique_id: light_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.light_sleep_duration }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('light_sleep_duration_in_hours') }}
       icon: "mdi:bed"
 
     - name: "Total Sleep Yesterday"
       unique_id: total_sleep_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.total_sleep_duration }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('total_sleep_duration_in_hours') }}
       icon: "mdi:sleep"
 
     - name: "Time Awake Yesterday"
       unique_id: time_awake_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.awake_duration }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('awake_duration_in_hours') }}
       icon: "mdi:sleep-off"
 
     - name: "Time In Bed Yesterday"
       unique_id: time_in_bed_yesterday
       unit_of_measurement: h
       state: >
-        {{ states.sensor.sleep_quality.attributes.yesterday.in_bed_duration }}
+        {{ (state_attr('sensor.sleep_data', 'yesterday') or {}).get('in_bed_duration_in_hours') }}
       icon: "mdi:bed"
 ```
+
+Do note that you may need to edit this for your needs and configuration. For example, in this case we are assuming that we want to read the `sleep` sensor data which is called `sleep_data`. From it, we're reading the data from `yesterday` - which is a `monitored_dates`. Inside this, we are reading a few attributes which are either loaded by default or part of the `monitored_variables`. These assumptions may not apply in your case, or you may want to monitor other attributes under other sensors, named differently, or for other dates.
 
 ## Sponsoring
 

@@ -21,21 +21,6 @@ DEFAULT_BACKFILL = 0
 CONF_MONITORED_DATES = 'monitored_dates'
 DEFAULT_MONITORED_DATES = ['yesterday']
 
-# Default sensor definitions.
-CONF_KEY_NAME = 'default'
-DEFAULT_CONFIG = {}
-CONF_SCHEMA = {
-    vol.Optional(
-        CONF_MONITORED_DATES,
-        default=DEFAULT_MONITORED_DATES
-    ): cv.ensure_list,
-
-    vol.Optional(
-        CONF_BACKFILL,
-        default=DEFAULT_BACKFILL
-    ): cv.positive_int,
-}
-
 
 class MonitoredDayType(enum.Enum):
   """Types of days which can be monitored."""
@@ -68,7 +53,7 @@ class OuraSensor(entity.Entity):
 
     # Basic sensor config.
     self._config = config
-    self._sensor_config = config.get(CONF_KEY_NAME, {})
+    self._sensor_config = {}
     self._hass = hass
     self._name = SENSOR_NAME
 
@@ -114,9 +99,10 @@ class OuraDatedSensor(OuraSensor):
     extra_state_attributes: attributes of the sensor.
 
   Methods:
-    get_sensor_data_from_api: Fetches data from API.
-    parse_individual_data_point: Parses a data point from API.
-    parse_sensor_data: Parses data from API.
+    filter_individual_data_point: Filters a data point from the API.
+    get_sensor_data_from_api: Fetches data from the API.
+    parse_individual_data_point: Parses a data point from the API.
+    parse_sensor_data: Parses data from the API.
   """
 
   def __init__(self, config, hass, sensor_config=None):
@@ -386,6 +372,19 @@ class OuraDatedSensor(OuraSensor):
     dated_attributes = self._filter_monitored_variables(dated_attributes)
     self._attributes = dated_attributes
 
+  def filter_individual_data_point(self, data_point):
+    """Filters an individual data point.
+
+    If data must be filtered, this must be implemented by the child class.
+
+    Args:
+      data_point: Object for an individual day or data point.
+
+    Returns:
+      True, if data needs to be included. False, otherwise.
+    """
+    return True
+
   def get_sensor_data_from_api(self, start_date, end_date):
     """Fetches data from the API for the sensor.
 
@@ -436,6 +435,10 @@ class OuraDatedSensor(OuraSensor):
     for sensor_daily_data in sensor_data:
       sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
       if not sensor_daily_data:
+        continue
+
+      include_in_data = self.filter_individual_data_point(sensor_daily_data)
+      if not include_in_data:
         continue
 
       sensor_date = sensor_daily_data.get(day_param)
@@ -545,7 +548,7 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
         )
 
       if not daily_data:
-        continue
+        daily_data = [self._empty_sensor]
 
       if not type(daily_data) == list:
         daily_data = [daily_data]
@@ -621,6 +624,10 @@ class OuraDatedSeriesSensor(OuraDatedSensor):
     for sensor_daily_data in sensor_data:
       sensor_daily_data = self.parse_individual_data_point(sensor_daily_data)
       if not sensor_daily_data:
+        continue
+
+      include_in_data = self.filter_individual_data_point(sensor_daily_data)
+      if not include_in_data:
         continue
 
       sensor_date = sensor_daily_data.get(day_param)

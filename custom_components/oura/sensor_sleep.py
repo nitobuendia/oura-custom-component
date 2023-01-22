@@ -38,7 +38,6 @@ _SUPPORTED_MONITORED_VARIABLES = [
     'day',
     'awake_time',
     'awake_duration_in_hours',
-    'awake_duration',
     'bedtime_end',
     'bedtime_end_hour',
     'bedtime_start',
@@ -92,8 +91,6 @@ CONF_SCHEMA = {
     ): cv.positive_int,
 }
 
-DEFAULT_CONFIG = {}
-
 _EMPTY_SENSOR_ATTRIBUTE = {
     variable: None for variable in _SUPPORTED_MONITORED_VARIABLES
 }
@@ -118,6 +115,19 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
 
     self._api_endpoint = api.OuraEndpoints.SLEEP_PERIODS
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
+
+  def filter_individual_data_point(self, data_point):
+    """Filters an individual data point.
+
+    If data must be filtered, this must be implemented by the child class.
+
+    Args:
+      data_point: Object for an individual day or data point.
+
+    Returns:
+      True, if data needs to be included. False, otherwise.
+    """
+    return data_point.get('type') == 'long_sleep'
 
   def parse_individual_data_point(self, data_point):
     """Parses the individual day or data point.
@@ -153,7 +163,7 @@ class OuraSleepSensor(sensor_base.OuraDatedSensor):
         'total_sleep_duration_in_hours': date_helper.seconds_to_hours(
             data_point_copy.get('total_sleep_duration')),
         # Hours awake.
-        'awake_duration': date_helper.seconds_to_hours(
+        'awake_duration_in_hours': date_helper.seconds_to_hours(
             data_point_copy.get('awake_time')),
         # Hours in bed: sleep + awake.
         'in_bed_duration_in_hours': date_helper.seconds_to_hours(
