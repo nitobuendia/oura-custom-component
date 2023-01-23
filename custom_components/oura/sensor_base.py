@@ -260,9 +260,6 @@ class OuraDatedSensor(OuraSensor):
     # missing.
     start_date = date_helper.add_days_to_string_date(start_date, -7)
 
-    # Add an extra day to retrieve today's date in case of timezone difference.
-    end_date = date_helper.add_days_to_string_date(end_date, 1)
-
     return (start_date, end_date)
 
   def _get_monitored_name_days(self):
