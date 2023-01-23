@@ -827,7 +827,7 @@ Do note that you may need to edit this for your needs and configuration. For exa
 
   #### Display Scores Last 7 Days
 
-  *Card*: 
+  *Card*
   
   ![image](https://user-images.githubusercontent.com/3003773/213946755-06f7c4a6-2e89-45fc-a74b-2fc5fa7a7599.png)
   
