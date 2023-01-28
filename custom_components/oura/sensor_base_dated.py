@@ -226,7 +226,7 @@ class OuraDatedSensor(sensor_base.OuraSensor):
     (start_date, _) = self._get_monitored_date_range()
 
     if not sensor_data:
-      return {}
+      sensor_data = {}
 
     if not default_attributes:
       default_attributes = {}
@@ -300,7 +300,7 @@ class OuraDatedSensor(sensor_base.OuraSensor):
     sensor_data = self.parse_sensor_data(oura_data)
 
     if not sensor_data:
-      return
+      sensor_data = {}
 
     dated_attributes = self._map_data_to_monitored_days(
         sensor_data, self._empty_sensor)

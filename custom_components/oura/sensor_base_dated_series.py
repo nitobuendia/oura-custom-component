@@ -66,7 +66,7 @@ class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
     (start_date, _) = self._get_monitored_date_range()
 
     if not sensor_data:
-      return {}
+      sensor_data = {}
 
     if not default_attributes:
       default_attributes = {}
