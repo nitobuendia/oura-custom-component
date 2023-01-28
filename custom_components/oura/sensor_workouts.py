@@ -79,5 +79,5 @@ class OuraWorkoutsSensor(sensor_base.OuraDatedSeriesSensor):
         config.get(const.CONF_SENSORS, {}).get(CONF_KEY_NAME, {}))
     super(OuraWorkoutsSensor, self).__init__(config, hass, sessions_config)
 
-    self._api_endpoint = api.OuraEndpoints.SESSIONS
+    self._api_endpoint = api.OuraEndpoints.WORKOUTS
     self._empty_sensor = _EMPTY_SENSOR_ATTRIBUTE
