@@ -4,7 +4,6 @@ from homeassistant import const
 from homeassistant.helpers import config_validation as cv
 import voluptuous as vol
 from . import sensor_activity
-from . import sensor_base
 from . import sensor_bedtime
 from . import sensor_heart_rate
 from . import sensor_readiness
@@ -22,10 +21,7 @@ _SENSORS_SCHEMA = {
         sensor_heart_rate.CONF_KEY_NAME): sensor_heart_rate.CONF_SCHEMA,
     vol.Optional(sensor_readiness.CONF_KEY_NAME): sensor_readiness.CONF_SCHEMA,
     vol.Optional(sensor_sessions.CONF_KEY_NAME): sensor_sessions.CONF_SCHEMA,
-    vol.Optional(
-        sensor_sleep.CONF_KEY_NAME,
-        # Set sleep sensor on by default.
-        default={}): sensor_sleep.CONF_SCHEMA,
+    vol.Optional(sensor_sleep.CONF_KEY_NAME): sensor_sleep.CONF_SCHEMA,
     vol.Optional(
         sensor_sleep_periods.CONF_KEY_NAME): sensor_sleep_periods.CONF_SCHEMA,
     vol.Optional(

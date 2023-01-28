@@ -4,7 +4,8 @@ import voluptuous as vol
 from homeassistant import const
 from homeassistant.helpers import config_validation as cv
 from . import api
-from . import sensor_base
+from . import const as oura_const
+from . import sensor_base_dated
 
 # Sensor configuration
 _DEFAULT_NAME = 'oura_activity'
@@ -59,8 +60,8 @@ CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
 
     vol.Optional(
-        sensor_base.CONF_MONITORED_DATES,
-        default=sensor_base.DEFAULT_MONITORED_DATES
+        oura_const.CONF_MONITORED_DATES,
+        default=oura_const.DEFAULT_MONITORED_DATES
     ): cv.ensure_list,
 
     vol.Optional(
@@ -69,8 +70,8 @@ CONF_SCHEMA = {
     ): vol.All(cv.ensure_list, [vol.In(_SUPPORTED_MONITORED_VARIABLES)]),
 
     vol.Optional(
-        sensor_base.CONF_BACKFILL,
-        default=sensor_base.DEFAULT_BACKFILL
+        oura_const.CONF_BACKFILL,
+        default=oura_const.DEFAULT_BACKFILL
     ): cv.positive_int,
 }
 
@@ -79,7 +80,7 @@ _EMPTY_SENSOR_ATTRIBUTE = {
 }
 
 
-class OuraActivitySensor(sensor_base.OuraDatedSensor):
+class OuraActivitySensor(sensor_base_dated.OuraDatedSensor):
   """Representation of an Oura Ring Activity sensor.
 
   Attributes:

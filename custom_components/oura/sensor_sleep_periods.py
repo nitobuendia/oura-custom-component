@@ -5,7 +5,8 @@ from dateutil import parser
 from homeassistant import const
 from homeassistant.helpers import config_validation as cv
 from . import api
-from . import sensor_base
+from . import const as oura_const
+from . import sensor_base_dated_series
 from .helpers import date_helper
 
 # Sensor configuration
@@ -65,13 +66,13 @@ CONF_SCHEMA = {
     vol.Optional(const.CONF_NAME, default=_DEFAULT_NAME): cv.string,
 
     vol.Optional(
-        sensor_base.CONF_ATTRIBUTE_STATE,
+        oura_const.CONF_ATTRIBUTE_STATE,
         default=_DEFAULT_ATTRIBUTE_STATE
     ): vol.In(_SUPPORTED_MONITORED_VARIABLES),
 
     vol.Optional(
-        sensor_base.CONF_MONITORED_DATES,
-        default=sensor_base.DEFAULT_MONITORED_DATES
+        oura_const.CONF_MONITORED_DATES,
+        default=oura_const.DEFAULT_MONITORED_DATES
     ): cv.ensure_list,
 
     vol.Optional(
@@ -80,8 +81,8 @@ CONF_SCHEMA = {
     ): vol.All(cv.ensure_list, [vol.In(_SUPPORTED_MONITORED_VARIABLES)]),
 
     vol.Optional(
-        sensor_base.CONF_BACKFILL,
-        default=sensor_base.DEFAULT_BACKFILL
+        oura_const.CONF_BACKFILL,
+        default=oura_const.DEFAULT_BACKFILL
     ): cv.positive_int,
 }
 
@@ -90,7 +91,7 @@ _EMPTY_SENSOR_ATTRIBUTE = {
 }
 
 
-class OuraSleepPeriodsSensor(sensor_base.OuraDatedSeriesSensor):
+class OuraSleepPeriodsSensor(sensor_base_dated_series.OuraDatedSeriesSensor):
   """Representation of an Oura Ring Sleep Periods sensor.
 
   Attributes:
