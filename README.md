@@ -839,7 +839,7 @@ You can leverage the sensor data to create powerful visualizations about your sl
 ![Oura chart with Oura score](docs/img/apex-charts-scores.png)
 
 <details>
-  <summary>**configuration.yaml**</summary>
+  <summary><strong>configuration.yaml</strong></summary>
 
   ```yaml
   sensor:
@@ -886,7 +886,7 @@ You can leverage the sensor data to create powerful visualizations about your sl
 </details>
 
 <details>
-  <summary>**Lovelace Card (YAML)**</summary>
+  <summary><strong>Lovelace Card (YAML)</strong></summary>
 
   ```yaml
   - type: custom:apexcharts-card
@@ -994,7 +994,7 @@ You can leverage the sensor data to create powerful visualizations about your sl
 ![image](docs/img/apex-charts-sleep-trend.png)
 
 <details>
-  <summary>**configuration.yaml**</summary>
+  <summary><strong>configuration.yaml</strong></summary>
 
   ```yaml
   sensor:
@@ -1029,9 +1029,7 @@ You can leverage the sensor data to create powerful visualizations about your sl
 </details>
 
 <details>
-  <summary>
-    **Lovelace Card (YAML)**
-  </summary>
+  <summary><strong>Lovelace Card (YAML)</strong></summary>
 
   ```yaml
   - type: custom:apexcharts-card
