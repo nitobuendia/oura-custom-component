@@ -61,6 +61,8 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
       - [Workouts Sensor monitored attributes](#workouts-sensor-monitored-attributes)
       - [Workouts Sensor sample output](#workouts-sensor-sample-output)
     - [Derived sensors](#derived-sensors)
+  - [Card Examples](#card-examples)
+      - [apexcharts-card](#apexcharts-card)
   - [Sponsoring](#sponsoring)
 
 ## Installation
@@ -818,6 +820,347 @@ template:
 ```
 
 Do note that you may need to edit this for your needs and configuration. For example, in this case we are assuming that we want to read the `sleep` sensor data which is called `sleep_data`. From it, we're reading the data from `yesterday` - which is a `monitored_dates`. Inside this, we are reading a few attributes which are either loaded by default or part of the `monitored_variables`. These assumptions may not apply in your case, or you may want to monitor other attributes under other sensors, named differently, or for other dates.
+
+## Card Examples
+
+  ### [apexcharts-card](https://github.com/RomRider/apexcharts-card)
+
+  #### Display Scores Last 7 Days
+
+  *Card*
+  
+  ![image](https://user-images.githubusercontent.com/3003773/213946755-06f7c4a6-2e89-45fc-a74b-2fc5fa7a7599.png)
+  
+  *Card YAML*
+  
+  ```
+  type: custom:apexcharts-card
+  apex_config:
+    chart:
+      height: 150px
+    xaxis:
+      type: datetime
+      labels:
+        format: ddd
+  graph_span: 7d
+  header:
+    show: true
+    show_states: true
+    colorize_states: true
+    title: Oura Scores
+    standard_format: true
+  series:
+    - entity: sensor.oura_sleep_score
+      name: Sleep
+      color: '#20bf6b'
+      show:
+        in_chart: false
+        in_header: true
+    - entity: sensor.oura_sleep_score
+      name: Sleep
+      color: '#20bf6b'
+      data_generator: |
+        var data = [];
+        var attributes = entity.attributes;
+        for(let day in attributes) {
+          if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+            var datapointday = moment(attributes[day].day);
+            var datapointscore = attributes[day].score;
+            if(datapointscore == null){
+              datapointscore = 0
+            }
+            data.push({x: datapointday, y: datapointscore});
+          }
+        }
+        return data;
+      type: line
+      show:
+        in_chart: true
+        in_header: false
+    - entity: sensor.oura_readiness
+      name: Readiness
+      color: '#45aaf2'
+      show:
+        in_chart: false
+        in_header: true
+    - entity: sensor.oura_readiness
+      name: Readiness
+      color: '#45aaf2'
+      data_generator: |
+        var data = [];
+        var attributes = entity.attributes;
+        for(let day in attributes) {
+          if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+            var datapointday = moment(attributes[day].day);
+            var datapointscore = attributes[day].score;
+            if(datapointscore == null){
+              datapointscore = 0
+            }
+            data.push({x: datapointday, y: datapointscore});
+          }
+        }
+        return data;
+      type: line
+      show:
+        in_chart: true
+        in_header: false
+    - entity: sensor.oura_activity
+      name: Activity
+      color: '#fed330'
+      show:
+        in_chart: false
+        in_header: true
+    - entity: sensor.oura_activity
+      name: Activity
+      color: '#fed330'
+      data_generator: |
+        var data = [];
+        var attributes = entity.attributes;
+        for(let day in attributes) {
+          if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+            var datapointday = moment(attributes[day].day);
+            var datapointscore = attributes[day].score;
+            if(datapointscore == null){
+              datapointscore = 0
+            }
+            data.push({x: datapointday, y: datapointscore});
+          }
+        }
+        return data;
+      type: line
+      show:
+        in_chart: true
+        in_header: false
+```
+
+*Required Sensor Configuration.yaml*
+    
+```
+       sleep_score:
+       name: oura_sleep_score
+       max_backfill: 0 
+       monitored_dates:
+        - 0d_ago
+        - 1d_ago
+        - 2d_ago
+        - 3d_ago
+        - 4d_ago
+        - 5d_ago
+        - 6d_ago
+        - 7d_ago
+     activity:
+       name: oura_activity
+       max_backfill: 0
+       monitored_dates:
+        - 0d_ago
+        - 1d_ago
+        - 2d_ago
+        - 3d_ago
+        - 4d_ago
+        - 5d_ago
+        - 6d_ago
+        - 7d_ago
+     readiness:
+       name: oura_readiness
+       max_backfill: 0
+       monitored_dates:
+        - 0d_ago
+        - 1d_ago
+        - 2d_ago
+        - 3d_ago
+        - 4d_ago
+        - 5d_ago
+        - 6d_ago
+        - 7d_ago
+  ```
+
+  ### Display Sleep Trend Last 7 Days
+  *Card*
+  
+  ![image](https://user-images.githubusercontent.com/3003773/213947100-3fbb6f09-9259-432a-bcd2-8ad35dde7873.png)
+
+  *Card YAML*
+  ```
+  type: custom:apexcharts-card
+apex_config:
+  chart:
+    height: 200px
+graph_span: 7d
+header:
+  show: true
+  show_states: true
+  colorize_states: true
+  title: Sleep
+  standard_format: true
+series:
+  - entity: sensor.oura_sleep_score
+    name: Score
+    show:
+      in_chart: false
+    color: white
+  - entity: sensor.0d_sleep_average_hr
+    name: Avg HR
+    show:
+      in_chart: false
+  - entity: sensor.0d_lowest_heart_rate
+    name: Lowest HR
+    show:
+      in_chart: false
+  - entity: sensor.oura_sleep_metrics
+    name: In Bed
+    color: grey
+    data_generator: |
+      var data = [];
+      var attributes = entity.attributes;
+      for(let day in attributes) {
+        if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+          var datapointday = moment(attributes[day].day);
+          var datapointscore = attributes[day].in_bed_duration_in_hours;
+          if(datapointscore == null){
+            datapointscore = 0;
+          }
+          data.push({x: datapointday, y: datapointscore});
+        }
+      }
+      return data;
+    type: area
+    show:
+      in_chart: true
+      in_header: false
+  - entity: sensor.oura_sleep_metrics
+    name: Total Sleep
+    color: purple
+    data_generator: |
+      var data = [];
+      var attributes = entity.attributes;
+      for(let day in attributes) {
+        if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+          var datapointday = moment(attributes[day].day);
+          var datapointscore = attributes[day].total_sleep_duration_in_hours;
+          if(datapointscore == null){
+            datapointscore = 0;
+          }
+          data.push({x: datapointday, y: datapointscore});
+        }
+      }
+      return data;
+    type: area
+    show:
+      in_chart: true
+      in_header: false
+  - entity: sensor.oura_sleep_metrics
+    name: REM
+    color: '#20bf6b'
+    data_generator: |
+      var data = [];
+      var attributes = entity.attributes;
+      for(let day in attributes) {
+        if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+          var datapointday = moment(attributes[day].day);
+          var datapointscore = attributes[day].rem_sleep_duration_in_hours;
+          if(datapointscore == null){
+            datapointscore = 0;
+          }
+          data.push({x: datapointday, y: datapointscore});
+        }
+      }
+      return data;
+    type: column
+    show:
+      in_chart: true
+      in_header: false
+  - entity: sensor.oura_sleep_metrics
+    name: Deep
+    color: '#45aaf2'
+    data_generator: |
+      var data = [];
+      var attributes = entity.attributes;
+      for(let day in attributes) {
+        if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+          var datapointday = moment(attributes[day].day);
+          var datapointscore = attributes[day].deep_sleep_duration_in_hours;
+          if(datapointscore == null){
+            datapointscore = 0;
+          }
+          data.push({x: datapointday, y: datapointscore});
+        }
+      }
+      return data;
+    type: column
+    show:
+      in_chart: true
+      in_header: false
+  - entity: sensor.oura_sleep_metrics
+    name: Light
+    color: '#fed330'
+    data_generator: |
+      var data = [];
+      var attributes = entity.attributes;
+      for(let day in attributes) {
+        if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+          var datapointday = moment(attributes[day].day);
+          var datapointscore = attributes[day].light_sleep_duration_in_hours;
+          if(datapointscore == null){
+            datapointscore = 0;
+          }
+          data.push({x: datapointday, y: datapointscore});
+        }
+      }
+      return data;
+    type: column
+    show:
+      in_chart: true
+      in_header: false
+  - entity: sensor.oura_sleep_metrics
+    name: Awake
+    color: '#fc5c65'
+    data_generator: |
+      var data = [];
+      var attributes = entity.attributes;
+      for(let day in attributes) {
+        if (typeof attributes[day] == 'object' && attributes[day] !== null) {
+          var datapointday = moment(attributes[day].day);
+          var datapointscore = attributes[day].awake_duration_in_hours;
+          if(datapointscore == null){
+            datapointscore = 0;
+          }
+          data.push({x: datapointday, y: datapointscore});
+        }
+      }
+      return data;
+    type: column
+    show:
+      in_chart: true
+      in_header: false
+  ```
+
+  *Required Sensor Configuration.yaml*
+  ```
+       sleep_score:
+       name: oura_sleep_score
+       max_backfill: 0 
+       monitored_dates:
+        - 0d_ago
+        - 1d_ago
+        - 2d_ago
+        - 3d_ago
+        - 4d_ago
+        - 5d_ago
+        - 6d_ago
+        - 7d_ago
+       name: oura_sleep_metrics
+       max_backfill: 0
+       monitored_dates:
+        - 0d_ago
+        - 1d_ago
+        - 2d_ago
+        - 3d_ago
+        - 4d_ago
+        - 5d_ago
+        - 6d_ago
+        - 7d_ago
+        - 8d_ago
+  ```
 
 ## Sponsoring
 
