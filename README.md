@@ -75,6 +75,7 @@ If this is helpful, feel free to `Buy Me a Beer`; or check other options on the 
         - [Using apexcharts-card](#using-apexcharts-card)
           - [Score card using apexcharts-card](#score-card-using-apexcharts-card)
           - [Sleep trend card using apexcharts-card](#sleep-trend-card-using-apexcharts-card)
+  - [Frequently Asked Questions (FAQs) and Common Issues](#frequently-asked-questions-faqs-and-common-issues)
 
 ## Installation
 
@@ -1193,3 +1194,9 @@ You can leverage the sensor data to create powerful visualizations about your sl
           in_header: false
   ```
 </details>
+
+## Frequently Asked Questions (FAQs) and Common Issues
+
+**I am getting `NoURLAvailableError` during set up.**
+
+In order for this Oura component to complete the sign up process, at least one URL must be configured on your Home-Assistant instance. Follow [this process](https://www.home-assistant.io/docs/configuration/basic/) to set one up on `Settings > System > Network` or on your `configuration.yaml` file.
