@@ -4,6 +4,14 @@ This project is a custom component for [Home-Assistant](https://home-assistant.i
 
 The component sensors with sleep data for previous days from [Oura Ring](https://ouraring.com/).
 
+
+## Sponsoring
+
+If this is helpful, feel free to `Buy Me a Beer`; or check other options on the Github `❤️ Sponsor` link on the top of this page.
+
+<a href="https://www.buymeacoffee.com/nitobuendia" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/arial-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
+
+
 ## Table of Contents
 
 - [Oura - Custom Component for Home-Assisant](#oura---custom-component-for-home-assisant)
@@ -66,7 +74,6 @@ The component sensors with sleep data for previous days from [Oura Ring](https:/
         - [Using apexcharts-card](#using-apexcharts-card)
           - [Score card using apexcharts-card](#score-card-using-apexcharts-card)
           - [Sleep trend card using apexcharts-card](#sleep-trend-card-using-apexcharts-card)
-  - [Sponsoring](#sponsoring)
 
 ## Installation
 
@@ -1185,9 +1192,3 @@ You can leverage the sensor data to create powerful visualizations about your sl
           in_header: false
   ```
 </details>
-
-## Sponsoring
-
-If this is helpful, feel free to `Buy Me a Beer`; or check other options on the Github `❤️ Sponsor` link on the top of this page.
-
-<a href="https://www.buymeacoffee.com/nitobuendia" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/arial-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
