@@ -15,6 +15,7 @@ If this is helpful, feel free to `Buy Me a Beer`; or check other options on the 
 ## Table of Contents
 
 - [Oura - Custom Component for Home-Assisant](#oura---custom-component-for-home-assisant)
+  - [Sponsoring](#sponsoring)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Configuration](#configuration)
