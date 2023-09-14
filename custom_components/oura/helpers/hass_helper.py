@@ -2,12 +2,15 @@
 
 import logging
 
+_LOGGER = logging.getLogger(__name__)
+
 # Safe importing as this module was not existing on previous versions
 # of Home-Assistant.
 try:
   from homeassistant.helpers import network
 except ModuleNotFoundError:
-  logging.debug('Network module not found.')
+  _LOGGER.debug('Network module not found.')
+
 
 
 def get_url(hass):
@@ -29,7 +32,7 @@ def get_url(hass):
           prefer_external=True,
           require_ssl=False)
     except AttributeError:
-      logging.debug(
+      _LOGGER.debug(
           'Hass version does not have get_url helper, using fall back.')
 
   base_url = hass.config.api.base_url
