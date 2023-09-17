@@ -363,7 +363,7 @@ class OuraDatedSensor(sensor_base.OuraSensor):
       Oura sensor data for that given day.
     """
     if not oura_data or data_param not in oura_data:
-      _LOGGER.error('Couldn\'t fetch data for Oura ring sensor.')
+      _LOGGER.error('Couldnt fetch data for Oura ring sensor.')
 #          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
       return {}
 
