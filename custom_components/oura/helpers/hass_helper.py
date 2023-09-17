@@ -32,8 +32,7 @@ def get_url(hass):
           prefer_external=True,
           require_ssl=False)
     except AttributeError:
-      _LOGGER.debug(
-          'Hass version does not have get_url helper, using fall back.')
+      _LOGGER.debug('Hass version does not have get_url helper, using fall back.')
 
   base_url = hass.config.api.base_url
   if base_url:
