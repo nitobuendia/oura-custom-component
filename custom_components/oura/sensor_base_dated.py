@@ -153,7 +153,7 @@ class OuraDatedSensor(sensor_base.OuraSensor):
           days_ago = None
 
     if days_ago is None:
-      _LOGGER.info('Unknown day name using yesterday.')
+      _LOGGER.info('Unknown day name ' + date_name + 'using yesterday.')
  #         f'Oura ({self._name}): ' +
  #         'Unknown day name `{date_name}`, using yesterday.')
       days_ago = 1
@@ -254,12 +254,12 @@ class OuraDatedSensor(sensor_base.OuraSensor):
         backfill += 1
 
       if original_date != date_value:
-        _LOGGER.warning('No Oura data found for ')
+        _LOGGER.warning('No Oura data found for '+ date_name_title +'(' + original_date + '). Fetching '+ date_value +'instead.')
 #            (
 #                f'Oura ({self._name}): No Oura data found for '
 #                f'{date_name_title} ({original_date}). Fetching {date_value} '
 #                'instead.'
-#            ) if date_value else (
+#         ) if date_value else (
 #                f'Unable to find suitable backfill date. No data available.'
 #            )
 #        )

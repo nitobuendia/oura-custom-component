@@ -92,7 +92,7 @@ class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
         backfill += 1
 
       if original_date != date_value:
-        _LOGGER.warning('No Oura Data found for')
+        _LOGGER.warning('No Oura Data found for ' + date_name_title + '(' + original_date + '). Fetching ' + date_value +'instead.')
 #         _LOGGER.warning(
 #            (
 #                f'Oura ({self._name}): No Oura data found for '
