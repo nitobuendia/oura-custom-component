@@ -254,15 +254,13 @@ class OuraDatedSensor(sensor_base.OuraSensor):
         backfill += 1
 
       if original_date != date_value:
-        _LOGGER.warning('No Oura data found for '+ date_name_title +'(' + original_date + '). Fetching '+ date_value +'instead.')
-#            (
-#                f'Oura ({self._name}): No Oura data found for '
-#                f'{date_name_title} ({original_date}). Fetching {date_value} '
-#                'instead.'
-#         ) if date_value else (
-#                f'Unable to find suitable backfill date. No data available.'
-#            )
-#        )
+        if date_value:
+          message = 'No Oura data found for '+ date_name_title +' ('+ original_date +'). Fetching '+ date_value + 'instead.'
+        else:
+          message = 'Unable to find suitable backfill date. No data available.'
+        
+        _LOGGER.warning(message)
+
 
       if daily_data:
         date_attributes.update(daily_data)
