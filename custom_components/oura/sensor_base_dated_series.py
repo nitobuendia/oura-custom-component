@@ -3,6 +3,7 @@
 import logging
 from . import sensor_base_dated
 
+_LOGGER = logging.getLogger(__name__)
 
 class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
   """Representation of an Oura Ring sensor with series daily data.
@@ -91,15 +92,11 @@ class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
         backfill += 1
 
       if original_date != date_value:
-        logging.warning(
-            (
-                f'Oura ({self._name}): No Oura data found for '
-                f'{date_name_title} ({original_date}). Fetching {date_value} '
-                'instead.'
-            ) if date_value else (
-                f'Unable to find suitable backfill date. No data available.'
-            )
-        )
+        if date_value:
+          message = 'No Oura data found for '+ date_name_title +' ('+ original_date +'). Fetching '+ date_value + 'instead.'
+        else:
+          message = 'Unable to find suitable backfill date. No data available.'        
+        _LOGGER.warning(message)
 
       if not daily_data:
         daily_data = [self._empty_sensor]
@@ -166,8 +163,7 @@ class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
       Oura sensor data for that given day.
     """
     if not oura_data or data_param not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
+      _LOGGER.error('Couldnt fetch data for Oura ring sensor.')
       return {}
 
     sensor_data = oura_data.get(data_param)

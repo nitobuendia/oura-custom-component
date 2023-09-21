@@ -9,6 +9,7 @@ from . import const as oura_const
 from . import sensor_base
 from .helpers import date_helper
 
+_LOGGER = logging.getLogger(__name__)
 
 class MonitoredDayType(enum.Enum):
   """Types of days which can be monitored."""
@@ -152,9 +153,7 @@ class OuraDatedSensor(sensor_base.OuraSensor):
           days_ago = None
 
     if days_ago is None:
-      logging.info(
-          f'Oura ({self._name}): ' +
-          'Unknown day name `{date_name}`, using yesterday.')
+      _LOGGER.info('Unknown day name ' + date_name + 'using yesterday.')
       days_ago = 1
 
     return str(today - datetime.timedelta(days=days_ago))
@@ -253,15 +252,13 @@ class OuraDatedSensor(sensor_base.OuraSensor):
         backfill += 1
 
       if original_date != date_value:
-        logging.warning(
-            (
-                f'Oura ({self._name}): No Oura data found for '
-                f'{date_name_title} ({original_date}). Fetching {date_value} '
-                'instead.'
-            ) if date_value else (
-                f'Unable to find suitable backfill date. No data available.'
-            )
-        )
+        if date_value:
+          message = 'No Oura data found for '+ date_name_title +' ('+ original_date +'). Fetching '+ date_value + 'instead.'
+        else:
+          message = 'Unable to find suitable backfill date. No data available.'
+        
+        _LOGGER.warning(message)
+
 
       if daily_data:
         date_attributes.update(daily_data)
@@ -362,8 +359,7 @@ class OuraDatedSensor(sensor_base.OuraSensor):
       Oura sensor data for that given day.
     """
     if not oura_data or data_param not in oura_data:
-      logging.error(
-          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
+      _LOGGER.error('Couldnt fetch data for Oura ring sensor.')
       return {}
 
     sensor_data = oura_data.get(data_param)

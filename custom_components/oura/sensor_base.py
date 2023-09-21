@@ -6,6 +6,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import entity
 from . import api
 
+_LOGGER = logging.getLogger(__name__)
 SENSOR_NAME = 'oura'
 
 
