@@ -154,8 +154,6 @@ class OuraDatedSensor(sensor_base.OuraSensor):
 
     if days_ago is None:
       _LOGGER.info('Unknown day name ' + date_name + 'using yesterday.')
- #         f'Oura ({self._name}): ' +
- #         'Unknown day name `{date_name}`, using yesterday.')
       days_ago = 1
 
     return str(today - datetime.timedelta(days=days_ago))
@@ -362,7 +360,6 @@ class OuraDatedSensor(sensor_base.OuraSensor):
     """
     if not oura_data or data_param not in oura_data:
       _LOGGER.error('Couldnt fetch data for Oura ring sensor.')
-#          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
       return {}
 
     sensor_data = oura_data.get(data_param)

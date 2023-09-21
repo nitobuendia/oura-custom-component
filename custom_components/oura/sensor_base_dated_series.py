@@ -95,8 +95,7 @@ class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
         if date_value:
           message = 'No Oura data found for '+ date_name_title +' ('+ original_date +'). Fetching '+ date_value + 'instead.'
         else:
-          message = 'Unable to find suitable backfill date. No data available.'
-        
+          message = 'Unable to find suitable backfill date. No data available.'        
         _LOGGER.warning(message)
 
       if not daily_data:
@@ -165,7 +164,6 @@ class OuraDatedSeriesSensor(sensor_base_dated.OuraDatedSensor):
     """
     if not oura_data or data_param not in oura_data:
       _LOGGER.error('Couldnt fetch data for Oura ring sensor.')
-#          f'Oura ({self._name}): Couldn\'t fetch data for Oura ring sensor.')
       return {}
 
     sensor_data = oura_data.get(data_param)
