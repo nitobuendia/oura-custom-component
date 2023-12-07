@@ -22,6 +22,7 @@ _DEFAULT_MONITORED_VARIABLES = [
     'score',
     'target_calories',
     'total_calories',
+    'day',
 ]
 _SUPPORTED_MONITORED_VARIABLES = [
     'class_5_min',
