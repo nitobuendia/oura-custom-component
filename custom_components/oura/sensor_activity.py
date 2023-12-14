@@ -13,6 +13,7 @@ _DEFAULT_NAME = 'oura_activity'
 CONF_KEY_NAME = 'activity'
 _DEFAULT_MONITORED_VARIABLES = [
     'active_calories',
+    'day',
     'high_activity_time',
     'low_activity_time',
     'medium_activity_time',
@@ -22,7 +23,6 @@ _DEFAULT_MONITORED_VARIABLES = [
     'score',
     'target_calories',
     'total_calories',
-    'day',
 ]
 _SUPPORTED_MONITORED_VARIABLES = [
     'class_5_min',
