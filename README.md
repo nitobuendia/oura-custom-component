@@ -314,7 +314,7 @@ This sensor supports all the following monitored attributes:
 
 For a definition of all these variables, check [Oura's API](https://cloud.ouraring.com/v2/docs#operation/daily_activity_route_daily_activity_get).
 
-By default, the following attributes are being monitored: `active_calories`, `high_activity_time`, `low_activity_time`, `medium_activity_time`, `non_wear_time`, `resting_time`, `sedentary_time`, `score`, `target_calories`, `total_calories`.
+By default, the following attributes are being monitored: `active_calories`, `high_activity_time`, `low_activity_time`, `medium_activity_time`, `non_wear_time`, `resting_time`, `sedentary_time`, `score`, `target_calories`, `total_calories`, `day`.
 
 #### Activity Sensor sample output
 
